@@ -34,8 +34,21 @@ uploadFile.addEventListener('click', () => {
 			// Updating the GLOBAL filepath variable 
 			// to user-selected file. 
 			global.filepath = file.filePaths[0].toString(); 
-			console.log(global.filepath); 
-			} 
+            console.log(global.filepath); 
+            const fs = require('fs'); 
+
+                if (global.filepath && !file.canceled) { 
+                    fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI
+                if (!err) { 
+                    console.log(data); 
+
+                } else { 
+                    console.log(err); 
+                } 
+            }); 
+            } 
+            } 
+            
 		}).catch(err => { 
 			console.log(err) 
 		}); 
