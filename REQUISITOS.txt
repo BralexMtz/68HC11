@@ -1,0 +1,29 @@
+1.- Dividir modos de direccionamiento(6)
+    - Tipo_de_direccionamiento(TODOS): --
+
+    - Inherente     (Bralex) 
+    - Directo       (Osvaldo)
+    - Inmediato     (Brandon)
+    - Relativo      (Bralex)
+    - Extendido     (Osvaldo)
+    - Indexado      (Brandon)
+
+2.- Crear archivo lst (binario-Ensamblador)  + bonito
+3.- Generacion del archivo con el codigo objeto, formato propuesto (binario) +feo .s19
+5.- Deteccion de errores.
+---------
+ > Soporta mayusculas y minusculas
+ > Reporte en formato digital (------> A HUEVO <------)
+    - Copia de credencial
+    - Reporte que explique diseño y estructura, que aporto cada elemento del equipo
+    - Adjuntar el código completo del compilador y archivos generados
+    - Evidencia que sustente todo(Capturas de pantalla Archivos)
+-----------
++ Colores 
++ Generacion con el formato oficial de motorola
+
+    
+
+
+
+
