@@ -1,11 +1,13 @@
 const electron = require('electron'); 
 const path = require('path'); 
-
+//Imports check for data input
+const check = require('./direccionamiento');
 // Importing dialog module using remote 
 const dialog = electron.remote.dialog; 
 
 var uploadFile = document.getElementById('upload'); 
 
+check.tipo_direccionamiento();// -----Only test
 // Defining a Global file path Variable to store 
 // user-selected file 
 global.filepath = undefined; 
@@ -40,7 +42,8 @@ uploadFile.addEventListener('click', () => {
                 if (global.filepath && !file.canceled) { 
                     fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI
                 if (!err) { 
-                    console.log(data); 
+					//console.log(data); 
+					check.check_sintaxis(data);
 
                 } else { 
                     console.log(err); 
