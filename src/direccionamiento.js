@@ -15,6 +15,7 @@ function check_sintaxis(data) {
 }
 
 function tipo_direccionamiento(){
+    //Funcion de prueba
     console.log('Detectando el tipo...');
 
 }
