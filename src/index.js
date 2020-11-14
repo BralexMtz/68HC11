@@ -1,11 +1,15 @@
 const electron = require('electron'); 
 const path = require('path'); 
+//const xlsx = require('xlsx');
+const xlsxFile = require('read-excel-file/node');
 //Imports check for data input
 const check = require('./direccionamiento');
 // Importing dialog module using remote 
 const dialog = electron.remote.dialog; 
 
 var uploadFile = document.getElementById('upload'); 
+let data;
+let rows;
 
 check.tipo_direccionamiento();// -----Only test
 // Defining a Global file path Variable to store 
@@ -44,7 +48,7 @@ uploadFile.addEventListener('click', () => {
                 if (!err) { 
 					//console.log(data); 
 					check.check_sintaxis(data);
-
+					check.revisar_existencia(data,rows);
                 } else { 
                     console.log(err); 
                 } 
@@ -81,3 +85,9 @@ uploadFile.addEventListener('click', () => {
 		}); 
 	} 
 }); 
+
+xlsxFile('assets/INSTRUCCIONES.xlsx').then((rows)=>{
+	check.lectura_excel(rows);
+});
+
+
