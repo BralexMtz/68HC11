@@ -48,7 +48,10 @@ uploadFile.addEventListener('click', () => {
                 if (!err) { 
 					//console.log(data); 
 					check.check_sintaxis(data);
-					check.revisar_existencia(data,rows);
+					xlsxFile('assets/INSTRUCCIONES.xlsx').then((rows)=>{
+						check.revisar_existencia(data,rows);
+					});
+					
                 } else { 
                     console.log(err); 
                 } 
@@ -86,8 +89,6 @@ uploadFile.addEventListener('click', () => {
 	} 
 }); 
 
-xlsxFile('assets/INSTRUCCIONES.xlsx').then((rows)=>{
-	check.lectura_excel(rows);
-});
+
 
 

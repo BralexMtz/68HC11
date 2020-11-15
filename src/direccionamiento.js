@@ -18,11 +18,30 @@ function tipo_direccionamiento(){
 }
 
 function lectura_excel(rows){
-    console.log(rows);
+    console.log("rows");
 }
 
 function revisar_existencia(data,rows){
-    console.log("AQUI SE REVISA");
+    lines = data.split("\n");
+    for (var line in lines) {
+        //Read the lines and separate with comas
+        lines[line] = lines[line].replace(/\s+/g, ' ').trim().replace(/\s/g,",");
+        //Create an multidimensional array, [0] is INSTRUCTION [1] DATA [2-*] COMMENT
+        lines[line] = lines[line].split(',');
+    }
+    // CHECK IF EXIST THE INSTRUCCION
+    var bandera = 0;
+    for (var inst in lines){
+        for (var num = 2 ; num<=99 ; num++){
+            if(lines[inst][0].toUpperCase() == rows[num][0].toUpperCase()){
+                console.log("SIMON KRNAL QUE LISTO");
+                bandera = 1;
+            }    
+        }
+        if(bandera == 0)
+                console.log("NEL TAS WEY ESTO NO EXISTE")
+        bandera=0;
+    }
 }
 
 module.exports={ check_sintaxis,
