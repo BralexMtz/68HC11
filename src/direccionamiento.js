@@ -26,7 +26,7 @@ function revisar_existencia(data,rows){
     for (var line in lines) {
         //Read the lines and separate with comas
         lines[line] = lines[line].replace(/\s+/g, ' ').trim().replace(/\s/g,",");
-        //Create an multidimensional array, [0] is INSTRUCTION [1] DATA [2-*] COMMENT
+        //Create an multidimensional array, [0] is INSTRUCTION(MNEMONICO) [1] OPERANDOS [2-*] COMMENT
         lines[line] = lines[line].split(',');
     }
     // CHECK IF EXIST THE INSTRUCCION
