@@ -6,4 +6,4 @@
        ldaa  #$00    * CONFIG TODO EL PUERTO  A COMO ENTRADAS
        LDAA  #$FF    * CONFIG TODO EL PUERTO  G COMO SALIDAS              
        ldaa  #$00    * CONFIG TODO EL PUERTO  A COMO ENTRADAS
-       LDAA  #$FF    * CONFIG TODO EL PUERTO  G COMO SALIDAS,ldaa,#$00,LDAA,#$FF,ldaa,#$00,LDAA,#$FF
+       LDAA  #$FF    * CONFIG TODO EL PUERTO  G COMO SALIDAS,ldaa,#$00,LDAA,#$FF,ldaa,#$00,LDAA,#$FF,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ldaa,#$00,LDAA,#$FFalinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelinelineline

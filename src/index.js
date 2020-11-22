@@ -46,12 +46,12 @@ uploadFile.addEventListener('click', () => {
                 if (global.filepath && !file.canceled) { 
                     fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI
                 if (!err) { 
-					//console.log(data); 
-					compilator.check_syntax(data);
 
-					xlsxFile('assets/INSTRUCCIONES.xlsx').then((rows)=>{
-						compilator.main(data,rows);
-					});
+
+					// xlsxFile('assets/INSTRUCCIONES.xlsx').then((rows)=>{
+					// 	compilator.main(data,rows);
+					// });
+					compilator.main(data);
 					
                 } else { 
                     console.log(err); 
