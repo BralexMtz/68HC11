@@ -1,0 +1,276 @@
+const xlsxFile = require('read-excel-file/node');
+// global variables
+var lines=[]; 
+var values=[];
+var etiquetas=[];
+const directives=["ORG","END","EQU","FCB"]
+
+function linea(){
+    this.tipo; //  ETIQUETA, INSTRUCCION, VARIABLE, COMENTARIO, EXCEPCION
+    this.instruccion;
+    this.operando=[]
+    this.errores=[]
+    this.is_identado;
+    this.comentario;
+    this.tipo_direccionamiento;
+    //
+    this.linea_str;
+    
+    this.get_bytes= function (numOperando) {
+        var operatorBytes;
+        operatorBytes = numOperando.replace('#', '')
+        operatorBytes = operatorBytes.replace('$', '')
+        return operatorBytes.length/2 
+    }
+}
+
+
+
+function is_identado(linea_str) {
+    //var rexp = /^[\s]\w*.*/;
+    var rexp = /^(\s)(?=\s)*.*(?=[A-z])/gm;
+    if(linea_str.match(rexp)==null){      
+        return false;
+    }else{
+        return true;
+    }
+}
+//anweisung =====> instruccion en aleman
+function is_anweisung_tipo(instruccion, rows, column){
+    var bandera=false
+    for(var row of rows){
+        if(instruccion==row[0] && row[column]!="--" ){
+            bandera=true
+        }
+    }
+    return bandera
+}
+
+
+function tipo_direccionamiento(rows){
+    // INHERENTE, INMEDIATO, DIRECTO, EXTENDIDO, INDEXADO_X, INDEXADO_Y, RELATIVO
+    //Funcion de prueba
+    for (line of lines){
+        //REVISAR SI YA LLEGAMOS A LA LINEA CON EL END
+        //lineLength = line.length;
+        if (line.instruccion == 'END'){
+            console.log('SALAVERGA YA TERMINO...')
+            break
+        }
+        if(line.tipo == 'INSTRUCCION'){
+            if (directives.includes(line.instruccion)){
+                console.log('Es directiva mi chavo :u ' + line.operando)
+            }else if (line.operando == null){
+                //POSIBLE MODO INHERENTE, REVISAR QUE EL MNEMONICO TENGA MODO INHERENTE
+                line.tipo_direccionamiento = 'INHERENTE'
+                
+            }else if (line.operando != null){
+                //PUEDE SER CUALQUIERA
+                var line_operando=line.operando[0]
+                var operando_etiqueta = line_operando.replace('#','') //Quitamos # si lo tiene
+                if( !operando_etiqueta.startsWith('$') && operando_etiqueta.match(/^[0-9]*$/) == null ){
+                    if (Object.keys(values).includes(operando_etiqueta)){ // valida si el operando es variable
+                        line_operando = values[operando_etiqueta] //asigna el valor
+                    }else if (is_anweisung_tipo(line.instruccion,rows,13)){
+                        if( Object.keys(etiquetas).includes(line_operando))
+                            line.tipo_direccionamiento = 'RELATIVO'
+                        else
+                            line.errores.push(3) //ERROR 03 Etiqueta inexistente
+                        
+                    } else{
+                        if(line.operando[0].indexOf("#") != -1) // si contiene #
+                            line.errores.push(1)   //ERROR 1 Constante inexistente
+                        else
+                            line.errores.push(2)    //ERROR 2   Variable inexistente
+                    }
+                }
+                numBytesOperando = line.get_bytes(line_operando)
+                
+                
+                if (line_operando.startsWith('#')){
+                    //POSIBLE MODO INMEDIATO, REVISAR EL EL EXCEL QUE COINCIDA
+                    line.tipo_direccionamiento = 'INMEDIATO'
+
+                }else {
+                    //MOVER A DONDE YA VAYAMOS A TRADUCIR
+                    if (!line_operando.startsWith('$')){    //El $ probablemente sea el segundo caracter
+                        //PASARLO A HEXADECIMAL
+                        line_operando = Number(parseInt(line_operando, 10)).toString(16);
+                    }
+
+                    if (line_operando.endsWith(',X')){
+                        //POSIBLE INDEXADO CON RESPECTO DE X
+                        line.tipo_direccionamiento = 'INDEXADO_X'
+    
+                    }else if (line_operando.endsWith(',Y')){
+                        //POSIBLE INDEXADO CON RESPECTO DE Y
+                        line.tipo_direccionamiento = 'INDEXADO_Y'
+                        
+                    }else if (numBytesOperando == 1){
+                        line.tipo_direccionamiento = 'DIRECTO'
+    
+                    }else if (numBytesOperando == 2){
+                        line.tipo_direccionamiento = 'EXTENDIDO'
+                    }
+                    //REVISEN LAS EXCEPCIONES, SON IMPORTANTISIMAS Y TAL VEZ VAYAN AQUI
+                }
+                
+            }
+    }
+}
+}
+
+
+function is_excepcion(instruccion){
+    let excepcion=["BSET","BRCLR","BCLR","BRSET"]
+    return excepcion.includes(instruccion)    
+    
+}
+
+function get_operandos_exception (instruccion, operandos){
+    var auxiliar;
+    var resultado=[]
+    if (operandos.includes(',X')){
+        auxiliar = operandos.replace(',X', '...')
+        resultado = auxiliar.split(',')
+        resultado[0] = resultado[0].replace('...', ',X')
+        
+    }else if (operandos.includes(',Y')){
+        auxiliar = operandos.replace(',Y', '...')
+        resultado = auxiliar.split(',')
+        resultado[0] = resultado[0].replace('...', ',Y')
+        
+    }else{
+        resultado = operandos.split(',')
+    }
+
+    return resultado;
+    
+}
+
+function get_lines(data){
+    lineas = data.split("\n"); //separa por renglon
+    var renglones=[]
+    for (var index in lineas) {
+        let comentario;
+        renglones[index]=lineas[index];
+        if(lineas[index].indexOf("*") != -1){
+            //renglon sin comentario  
+            renglones[index]=lineas[index].substring(0,lineas[index].indexOf("*"));//quitar comentarios de cada linea
+            //comentario
+            comentario=lineas[index].substring(lineas[index].indexOf("*"));
+        }
+        //Read the lineas and separate with comas
+        renglones[index] = renglones[index].replace(/\s+/g,' ').trim();
+        //Create an multidimensional array, [0] is INSTRUCTION(MNEMONICO) [1] OPERANDOS/EQU [2]? VALOR DE EQU
+        renglones[index] = renglones[index].split(' ');
+        longitud = renglones[index].length;
+        linea_X =  new linea();
+        linea_X.linea_str=lineas[index];
+        if(longitud == 1 && renglones[index][0].length != 0 && !is_identado(lineas[index])){
+            //ES ETIQUETA
+            linea_X.tipo = 'ETIQUETA';
+            if(renglones[index][0]=='END')
+                linea_X.instruccion=renglones[index][0]
+            etiquetas[renglones[index][0]]="x"
+        }else if(longitud >=1 && longitud <= 3 && is_identado(lineas[index])){
+            //ES UN MNEMONICO CON OPERANDOS
+            linea_X.tipo = 'INSTRUCCION'
+            linea_X.instruccion=renglones[index][0]
+            linea_X.comentario = comentario
+            if(is_excepcion(linea_X.instruccion)){
+                linea_X.tipo = 'EXCEPCION'
+                linea_X.operando=get_operandos_exception(linea_X.instruccion, renglones[index][1])
+                if(longitud==3){
+                    linea_X.operando.push(renglones[index][2])
+                }
+                //console.log(linea_X)    
+            }else if(longitud>1){
+                linea_X.operando.push(renglones[index][1])
+            }else{
+                linea_X.operando = null
+            }
+            linea_X.is_identado=is_identado(lineas[index])
+
+        }else if (renglones[index].includes("EQU")){
+            //ES UNA VARIABLE O CONSTANTE
+            linea_X.tipo = 'VARIABLE'
+            linea_X.comentario = comentario
+            values[renglones[index][0]] =  renglones[index][2]
+        }else if(longitud > 1 && !is_identado(lineas[index])){ //pegado al margen con operandos
+            linea_X.errores.push(9)
+        }else{
+            //ES PURO COMENTARIO O NADA(\n)
+            linea_X.tipo = 'COMENTARIO'
+            linea_X.comentario = comentario
+        }
+        renglones[index]=linea_X
+    }
+    return renglones;
+    
+}
+
+function exist_mnemonicos(rows){
+    var bandera = 0;
+    var end = 0;
+    for (var linea_obj of lines){
+        if(linea_obj.tipo=="INSTRUCCION"){
+            for (var num = 2 ; num<=99 ; num++){
+                if(linea_obj.instruccion.toUpperCase() == rows[num][0].toUpperCase() || directives.includes(linea_obj.instruccion.toUpperCase())){
+                    bandera = 1; // SI HAY NMEMONICO en excel o DIRECTIVA
+                }                
+            }
+            if(bandera == 0){
+                linea_obj.errores.push(4) //ERROR 04 Mnemonico inexistente
+            }
+            bandera=0;
+            if(linea_obj.instruccion.toUpperCase() == 'END')
+                end = 1;
+        }
+       
+    }
+    if(end==0)
+        lines[lines.length-1].errores.push(10) // ERROR 10 No se Encuentra END
+}
+
+
+
+
+function main(data){
+    //assets/INSTRUCCIONES.xlsx ====> FINAL LINE, BUT NOW FOR TESTING 
+    xlsxFile('../assets/INSTRUCCIONES.xlsx').then((rows)=>{
+        lines = get_lines(data)
+        exist_mnemonicos(rows);        // CHECK IF EXIST THE INSTRUCCION
+        
+        tipo_direccionamiento(rows)
+        
+        console.log(lines)
+
+        //escribir archivos LST
+        var fs = require('fs');
+        //src/nmms.txt >>final text
+        fs.appendFile('nmms.txt','line', function (err) {
+        if (err) throw err;
+  
+        });        
+    });
+}
+
+
+// module.exports={ check_syntax,
+//  tipo_direccionamiento,
+// lectura_excel,
+// main}
+////####### JUST FOR TESTING ######
+/// ENGINERS WORKING
+const fs = require('fs'); 
+fs.readFile('codigo.asc', 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    main(data)
+  });
+// node compilation.js
+
+
+//(\s)[a-z]*[A-Z]*
