@@ -11,6 +11,16 @@
 2.- Crear archivo lst (binario-Ensamblador)  + bonito
 3.- Generacion del archivo con el codigo objeto, formato propuesto (binario) +feo .s19
 5.- Deteccion de errores.
+    001 CONSTANTE INEXISTENTE  :)
+    002 VARIABLE INEXISTENTE   :)
+    003 ETIQUETA INEXISTENTE
+    004 MNEMÓNICO INEXISTENTE  :)
+    005 INSTRUCCIÓN CARECE DE OPERANDO(S)  
+    006 INSTRUCCIÓN NO LLEVA OPERANDO(S)  
+    007 MAGNITUD DE OPERANDO ERRONEA  
+    008 SALTO RELATIVO MUY LEJANO  
+    009 INSTRUCCIÓN CARECE DE ALMENOS UN ESPACIO RELATIVO AL MARGEN  :)
+    010 NO SE ENCUENTRA END :)
 ---------
  > Soporta mayusculas y minusculas
  > Reporte en formato digital (------> A HUEVO <------)

@@ -27,7 +27,6 @@ function linea(){
 
 
 function is_identado(linea_str) {
-    //var rexp = /^[\s]\w*.*/;
     var rexp = /^(\s)(?=\s)*.*(?=[A-z])/gm;
     if(linea_str.match(rexp)==null){      
         return false;
@@ -37,6 +36,14 @@ function is_identado(linea_str) {
 }
 //anweisung =====> instruccion en aleman
 function is_anweisung_tipo(instruccion, rows, column){
+   /*   
+     1 inmedi
+     3 direc
+     5 index,X
+     7 index,Y
+     9 ext
+     11 inhe
+     13 relativo */
     var bandera=false
     for(var row of rows){
         if(instruccion==row[0] && row[column]!="--" ){
@@ -45,7 +52,13 @@ function is_anweisung_tipo(instruccion, rows, column){
     }
     return bandera
 }
+function is_numeric(cadena){
+    if(cadena.match(/^[0-9]*$/) == null)
+        return false;
+    else
+        return true;
 
+}
 
 function tipo_direccionamiento(rows){
     // INHERENTE, INMEDIATO, DIRECTO, EXTENDIDO, INDEXADO_X, INDEXADO_Y, RELATIVO
@@ -54,12 +67,12 @@ function tipo_direccionamiento(rows){
         //REVISAR SI YA LLEGAMOS A LA LINEA CON EL END
         //lineLength = line.length;
         if (line.instruccion == 'END'){
-            console.log('SALAVERGA YA TERMINO...')
+            // console.log('SALAVERGA YA TERMINO...')
             break
         }
         if(line.tipo == 'INSTRUCCION'){
             if (directives.includes(line.instruccion)){
-                console.log('Es directiva mi chavo :u ' + line.operando)
+                //console.log('Es directiva mi chavo :u ' + line.operando)
             }else if (line.operando == null){
                 //POSIBLE MODO INHERENTE, REVISAR QUE EL MNEMONICO TENGA MODO INHERENTE
                 line.tipo_direccionamiento = 'INHERENTE'
@@ -68,10 +81,12 @@ function tipo_direccionamiento(rows){
                 //PUEDE SER CUALQUIERA
                 var line_operando=line.operando[0]
                 var operando_etiqueta = line_operando.replace('#','') //Quitamos # si lo tiene
-                if( !operando_etiqueta.startsWith('$') && operando_etiqueta.match(/^[0-9]*$/) == null ){
+                if( !operando_etiqueta.startsWith('$') && !is_numeric(operando_etiqueta) ){//si el operando no es hexadecimal ni decimal
+
                     if (Object.keys(values).includes(operando_etiqueta)){ // valida si el operando es variable
+
                         line_operando = values[operando_etiqueta] //asigna el valor
-                    }else if (is_anweisung_tipo(line.instruccion,rows,13)){
+                    }else if (is_anweisung_tipo(line.instruccion,rows,13)){ // si es tipo 
                         if( Object.keys(etiquetas).includes(line_operando))
                             line.tipo_direccionamiento = 'RELATIVO'
                         else
@@ -143,7 +158,6 @@ function get_operandos_exception (instruccion, operandos){
     }else{
         resultado = operandos.split(',')
     }
-
     return resultado;
     
 }
@@ -188,6 +202,7 @@ function get_lines(data){
             }else if(longitud>1){
                 linea_X.operando.push(renglones[index][1])
             }else{
+                //sin operandos
                 linea_X.operando = null
             }
             linea_X.is_identado=is_identado(lineas[index])
@@ -232,6 +247,94 @@ function exist_mnemonicos(rows){
     if(end==0)
         lines[lines.length-1].errores.push(10) // ERROR 10 No se Encuentra END
 }
+function get_operando_hex(operando_list){
+    operando=operando_list[0]
+    if(Object.keys(values).includes(operando)){ // es una variable o una constante
+        operando=values[operando]
+
+    }
+    operando=operando.replace("#","")
+    if(operando.startsWith('$')){
+        return operando.replace("$","")
+    }else if(is_numeric(operando)){
+        return Number(parseInt(operando, 10)).toString(16)
+    }else{
+        console.log("operando mal redactado: ",operando)
+    }
+
+
+}
+
+
+function traduccion(excel){
+
+    for (const line of lines) {
+        if(line.tipo=="INSTRUCCION" && !line.errores.includes(4) && !directives.includes(line.instruccion)){
+            if(!is_excepcion(line.instruccion)){
+            
+                var columna;
+                    // INHERENTE, INMEDIATO, DIRECTO, EXTENDIDO, INDEXADO_X, INDEXADO_Y, RELATIVO
+                switch (line.tipo_direccionamiento) {
+                    case "INHERENTE":
+                        columna=11;
+                        break;
+                    case "INMEDIATO":
+                        columna=1;
+                        break;
+                    case "DIRECTO":
+                        columna=3;
+                        break;
+                    case "EXTENDIDO":
+                        columna=9;
+                        break;
+                    case "INDEXADO_X":
+                        columna=5;
+                        break;
+                    case "INDEXADO_Y":
+                        columna=7;
+                        break;
+                    case "RELATIVO":
+                        columna=13;
+                        break;
+                    
+                    default:
+                        console.log("tipo direccionamiento desconocido: "+line.tipo_direccionamiento)
+                        break;
+                }
+                
+                for (var row of excel){
+                    if(line.instruccion.toLowerCase()==row[0]){
+                        var opcode=row[columna]
+                        var numBytesTotales=row[columna+1]
+                        line.opcode=opcode
+                        if(line.tipo_direccionamiento!="RELATIVO" && line.tipo_direccionamiento!="INHERENTE" && !line.errores.includes(1) && !line.errores.includes(2)){
+                            var operando_hex = get_operando_hex(line.operando)
+                            console.log(operando_hex)
+                            var bytes_contados = (line.opcode.length/2)+(operando_hex.length/2);
+                            if (bytes_contados == numBytesTotales){
+                                console.log("Bytes chidos ;)")
+                                line.operando_hex=operando_hex
+                                console.log(line)
+                            }else{
+                                console.log("Pesimo control de bytes")
+                                console.log("Opcode:", line.opcode)
+                                console.log("Operando_hex:", operando_hex)
+                                console.log(line)
+                            }    
+                        }else if(line.tipo_direccionamiento=="RELATIVO"){
+                            console.log("Que hacemos con relativo?")
+                            console.log("-------------------------")
+                            console.log(line)
+                            console.log("-------------------------")
+                        }
+                    }
+                }
+            }else{ // Es una excepcion
+
+            }
+        }
+    }
+}
 
 
 
@@ -243,8 +346,8 @@ function main(data){
         exist_mnemonicos(rows);        // CHECK IF EXIST THE INSTRUCCION
         
         tipo_direccionamiento(rows)
-        
-        console.log(lines)
+        traduccion(rows)
+
 
         //escribir archivos LST
         var fs = require('fs');
@@ -264,7 +367,8 @@ function main(data){
 ////####### JUST FOR TESTING ######
 /// ENGINERS WORKING
 const fs = require('fs'); 
-fs.readFile('codigo.asc', 'utf8', function (err,data) {
+const { Console } = require('console');
+fs.readFile('codigo.asc', 'utf-8', function (err,data) {
     if (err) {
       return console.log(err);
     }
