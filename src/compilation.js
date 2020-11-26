@@ -46,7 +46,7 @@ function is_anweisung_tipo(instruccion, rows, column){
      13 relativo */
     var bandera=false
     for(var row of rows){
-        if(instruccion==row[0] && row[column]!="--" ){
+        if(instruccion.toLowerCase()==row[0] && row[column]!="--" ){
             bandera=true
         }
     }
@@ -82,16 +82,17 @@ function tipo_direccionamiento(rows){
                 var line_operando=line.operando[0]
                 var operando_etiqueta = line_operando.replace('#','') //Quitamos # si lo tiene
                 if( !operando_etiqueta.startsWith('$') && !is_numeric(operando_etiqueta) ){//si el operando no es hexadecimal ni decimal
-
+                   
                     if (Object.keys(values).includes(operando_etiqueta)){ // valida si el operando es variable
-
                         line_operando = values[operando_etiqueta] //asigna el valor
                     }else if (is_anweisung_tipo(line.instruccion,rows,13)){ // si es tipo 
-                        if( Object.keys(etiquetas).includes(line_operando))
-                            line.tipo_direccionamiento = 'RELATIVO'
-                        else
+                        line.tipo_direccionamiento = 'RELATIVO'
+                        if(!Object.keys(etiquetas).includes(line_operando)){
+                               // line.errores.push()
+
+                        //else
                             line.errores.push(3) //ERROR 03 Etiqueta inexistente
-                        
+                        }
                     } else{
                         if(line.operando[0].indexOf("#") != -1) // si contiene #
                             line.errores.push(1)   //ERROR 1 Constante inexistente
@@ -309,23 +310,23 @@ function traduccion(excel){
                         line.opcode=opcode
                         if(line.tipo_direccionamiento!="RELATIVO" && line.tipo_direccionamiento!="INHERENTE" && !line.errores.includes(1) && !line.errores.includes(2)){
                             var operando_hex = get_operando_hex(line.operando)
-                            console.log(operando_hex)
+                            //console.log(operando_hex)
                             var bytes_contados = (line.opcode.length/2)+(operando_hex.length/2);
                             if (bytes_contados == numBytesTotales){
-                                console.log("Bytes chidos ;)")
+                                //console.log("Bytes chidos ;)")
                                 line.operando_hex=operando_hex
-                                console.log(line)
+                                //console.log(line)
                             }else{
-                                console.log("Pesimo control de bytes")
+                                /*console.log("Pesimo control de bytes")
                                 console.log("Opcode:", line.opcode)
                                 console.log("Operando_hex:", operando_hex)
-                                console.log(line)
+                                console.log(line)*/
                             }    
                         }else if(line.tipo_direccionamiento=="RELATIVO"){
-                            console.log("Que hacemos con relativo?")
+                            /*console.log("Que hacemos con relativo?")
                             console.log("-------------------------")
                             console.log(line)
-                            console.log("-------------------------")
+                            console.log("-------------------------")*/
                         }
                     }
                 }
@@ -355,7 +356,8 @@ function main(data){
         fs.appendFile('nmms.txt','line', function (err) {
         if (err) throw err;
   
-        });        
+        });   
+        console.log(lines)     
     });
 }
 
