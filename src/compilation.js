@@ -107,7 +107,7 @@ function tipo_direccionamiento(rows){
                     //POSIBLE MODO INMEDIATO, REVISAR EL EL EXCEL QUE COINCIDA
                     line.tipo_direccionamiento = 'INMEDIATO'
 
-                }else {
+                }else if(line.tipo_direccionamiento!='RELATIVO'){
                     //MOVER A DONDE YA VAYAMOS A TRADUCIR
                     if (!line_operando.startsWith('$')){    //El $ probablemente sea el segundo caracter
                         //PASARLO A HEXADECIMAL
@@ -353,10 +353,10 @@ function main(data){
         //escribir archivos LST
         var fs = require('fs');
         //src/nmms.txt >>final text
-        fs.appendFile('nmms.txt','line', function (err) {
-        if (err) throw err;
+        // fs.appendFile('nmms.txt','line', function (err) {
+        // if (err) throw err;
   
-        });   
+        // });   
         console.log(lines)     
     });
 }
