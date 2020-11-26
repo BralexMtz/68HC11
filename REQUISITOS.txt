@@ -4,7 +4,7 @@
     - Inherente     (Bralex) 
     - Directo       (Osvaldo)
     - Inmediato     (Brandon)
-    - Relativo      (Bralex)
+    - Relativo      (Bralex)  -falta
     - Extendido     (Osvaldo)
     - Indexado      (Brandon)
 

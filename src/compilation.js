@@ -330,7 +330,7 @@ function traduccion(excel){
                     }
                 }
             }else{ // Es una excepcion
-
+                
             }
         }
     }
