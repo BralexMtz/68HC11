@@ -231,13 +231,14 @@ function exist_mnemonicos(rows){
     var end = 0;
     for (var linea_obj of lines){
         if(linea_obj.tipo=="INSTRUCCION"){
-            for (var num = 2 ; num<=99 ; num++){
-                if(linea_obj.instruccion.toUpperCase() == rows[num][0].toUpperCase() || directives.includes(linea_obj.instruccion.toUpperCase())){
+            for (var row of rows){
+                if(linea_obj.instruccion.toLowerCase() == row[0] || directives.includes(linea_obj.instruccion.toUpperCase())){
                     bandera = 1; // SI HAY NMEMONICO en excel o DIRECTIVA
                 }                
             }
             if(bandera == 0){
                 linea_obj.errores.push(4) //ERROR 04 Mnemonico inexistente
+
             }
             bandera=0;
             if(linea_obj.instruccion.toUpperCase() == 'END')
@@ -348,6 +349,7 @@ function main(data){
         
         tipo_direccionamiento(rows)
         traduccion(rows)
+        console.log(lines)     
 
 
         //escribir archivos LST
@@ -357,7 +359,6 @@ function main(data){
         // if (err) throw err;
   
         // });   
-        console.log(lines)     
     });
 }
 
