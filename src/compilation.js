@@ -127,11 +127,23 @@ function tipo_direccionamiento(rows){
     
                     }else if (numBytesOperando == 2){
                         line.tipo_direccionamiento = 'EXTENDIDO'
-                    }
-                    //REVISEN LAS EXCEPCIONES, SON IMPORTANTISIMAS Y TAL VEZ VAYAN AQUI
+
+                    }                    
+
                 }
                 
             }
+    }else if (line.tipo == 'EXCEPCION'){
+/*         console.log(line.operando[0])
+        console.log(line.instruccion)
+        console.log('-----------------') */
+        if(line.operando[0].endsWith(',X')){
+            line.tipo_direccionamiento = 'INDEXADO_X'
+        }else if(line.operando[0].endsWith(',Y')){
+            line.tipo_direccionamiento = 'INDEXADO_Y'
+        }else{
+            line.tipo_direccionamiento = 'DIRECTO'
+        } 
     }
 }
 }
@@ -271,6 +283,7 @@ function get_operando_hex(operando_list){
 function traduccion(excel){
 
     for (const line of lines) {
+        //VALIDAR QUE NO SEA UNA EXCEPCION
         if(line.tipo=="INSTRUCCION" && !line.errores.includes(4) && !directives.includes(line.instruccion)){
             if(!is_excepcion(line.instruccion)){
             
@@ -309,7 +322,8 @@ function traduccion(excel){
                         var opcode=row[columna]
                         var numBytesTotales=row[columna+1]
                         line.opcode=opcode
-                        if(line.tipo_direccionamiento!="RELATIVO" && line.tipo_direccionamiento!="INHERENTE" && !line.errores.includes(1) && !line.errores.includes(2)){
+                        if(line.tipo_direccionamiento!="RELATIVO" && line.tipo_direccionamiento!="INHERENTE" 
+                            && !line.errores.includes(1) && !line.errores.includes(2) && line.tipo != "EXCEPCION"){
                             var operando_hex = get_operando_hex(line.operando)
                             //console.log(operando_hex)
                             var bytes_contados = (line.opcode.length/2)+(operando_hex.length/2);
@@ -331,8 +345,9 @@ function traduccion(excel){
                         }
                     }
                 }
-            }else{ // Es una excepcion
-                
+            }else if (line.tipo == "EXCEPCION"){ // Es una excepcion
+                //TRADUCCION PARA LAS EXCEPCIONES DE 2 Y 3 OPERANDOS
+                //
             }
         }
     }
@@ -354,11 +369,11 @@ function main(data){
 
         //escribir archivos LST
         var fs = require('fs');
-        //src/nmms.txt >>final text
-        // fs.appendFile('nmms.txt','line', function (err) {
-        // if (err) throw err;
+        // src/nmms.txt >>final text
+        //  fs.appendFile('nmms.txt','line', function (err) {
+        //  if (err) throw err;
   
-        // });   
+        //  });   
     });
 }
 
