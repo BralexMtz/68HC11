@@ -4,6 +4,8 @@ var lines=[];
 var values=[];
 var etiquetas=[];
 const directives=["ORG","END","EQU","FCB"]
+var memoria_inicio;
+
 
 function linea(){
     this.tipo; //  ETIQUETA, INSTRUCCION, VARIABLE, COMENTARIO, EXCEPCION
@@ -13,6 +15,7 @@ function linea(){
     this.is_identado;
     this.comentario;
     this.tipo_direccionamiento;
+    this.operando_hex=[]
     //
     this.linea_str;
     
@@ -59,6 +62,7 @@ function is_numeric(cadena){
         return true;
 
 }
+
 
 function tipo_direccionamiento(rows){
     // INHERENTE, INMEDIATO, DIRECTO, EXTENDIDO, INDEXADO_X, INDEXADO_Y, RELATIVO
@@ -194,9 +198,14 @@ function get_lines(data){
         longitud = renglones[index].length;
         linea_X =  new linea();
         linea_X.linea_str=lineas[index];
+        if (renglones[index][0] == 'ORG'){
+            memoria_inicio = renglones[index][1].replace("$", "")
+        }
+
         if(longitud == 1 && renglones[index][0].length != 0 && !is_identado(lineas[index])){
             //ES ETIQUETA
             linea_X.tipo = 'ETIQUETA';
+            linea_X.instruccion=renglones[index][0]     //GUARDAMOS LAS ETIQUETAS EN EL CAMPO INSRTUCCION
             if(renglones[index][0]=='END')
                 linea_X.instruccion=renglones[index][0]
             etiquetas[renglones[index][0]]="x"
@@ -261,32 +270,40 @@ function exist_mnemonicos(rows){
     if(end==0)
         lines[lines.length-1].errores.push(10) // ERROR 10 No se Encuentra END
 }
-function get_operando_hex(operando_list){
-    operando=operando_list[0]
+function get_operando_hex(operandoFormato){//PASAMOS EL VALOR EN LUGAR DE LA LISTA MEJOR
+    var resultado;
+    //console.log(operandoFormato)
+    operando=operandoFormato   //MODIFICAMOS?
     if(Object.keys(values).includes(operando)){ // es una variable o una constante
         operando=values[operando]
-
     }
-    operando=operando.replace("#","")
-    if(operando.startsWith('$')){
-        return operando.replace("$","")
-    }else if(is_numeric(operando)){
-        return Number(parseInt(operando, 10)).toString(16)
-    }else{
+    operando=operando.replace("#","")  //QUITA EL #
+    operando=operando.replace(",X","") //QUITA LA X
+    operando=operando.replace(",Y","") //QUITA LA Y
+    if(operando.startsWith('$')){    //hexadecimal
+        resultado= operando.replace("$","")
+    }else if(is_numeric(operando)){  //decimal
+        resultado= Number(parseInt(operando, 10)).toString(16)
+    }else{ 
         console.log("operando mal redactado: ",operando)
     }
+    if(resultado.length%2==1){ //SÍ ES IMPAR
+        resultado.length='0'+resultado
+    }
+
+    return resultado
 
 
 }
 
 
 function traduccion(excel){
-
+    var memoria_actual=0; 
     for (const line of lines) {
         //VALIDAR QUE NO SEA UNA EXCEPCION
-        if(line.tipo=="INSTRUCCION" && !line.errores.includes(4) && !directives.includes(line.instruccion)){
-            if(!is_excepcion(line.instruccion)){
-            
+        if((line.tipo=="INSTRUCCION" || line.tipo=="EXCEPCION") && !line.errores.includes(4) && !directives.includes(line.instruccion)){
+            //if(!is_excepcion(line.instruccion)){
+                                
                 var columna;
                     // INHERENTE, INMEDIATO, DIRECTO, EXTENDIDO, INDEXADO_X, INDEXADO_Y, RELATIVO
                 switch (line.tipo_direccionamiento) {
@@ -316,44 +333,157 @@ function traduccion(excel){
                         console.log("tipo direccionamiento desconocido: "+line.tipo_direccionamiento)
                         break;
                 }
-                
+                //IF DE VALIDACION DE EXCEPCION
                 for (var row of excel){
-                    if(line.instruccion.toLowerCase()==row[0]){
-                        var opcode=row[columna]
-                        var numBytesTotales=row[columna+1]
-                        line.opcode=opcode
+                    if(line.instruccion.toLowerCase()==row[0]){  ///menonico
+                        var opcode=row[columna]  
+                        if(opcode=='--'){ //INSTRUCCION INHERENTE QUE LLEVA OPERANDO y se tomo como directo, indexado o otro
+                            if(is_anweisung_tipo(line.instruccion,excel,11)){//si es inmediato
+                                line.errores.push(6) //operando de más
+                            }else{
+                                let columna_direcc=[3,5,7,9,1,13]
+                                let bandera=0
+                                for(colum of columna_direcc){
+                                    if(is_anweisung_tipo(line.instruccion,excel,colum)){
+                                        bandera=1
+                                    }
+                                }
+                                if(bandera==1){
+                                    line.errores.push(5)
+                                } 
+                            }
+                        }else{  
+                            var numBytesTotales=row[columna+1]  
+                            line.opcode=opcode.toString()
+                            if(line.opcode.length%2==1){
+                                line.opcode='0'+line.opcode;
+                            }
+                            line.memoria=memoria_actual
+                            memoria_actual +=line.get_bytes(line.opcode)
+                        }
                         if(line.tipo_direccionamiento!="RELATIVO" && line.tipo_direccionamiento!="INHERENTE" 
-                            && !line.errores.includes(1) && !line.errores.includes(2) && line.tipo != "EXCEPCION"){
-                            var operando_hex = get_operando_hex(line.operando)
-                            //console.log(operando_hex)
+                            && !line.errores.includes(1) && !line.errores.includes(2) && !line.errores.includes(6) 
+                            && !line.errores.includes(5) && !is_excepcion(line.instruccion)){
+                            
+                            var operando_hex = get_operando_hex(line.operando[0]) 
+                            //    TRADUCCION DE OPERANDOS
                             var bytes_contados = (line.opcode.length/2)+(operando_hex.length/2);
                             if (bytes_contados == numBytesTotales){
                                 //console.log("Bytes chidos ;)")
-                                line.operando_hex=operando_hex
+                                //asigna
+                                memoria_actual+=(operando_hex.length/2)
+                                line.operando_hex.push(operando_hex)  
                                 //console.log(line)
-                            }else{
-                                /*console.log("Pesimo control de bytes")
-                                console.log("Opcode:", line.opcode)
-                                console.log("Operando_hex:", operando_hex)
-                                console.log(line)*/
-                            }    
+                                
+                            }else{ //MAGNITUD DE OPERANDO ERRONEA
+                                line.errores.push(7)
+                              
+                            }
+                            
+    
                         }else if(line.tipo_direccionamiento=="RELATIVO"){
-                            /*console.log("Que hacemos con relativo?")
-                            console.log("-------------------------")
-                            console.log(line)
-                            console.log("-------------------------")*/
+                            line.operando_hex.push({etiqueta:line.operando[0],memoria_sig:memoria_actual})
+
+                            
+                        }else if(line.tipo == 'EXCEPCION'){
+                            let oper1=get_operando_hex(line.operando[0])
+                            line.operando_hex.push(oper1) 
+                            memoria_actual+=(oper1.length/2)
+                            let oper2=get_operando_hex(line.operando[1])
+                            line.operando_hex.push(oper2) 
+                            memoria_actual+=(oper2.length/2)
+                            if (line.operando.length >= 3){ //Se trata de BRCLR ó BRSET
+                                line.operando_hex.push({etiqueta:line.operando[2],memoria_sig:memoria_actual})//HACEMOS LO DEL RELATIVO CON LA ETIQUETA
+                            } 
                         }
                     }
                 }
-            }else if (line.tipo == "EXCEPCION"){ // Es una excepcion
-                //TRADUCCION PARA LAS EXCEPCIONES DE 2 Y 3 OPERANDOS
-                //
-            }
+        }else if(line.tipo=="ETIQUETA"){
+            etiquetas[line.instruccion]=memoria_actual
         }
     }
 }
 
+function reglasSuma(arriba, abajo){
+    iguales = (arriba == '1') && (abajo == '1')
+    ceros = ((arriba == '0') && (abajo == '0'))
+    if (iguales || ceros)
+        return '0'
+    else
+        return '1'
+}
 
+function complementoADos(binario){
+    var uno = ''
+    for (var i=1;i<binario.length; i++ ){
+        uno += '0'
+    }
+    uno += '1'
+    var noBinario = ''
+    for (bit of binario){
+        if (bit == 1)
+            noBinario += '0'
+        else
+            noBinario += '1'
+    }
+    var contador = uno.length
+    var resultado = ''
+    var acarreo = false
+
+    for (bit of binario){
+        
+        if (acarreo){
+            acarreo=false
+            noBinario[contador-1] = reglasSuma(noBinario[contador-1],1)
+        }
+        resultado += reglasSuma(noBinario[contador-1], uno[contador-1])
+        
+        if ((noBinario[contador-1] + uno[contador-1]) == 2){
+            acarreo = true
+        }
+
+        contador -= 1
+    }    
+    
+    resultado = parseInt(resultado.split('').reverse().join(''), 2).toString(16)
+
+    return (resultado.length==1)? 'F'+resultado.toUpperCase(): resultado.toUpperCase()
+
+
+
+}
+
+function relative_generation(){
+    console.log(etiquetas)
+    for(line of lines){
+        if(line.tipo_direccionamiento=="RELATIVO" || (line.tipo=="EXCEPCION" && line.operando_hex.length>2)) {
+
+            var index=0
+            if(line.tipo=="EXCEPCION"){
+                index=2
+            }
+
+            var lugar_etiqueta=etiquetas[line.operando_hex[index].etiqueta]    
+            var lugar_relativo=line.operando_hex[index].memoria_sig
+            var resultado=lugar_etiqueta - lugar_relativo;
+            if(resultado<=128 && resultado>= -127){ 
+                //PASAR DE DECIMAL A HEXADECIMAL INCLUYENDO NEGATIVOS
+                if(resultado<0){
+                    resultado*=-1;
+                    resultado=resultado.toString(2)
+                    resultado=complementoADos(resultado)
+                }else{
+                    resultado=resultado.toString(16)
+                }
+
+                line.operando_hex[index]=resultado
+
+            }else{
+                line.errores.push(8)
+            }
+        }       
+    }
+}
 
 
 function main(data){
@@ -364,8 +494,9 @@ function main(data){
         
         tipo_direccionamiento(rows)
         traduccion(rows)
-        console.log(lines)     
-
+        console.log(etiquetas)
+        relative_generation()
+        
 
         //escribir archivos LST
         var fs = require('fs');
