@@ -54,7 +54,3 @@ function complementoADos(binario){
 
 }
 
-
-var resultado = complementoADos('1010')
-var prueba=''
-console.log(prueba.length)

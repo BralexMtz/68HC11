@@ -214,7 +214,7 @@ function get_lines(data){
         linea_X.linea_str=lineas[index];
         if (renglones[index][0] == 'ORG'){
             if(memoria_inicio.length==0)
-                memoria_inicio = renglones[index][1].replace("$", "")
+                memoria_inicio = parseInt(renglones[index][1].replace("$", ""),16).toString()
         }
 
         if(longitud == 1 && renglones[index][0].length != 0 && !is_identado(lineas[index])){
@@ -257,8 +257,6 @@ function get_lines(data){
             linea_X.tipo = 'COMENTARIO'
             linea_X.comentario = comentario
         }
-        if (renglones[index][0] == 'ORG')
-            console.log(linea_X)
 
         renglones[index]=linea_X
     }
@@ -550,7 +548,11 @@ function impresoraFormato(lines){
             status = 'A'
         
         impresion = ''
-        if (lines[i].tipo == 'COMENTARIO'){
+
+        if(lines[i].errores.length!=0){
+            impresion=renglon.toString().padStart(3)+'  '+status
+            impresion=generate_column(impresion)+''+lines[i].linea_str
+        }else if(lines[i].tipo == 'COMENTARIO'){
             impresion = renglon.toString().padStart(3)+'  '+status
             impresion = generate_column(impresion)+' '+lines[i].linea_str
         }else if (lines[i].tipo == 'VARIABLE'){
@@ -564,16 +566,21 @@ function impresoraFormato(lines){
         }else if(lines[i].tipo == 'INSTRUCCION' || lines[i].tipo == 'EXCEPCION'){
             //Imprime con memoria actual
            
-            if (lines[i].instruccion == 'ORG'){
-                memoria_inicio = lines[i].operando[0].replace('$', '')
-            }
+
             if(directives.includes(lines[i].instruccion)){
-                lines[i].memoria=''
+
+                lines[i].memoria=0
                 lines[i].opcode=''
                 lines[i].operando_hex.push('')
             }
+            if (lines[i].instruccion == 'ORG'){
+                memoria_inicio = parseInt(lines[i].operando[0].replace('$', ''),16)   
+                console.log(lines[i])
+            }
+            
 
             lines[i].memoria += Number(memoria_inicio)  //Primera columna
+            lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
             impresion += renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria
             impresion += '  '+lines[i].opcode
             for(operando of lines[i].operando_hex)
@@ -585,21 +592,23 @@ function impresoraFormato(lines){
             var n = i
             var encontrado=false
             while(n<lines.length && !encontrado){ //busca siguiente memoria
-                if(lines[n].tipo="INSTRUCCION"){
+                if(lines[n].tipo=="INSTRUCCION"){
                     lines[i].memoria=lines[n].memoria
                     encontrado=true
                 }
-
+                n++
             }
             if(!encontrado){
                 lines[i].memoria=''
             }
             
             lines[i].memoria += Number(memoria_inicio)  //Primera columna
+            lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
             impresion += renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria
             impresion = generate_column(impresion) + lines[i].linea_str
-        }   
+        }
         impresionGlobal+=impresion+"\n"
+
         
         if (lines[i].errores.length != 0){ // Tiene Errores :c
             impresionGlobal+="   ^^^^   "
@@ -629,7 +638,6 @@ function main(data){
         //escribir archivos LST    
         impresoraFormato(lines)
 
-        console.log(lines[56])
 
     });
 }
