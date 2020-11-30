@@ -4,7 +4,7 @@ var lines=[];
 var values=[];
 var etiquetas=[];
 const directives=["ORG","END","EQU","FCB"]
-var memoria_inicio;
+var memoria_inicio='';
 
 
 function linea(){
@@ -16,7 +16,7 @@ function linea(){
     this.comentario;
     this.tipo_direccionamiento;
     this.operando_hex=[]
-    //
+    this.memoria
     this.linea_str;
     
     this.get_bytes= function (numOperando) {
@@ -88,7 +88,11 @@ function tipo_direccionamiento(rows){
                 if( !operando_etiqueta.startsWith('$') && !is_numeric(operando_etiqueta) ){//si el operando no es hexadecimal ni decimal
                    
                     if (Object.keys(values).includes(operando_etiqueta)){ // valida si el operando es variable
-                        line_operando = values[operando_etiqueta] //asigna el valor
+                        if(line.operando[0].indexOf('#') != -1)
+                            line_operando = '#'+values[operando_etiqueta] //asigna el valor
+                        else
+                            line_operando = values[operando_etiqueta] //asigna el valor
+
                     }else if (is_anweisung_tipo(line.instruccion,rows,13)){ // si es tipo 
                         line.tipo_direccionamiento = 'RELATIVO'
                         if(!Object.keys(etiquetas).includes(line_operando)){
@@ -98,10 +102,13 @@ function tipo_direccionamiento(rows){
                             line.errores.push(3) //ERROR 03 Etiqueta inexistente
                         }
                     } else{
-                        if(line.operando[0].indexOf("#") != -1) // si contiene #
-                            line.errores.push(1)   //ERROR 1 Constante inexistente
-                        else
-                            line.errores.push(2)    //ERROR 2   Variable inexistente
+                        //if (!Object.keys(etiquetas).includes(line_operando)){
+                            if(line.operando[0].indexOf("#") != -1) // si contiene # y no es una directiva
+                                line.errores.push(1)   //ERROR 1 Constante inexistente
+                            else 
+                                line.errores.push(2)    //ERROR 2   Variable inexistente
+                        //}
+                        
                     }
                 }
                 numBytesOperando = line.get_bytes(line_operando)
@@ -111,7 +118,8 @@ function tipo_direccionamiento(rows){
                     //POSIBLE MODO INMEDIATO, REVISAR EL EL EXCEL QUE COINCIDA
                     line.tipo_direccionamiento = 'INMEDIATO'
 
-                }else if(line.tipo_direccionamiento!='RELATIVO'){
+                }else{
+                    if(line.tipo_direccionamiento!='RELATIVO'){
                     //MOVER A DONDE YA VAYAMOS A TRADUCIR
                     if (!line_operando.startsWith('$')){    //El $ probablemente sea el segundo caracter
                         //PASARLO A HEXADECIMAL
@@ -126,13 +134,19 @@ function tipo_direccionamiento(rows){
                         //POSIBLE INDEXADO CON RESPECTO DE Y
                         line.tipo_direccionamiento = 'INDEXADO_Y'
                         
-                    }else if (numBytesOperando == 1){
+                    }
+                    else if (numBytesOperando == 1){
                         line.tipo_direccionamiento = 'DIRECTO'
     
                     }else if (numBytesOperando == 2){
                         line.tipo_direccionamiento = 'EXTENDIDO'
 
-                    }                    
+                    }else if (numBytesOperando >0.5 && !Object.keys(etiquetas).includes(line_operando)){
+                        line.tipo_direccionamiento = 'EXTENDIDO'
+                        line.errores.push(7)
+                    }
+                }
+
 
                 }
                 
@@ -199,7 +213,8 @@ function get_lines(data){
         linea_X =  new linea();
         linea_X.linea_str=lineas[index];
         if (renglones[index][0] == 'ORG'){
-            memoria_inicio = renglones[index][1].replace("$", "")
+            if(memoria_inicio.length==0)
+                memoria_inicio = renglones[index][1].replace("$", "")
         }
 
         if(longitud == 1 && renglones[index][0].length != 0 && !is_identado(lineas[index])){
@@ -235,12 +250,16 @@ function get_lines(data){
             linea_X.comentario = comentario
             values[renglones[index][0]] =  renglones[index][2]
         }else if(longitud > 1 && !is_identado(lineas[index])){ //pegado al margen con operandos
+            linea_X.tipo='COMENTARIO'
             linea_X.errores.push(9)
         }else{
             //ES PURO COMENTARIO O NADA(\n)
             linea_X.tipo = 'COMENTARIO'
             linea_X.comentario = comentario
         }
+        if (renglones[index][0] == 'ORG')
+            console.log(linea_X)
+
         renglones[index]=linea_X
     }
     return renglones;
@@ -274,6 +293,7 @@ function get_operando_hex(operandoFormato){//PASAMOS EL VALOR EN LUGAR DE LA LIS
     var resultado;
     //console.log(operandoFormato)
     operando=operandoFormato   //MODIFICAMOS?
+    operando=operando.replace("#","")  //QUITA EL #
     if(Object.keys(values).includes(operando)){ // es una variable o una constante
         operando=values[operando]
     }
@@ -330,7 +350,7 @@ function traduccion(excel){
                         break;
                     
                     default:
-                        console.log("tipo direccionamiento desconocido: "+line.tipo_direccionamiento)
+                        console.log("tipo direccionamiento desconocido: "+line.linea_str)
                         break;
                 }
                 //IF DE VALIDACION DE EXCEPCION
@@ -354,7 +374,7 @@ function traduccion(excel){
                             }
                         }else{  
                             var numBytesTotales=row[columna+1]  
-                            line.opcode=opcode.toString()
+                            line.opcode=opcode.toString().replace(/\s+/g,'')
                             if(line.opcode.length%2==1){
                                 line.opcode='0'+line.opcode;
                             }
@@ -363,7 +383,7 @@ function traduccion(excel){
                         }
                         if(line.tipo_direccionamiento!="RELATIVO" && line.tipo_direccionamiento!="INHERENTE" 
                             && !line.errores.includes(1) && !line.errores.includes(2) && !line.errores.includes(6) 
-                            && !line.errores.includes(5) && !is_excepcion(line.instruccion)){
+                            && !line.errores.includes(5) && !is_excepcion(line.instruccion) && !line.errores.includes(7)){
                             
                             var operando_hex = get_operando_hex(line.operando[0]) 
                             //    TRADUCCION DE OPERANDOS
@@ -382,7 +402,7 @@ function traduccion(excel){
                             
     
                         }else if(line.tipo_direccionamiento=="RELATIVO"){
-                            line.operando_hex.push({etiqueta:line.operando[0],memoria_sig:memoria_actual})
+                            line.operando_hex.push({etiqueta:line.operando[0],memoria_sig:memoria_actual+1})
 
                             
                         }else if(line.tipo == 'EXCEPCION'){
@@ -393,7 +413,7 @@ function traduccion(excel){
                             line.operando_hex.push(oper2) 
                             memoria_actual+=(oper2.length/2)
                             if (line.operando.length >= 3){ //Se trata de BRCLR ó BRSET
-                                line.operando_hex.push({etiqueta:line.operando[2],memoria_sig:memoria_actual})//HACEMOS LO DEL RELATIVO CON LA ETIQUETA
+                                line.operando_hex.push({etiqueta:line.operando[2],memoria_sig:memoria_actual+1})//HACEMOS LO DEL RELATIVO CON LA ETIQUETA
                             } 
                         }
                     }
@@ -406,11 +426,13 @@ function traduccion(excel){
 
 function reglasSuma(arriba, abajo){
     iguales = (arriba == '1') && (abajo == '1')
+    //diferentes = ((arriba == '1')&&(abajo == '0')) || ((arriba == '0')&&(abajo == '1'))
     ceros = ((arriba == '0') && (abajo == '0'))
-    if (iguales || ceros)
+    if (iguales || ceros){
         return '0'
-    else
+    }else{
         return '1'
+    }
 }
 
 function complementoADos(binario){
@@ -426,35 +448,35 @@ function complementoADos(binario){
         else
             noBinario += '1'
     }
-    var contador = uno.length
+    var contador = uno.length-1
     var resultado = ''
     var acarreo = false
-
+  
     for (bit of binario){
-        
+        var bit_actual=noBinario[contador]
         if (acarreo){
             acarreo=false
-            noBinario[contador-1] = reglasSuma(noBinario[contador-1],1)
+            if (bit_actual == 1){
+                acarreo = true
+            }
+            bit_actual = reglasSuma(bit_actual,'1')
+            
         }
-        resultado += reglasSuma(noBinario[contador-1], uno[contador-1])
+        resultado += reglasSuma(bit_actual, uno[contador])
         
-        if ((noBinario[contador-1] + uno[contador-1]) == 2){
+        if ((bit_actual == uno[contador]) == 1){
             acarreo = true
         }
 
         contador -= 1
     }    
-    
     resultado = parseInt(resultado.split('').reverse().join(''), 2).toString(16)
 
     return (resultado.length==1)? 'F'+resultado.toUpperCase(): resultado.toUpperCase()
 
 
-
 }
-
 function relative_generation(){
-    console.log(etiquetas)
     for(line of lines){
         if(line.tipo_direccionamiento=="RELATIVO" || (line.tipo=="EXCEPCION" && line.operando_hex.length>2)) {
 
@@ -462,7 +484,6 @@ function relative_generation(){
             if(line.tipo=="EXCEPCION"){
                 index=2
             }
-
             var lugar_etiqueta=etiquetas[line.operando_hex[index].etiqueta]    
             var lugar_relativo=line.operando_hex[index].memoria_sig
             var resultado=lugar_etiqueta - lugar_relativo;
@@ -473,9 +494,9 @@ function relative_generation(){
                     resultado=resultado.toString(2)
                     resultado=complementoADos(resultado)
                 }else{
-                    resultado=resultado.toString(16)
+                    let hexa= resultado.toString(16).toUpperCase()
+                    resultado=(hexa.length==1)?'0'+hexa:hexa;
                 }
-
                 line.operando_hex[index]=resultado
 
             }else{
@@ -483,6 +504,116 @@ function relative_generation(){
             }
         }       
     }
+}
+
+function generate_column(cadena){
+    var n=30
+    var espacios= n-cadena.length
+    for(var i=0; i<espacios;i++)
+        cadena+=' '
+    return cadena
+}
+
+
+
+function impresoraFormato(lines){
+    var memoria_actual = memoria_inicio
+    var fs = require('fs');
+    var descripcionesErrores = ['01- CONSTANTE INEXISTENTE', 
+                                '02- VARIABLE INEXISTENTE', 
+                                '03- ETIQUETA INEXISTENTE', 
+                                '04- MNEMONICO INEXISTENTE', 
+                                '05- INSTRUCCION CARECE DE OPERANDOS', 
+                                '06- INSTRUCCION NO LLEVA OPERANDOS', 
+                                '07- MAGNITUD DE OPERANDO ERRONEA', 
+                                '08- SALTO RELATIVO MUY LEJANO', 
+                                '09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN',
+                                '10- INSTRUCCION CARECE DE AL MENOS UN ESPACIO AL MARGEN', 
+                                '11- NO SE ENCUENTRA END']
+    fs.writeFile('compilacion.LST','',(err)=>{
+        if(err){
+            return console.log(err)
+        }
+    }) //dejamos limpio el archivo
+    var impresion
+    var status ='A';
+    var elementos;
+    var impresionGlobal='';
+    for (var i=0;i<lines.length;i++){
+        var renglon = i+1;
+        // if (renglon.toString().length == 1){
+        //     renglon = ' '+renglon.toString()
+        // }
+        if(lines[i].errores.length!= 0)
+            status = 'E'
+        else
+            status = 'A'
+        
+        impresion = ''
+        if (lines[i].tipo == 'COMENTARIO'){
+            impresion = renglon.toString().padStart(3)+'  '+status
+            impresion = generate_column(impresion)+' '+lines[i].linea_str
+        }else if (lines[i].tipo == 'VARIABLE'){
+            lines[i].memoria = '    '
+            
+            elementos = lines[i].linea_str.replace(/\s+/g,' ').split(' ')
+            elementos = get_operando_hex(elementos[2])
+            impresion = renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria+'  '+elementos
+            impresion = generate_column(impresion) + lines[i].linea_str
+            
+        }else if(lines[i].tipo == 'INSTRUCCION' || lines[i].tipo == 'EXCEPCION'){
+            //Imprime con memoria actual
+           
+            if (lines[i].instruccion == 'ORG'){
+                memoria_inicio = lines[i].operando[0].replace('$', '')
+            }
+            if(directives.includes(lines[i].instruccion)){
+                lines[i].memoria=''
+                lines[i].opcode=''
+                lines[i].operando_hex.push('')
+            }
+
+            lines[i].memoria += Number(memoria_inicio)  //Primera columna
+            impresion += renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria
+            impresion += '  '+lines[i].opcode
+            for(operando of lines[i].operando_hex)
+                impresion+=operando
+            impresion = generate_column(impresion) + lines[i].linea_str
+            
+        }else if(lines[i].tipo == 'ETIQUETA'){
+            //Imprime con memoria actual
+            var n = i
+            var encontrado=false
+            while(n<lines.length && !encontrado){ //busca siguiente memoria
+                if(lines[n].tipo="INSTRUCCION"){
+                    lines[i].memoria=lines[n].memoria
+                    encontrado=true
+                }
+
+            }
+            if(!encontrado){
+                lines[i].memoria=''
+            }
+            
+            lines[i].memoria += Number(memoria_inicio)  //Primera columna
+            impresion += renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria
+            impresion = generate_column(impresion) + lines[i].linea_str
+        }   
+        impresionGlobal+=impresion+"\n"
+        
+        if (lines[i].errores.length != 0){ // Tiene Errores :c
+            impresionGlobal+="   ^^^^   "
+            for(var error of lines[i].errores)      
+                impresionGlobal+= descripcionesErrores[error-1]+' '
+            impresionGlobal+='\n'
+        }
+        
+        
+    }
+     fs.appendFile('compilacion.LST',impresionGlobal, function (err) {
+         if (err) throw err;
+     });
+    
 }
 
 
@@ -494,17 +625,12 @@ function main(data){
         
         tipo_direccionamiento(rows)
         traduccion(rows)
-        console.log(etiquetas)
         relative_generation()
-        
+        //escribir archivos LST    
+        impresoraFormato(lines)
 
-        //escribir archivos LST
-        var fs = require('fs');
-        // src/nmms.txt >>final text
-        //  fs.appendFile('nmms.txt','line', function (err) {
-        //  if (err) throw err;
-  
-        //  });   
+        console.log(lines[56])
+
     });
 }
 
@@ -523,7 +649,4 @@ fs.readFile('codigo.asc', 'utf-8', function (err,data) {
     }
     main(data)
   });
-// node compilation.js
 
-
-//(\s)[a-z]*[A-Z]*

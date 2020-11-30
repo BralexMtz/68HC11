@@ -3,10 +3,11 @@ function reglasSuma(arriba, abajo){
     iguales = (arriba == '1') && (abajo == '1')
     //diferentes = ((arriba == '1')&&(abajo == '0')) || ((arriba == '0')&&(abajo == '1'))
     ceros = ((arriba == '0') && (abajo == '0'))
-    if (iguales || ceros)
+    if (iguales || ceros){
         return '0'
-    else
+    }else{
         return '1'
+    }
 }
 
 function complementoADos(binario){
@@ -22,25 +23,29 @@ function complementoADos(binario){
         else
             noBinario += '1'
     }
-    var contador = uno.length
+    var contador = uno.length-1
     var resultado = ''
     var acarreo = false
-
+    console.log(noBinario)
+    console.log(uno)
     for (bit of binario){
-        
+        var bit_actual=noBinario[contador]
         if (acarreo){
             acarreo=false
-            noBinario[contador-1] = reglasSuma(noBinario[contador-1],1)
+            if (bit_actual == 1){
+                acarreo = true
+            }
+            bit_actual = reglasSuma(bit_actual,'1')
+            
         }
-        resultado += reglasSuma(noBinario[contador-1], uno[contador-1])
+        resultado += reglasSuma(bit_actual, uno[contador])
         
-        if ((noBinario[contador-1] + uno[contador-1]) == 2){
+        if ((bit_actual == uno[contador]) == 1){
             acarreo = true
         }
 
         contador -= 1
     }    
-    
     resultado = parseInt(resultado.split('').reverse().join(''), 2).toString(16)
 
     return (resultado.length==1)? 'F'+resultado.toUpperCase(): resultado.toUpperCase()
@@ -50,6 +55,6 @@ function complementoADos(binario){
 }
 
 
-var resultado = complementoADos('0101')
-
-console.log(resultado);
+var resultado = complementoADos('1010')
+var prueba=''
+console.log(prueba.length)
