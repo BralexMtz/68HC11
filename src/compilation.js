@@ -517,6 +517,9 @@ function generate_column(cadena){
 function impresoraFormato(lines){
     var memoria_actual = memoria_inicio
     var fs = require('fs');
+    var color1 = '#0000FF';
+    var color2 = '#00FF00';
+    var color3 = '#FF0000';
     var descripcionesErrores = ['01- CONSTANTE INEXISTENTE', 
                                 '02- VARIABLE INEXISTENTE', 
                                 '03- ETIQUETA INEXISTENTE', 
@@ -533,10 +536,16 @@ function impresoraFormato(lines){
             return console.log(err)
         }
     }) //dejamos limpio el archivo
+    fs.writeFile('compilacion.html','',(err)=>{
+        if(err){
+            return console.log(err)
+        }
+    })
     var impresion
     var status ='A';
     var elementos;
     var impresionGlobal='';
+    var impresionColor ='<html>\n<body>';
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
         // if (renglon.toString().length == 1){
@@ -550,17 +559,27 @@ function impresoraFormato(lines){
         impresion = ''
 
         if(lines[i].errores.length!=0){
+            impresionColor+= "<p><a style='color:"+color1+";'>"
             impresion=renglon.toString().padStart(3)+'  '+status
+            impresionColor += impresion+"</a><a style='color:"+color3+";'>"
             impresion=generate_column(impresion)+''+lines[i].linea_str
+            impresionColor += lines[i].linea_str+'</a>'
         }else if(lines[i].tipo == 'COMENTARIO'){
+
+            impresionColor+= "<p><a style='color:"+color1+";'>"
             impresion = renglon.toString().padStart(3)+'  '+status
+            impresionColor += impresion+'</a>'
             impresion = generate_column(impresion)+' '+lines[i].linea_str
+
         }else if (lines[i].tipo == 'VARIABLE'){
             lines[i].memoria = '    '
             
             elementos = lines[i].linea_str.replace(/\s+/g,' ').split(' ')
             elementos = get_operando_hex(elementos[2])
-            impresion = renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria+'  '+elementos
+            impresionColor+= "<p style='color:"+color1+";'>"
+            impresion = renglon.toString().padStart(3)+'  '+status;
+            impresionColor += impresion+'</p>'
+            impresion +='  '+lines[i].memoria+'  '+elementos
             impresion = generate_column(impresion) + lines[i].linea_str
             
         }else if(lines[i].tipo == 'INSTRUCCION' || lines[i].tipo == 'EXCEPCION'){
@@ -581,7 +600,10 @@ function impresoraFormato(lines){
 
             lines[i].memoria += Number(memoria_inicio)  //Primera columna
             lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
-            impresion += renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria
+            impresionColor+= "<p style='color:"+color1+";'>"
+            impresion += renglon.toString().padStart(3)+'  '+status;
+            impresionColor += impresion+'</p>'
+            impresion +='  '+lines[i].memoria
             impresion += '  '+lines[i].opcode
             for(operando of lines[i].operando_hex)
                 impresion+=operando
@@ -604,7 +626,10 @@ function impresoraFormato(lines){
             
             lines[i].memoria += Number(memoria_inicio)  //Primera columna
             lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
-            impresion += renglon.toString().padStart(3)+'  '+status+'  '+lines[i].memoria
+            impresionColor+= "<p style='color:"+color1+";'>"
+            impresion += renglon.toString().padStart(3)+'  '+status;
+            impresionColor += impresion+'</p>'
+            impresion += '  '+lines[i].memoria
             impresion = generate_column(impresion) + lines[i].linea_str
         }
         impresionGlobal+=impresion+"\n"
@@ -619,9 +644,13 @@ function impresoraFormato(lines){
         
         
     }
+    impresionColor+='\n</body>\n</html>'
      fs.appendFile('compilacion.LST',impresionGlobal, function (err) {
          if (err) throw err;
      });
+     fs.appendFile('compilacion.html',impresionColor, function (err) {
+        if (err) throw err;
+    });
     
 }
 
