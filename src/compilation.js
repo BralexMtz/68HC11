@@ -545,7 +545,7 @@ function impresoraFormato(lines){
     var status ='A';
     var elementos;
     var impresionGlobal='';
-    var impresionColor ='<html>\n<body>';
+    var impresionColor ='<html>\n<body>\n<table border>'; // Quitar Borde
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
         // if (renglon.toString().length == 1){
@@ -559,28 +559,33 @@ function impresoraFormato(lines){
         impresion = ''
 
         if(lines[i].errores.length!=0){
-            impresionColor+= "<p><a style='color:"+color1+";'>"
+            //ERRORES
+            impresionColor += "<tr><td style='color:"+color1+";'>"
             impresion=renglon.toString().padStart(3)+'  '+status
-            impresionColor += impresion+"</a><a style='color:"+color3+";'>"
+            impresionColor += impresion+"</td><td colspan='2'></td><td colspan='3' style='color:"+color3+";'>"
             impresion=generate_column(impresion)+''+lines[i].linea_str
-            impresionColor += lines[i].linea_str+'</a>'
+            impresionColor += lines[i].linea_str+"</td></tr>"
+
         }else if(lines[i].tipo == 'COMENTARIO'){
 
-            impresionColor+= "<p><a style='color:"+color1+";'>"
+            impresionColor += "<tr><td style='color:"+color1+";'>"
             impresion = renglon.toString().padStart(3)+'  '+status
-            impresionColor += impresion+'</a>'
+            impresionColor += impresion+"</td><td colspan='2'></td><td colspan='3' style='color:"+color3+";'>"
+            impresionColor += lines[i].linea_str+"</td></tr>"
             impresion = generate_column(impresion)+' '+lines[i].linea_str
 
         }else if (lines[i].tipo == 'VARIABLE'){
+
             lines[i].memoria = '    '
-            
             elementos = lines[i].linea_str.replace(/\s+/g,' ').split(' ')
             elementos = get_operando_hex(elementos[2])
-            impresionColor+= "<p style='color:"+color1+";'>"
+            impresionColor += "<tr><td style='color:"+color1+";'>"
             impresion = renglon.toString().padStart(3)+'  '+status;
-            impresionColor += impresion+'</p>'
+            impresionColor += impresion+"</td><td></td><td style='color:"+color2+";'>";
             impresion +='  '+lines[i].memoria+'  '+elementos
+
             impresion = generate_column(impresion) + lines[i].linea_str
+            impresionColor+= elementos+"</td><td style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
             
         }else if(lines[i].tipo == 'INSTRUCCION' || lines[i].tipo == 'EXCEPCION'){
             //Imprime con memoria actual
@@ -600,9 +605,9 @@ function impresoraFormato(lines){
 
             lines[i].memoria += Number(memoria_inicio)  //Primera columna
             lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
-            impresionColor+= "<p style='color:"+color1+";'>"
+            //impresionColor+= "<p style='color:"+color1+";'>"
             impresion += renglon.toString().padStart(3)+'  '+status;
-            impresionColor += impresion+'</p>'
+            //impresionColor += impresion+'</p>'
             impresion +='  '+lines[i].memoria
             impresion += '  '+lines[i].opcode
             for(operando of lines[i].operando_hex)
@@ -626,9 +631,9 @@ function impresoraFormato(lines){
             
             lines[i].memoria += Number(memoria_inicio)  //Primera columna
             lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
-            impresionColor+= "<p style='color:"+color1+";'>"
+            //impresionColor+= "<p style='color:"+color1+";'>"
             impresion += renglon.toString().padStart(3)+'  '+status;
-            impresionColor += impresion+'</p>'
+            //impresionColor += impresion+'</p>'
             impresion += '  '+lines[i].memoria
             impresion = generate_column(impresion) + lines[i].linea_str
         }
@@ -637,14 +642,17 @@ function impresoraFormato(lines){
         
         if (lines[i].errores.length != 0){ // Tiene Errores :c
             impresionGlobal+="   ^^^^   "
+            impresionColor +="<tr><td colspan='4'>   ^^^^   "
             for(var error of lines[i].errores)      
                 impresionGlobal+= descripcionesErrores[error-1]+' '
+                impresionColor += descripcionesErrores[error-1]
             impresionGlobal+='\n'
+            impresionColor += "</td></tr>"
         }
         
         
     }
-    impresionColor+='\n</body>\n</html>'
+    impresionColor+='\n</table>\n</body>\n</html>'
      fs.appendFile('compilacion.LST',impresionGlobal, function (err) {
          if (err) throw err;
      });
@@ -660,13 +668,12 @@ function main(data){
     xlsxFile('../assets/INSTRUCCIONES.xlsx').then((rows)=>{
         lines = get_lines(data)
         exist_mnemonicos(rows);        // CHECK IF EXIST THE INSTRUCCION
-        
+        console.log(lines);
         tipo_direccionamiento(rows)
         traduccion(rows)
         relative_generation()
         //escribir archivos LST    
         impresoraFormato(lines)
-
 
     });
 }
