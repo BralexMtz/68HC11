@@ -586,7 +586,7 @@ function impresoraFormato(lines){
     var color1 = '#0000FF';
     var color2 = '#00FF00';
     var color3 = '#FF0000';
-    var color4 = '#FFFFFF';
+    var color4 = '#000000';
     var descripcionesErrores = ['01- CONSTANTE INEXISTENTE', 
                                 '02- VARIABLE INEXISTENTE', 
                                 '03- ETIQUETA INEXISTENTE', 
