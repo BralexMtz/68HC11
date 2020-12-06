@@ -475,43 +475,43 @@
 475  A                         ***********************************
 476  A  F100                         ORG  $F100
 477  A                           
-478  A  F364  36                     PSHA
+478  A  F100  36                     PSHA
 479  A                          
-480  A  F365  B6102E                 LDAA SCSR
-481  A  F368  B6102F                 LDAA SCDR
-482  A  F36B  970C                   STAA ORDEN
+480  A  F101  B6102E                 LDAA SCSR
+481  A  F104  B6102F                 LDAA SCDR
+482  A  F107  970C                   STAA ORDEN
 483  A                         
-484  A  F36D  32                     PULA  
+484  A  F109  32                     PULA  
 485  A                         
-486  A  F36E  3B                     RTI
+486  A  F10A  3B                     RTI
 487  A                         
 488  A                         ***********************************
 489  A                         * ATENCION A INTERRUPCION REAL TIME
 490  A                         ***********************************
 491  A  F110                        ORG  $F110
 492  A                         
-493  A  F37F  36                    PSHA
-494  A  F380  3C                    PSHX
+493  A  F110  36                    PSHA
+494  A  F111  3C                    PSHX
 495  A                         
-496  A  F381  CE1025                LDX #TFLG2
-497  A  F384  1C0040                BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
-498  A  F387  7A0018                DEC TEMPO
-499  A  F38A  2703                  BEQ SEGUNDO
+496  A  F112  CE1025                LDX #TFLG2
+497  A  F115  1C0040                BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
+498  A  F118  7A0018                DEC TEMPO
+499  A  F11B  2703                  BEQ SEGUNDO
 500  A                               
-501  A  F38C  32                    PULA
-502  A  F38D  38                    PULX
-503  A  F38E  3B                    RTI
+501  A  F11D  32                    PULA
+502  A  F11E  38                    PULX
+503  A  F11F  3B                    RTI
 504  A                         
-505  A  F38F                  SEGUNDO
-506  A  F38F  86FF                  LDAA #$FF
-507  A  F391  970D                  STAA SEG           * SEG ES UNA BANDERA DE SEGUNDO    
-508  A  F393  86F4                  LDAA #$F4         
-509  A  F395  9718                  STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
-510  A  F397  7C1002                INC  PORTG
+505  A  F120                  SEGUNDO
+506  A  F120  86FF                  LDAA #$FF
+507  A  F122  970D                  STAA SEG           * SEG ES UNA BANDERA DE SEGUNDO    
+508  A  F124  86F4                  LDAA #$F4         
+509  A  F126  9718                  STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
+510  A  F128  7C1002                INC  PORTG
 511  A                              
-512  A  F39A  32                    PULA
-513  A  F39B  38                    PULX
-514  A  F39C  3B                    RTI
+512  A  F12B  32                    PULA
+513  A  F12C  38                    PULX
+514  A  F12D  3B                    RTI
 515  A                         ***********************************
 516  A                         * VECTOR INTERRUPCION SERIAL
 517  A                         ***********************************
@@ -521,11 +521,11 @@
 521  A                         ***********************************
 522  A                         * VECTOR INTERRUPCION REAL TIME
 523  A                         ***********************************
-524  A  FFF0                         ORG   $FFF0
-525  A  FFF0                         FCB   $F1,$10       
+524  A  FFFE                         ORG   $FFFE
+525  A  FFFE                         FCB   $F1,$10       
 526  A                         
 527  A                         ***********************************
 528  A                         *RESET
 529  A                         ***********************************
-530  A  FFF0                         END       $8000       
+530  A  FFFE                         END       $8000       
 531  A                         

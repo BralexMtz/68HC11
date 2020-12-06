@@ -334,6 +334,9 @@ function traduccion(excel){
     var memoria_actual=0; 
     for (const line of lines) {
         //VALIDAR QUE NO SEA UNA EXCEPCION
+        if(line.tipo=="INSTRUCCION" && line.instruccion=="ORG"){
+            memoria_actual=0
+        }
         if((line.tipo=="INSTRUCCION" || line.tipo=="EXCEPCION") && !line.errores.includes(4) 
         && !directives.includes(line.instruccion)){
                 
@@ -414,6 +417,7 @@ function traduccion(excel){
                             if(line.opcode.length%2==1){
                                 line.opcode='0'+line.opcode;
                             }
+                            
                             line.memoria=memoria_actual
                             memoria_actual +=line.get_bytes(line.opcode)
                         }
