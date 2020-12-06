@@ -459,8 +459,9 @@ function traduccion(excel){
                             memoria_actual+=(oper2.length/2)
                             if (line.operando.length >= 3){ //Se trata de BRCLR ó BRSET
                                 line.operando_hex.push({etiqueta:line.operando[2],memoria_sig:memoria_actual+1})//HACEMOS LO DEL RELATIVO CON LA ETIQUETA
+                                memoria_actual++
                             } 
-                        }else if(line.tipo_direccionamiento="EXTENDIDO" && line.operando!=null ){
+                        }else if(line.tipo_direccionamiento=="EXTENDIDO" && line.operando!=null ){
                              if(Object.keys(etiquetas).includes(line.operando[0]))
                                  memoria_actual+=2
                         }
@@ -555,7 +556,6 @@ function relative_generation(){
             }
         }else if (line.tipo_direccionamiento=="EXTENDIDO"){
             if (Object.keys(etiquetas).includes(line.operando[0])){
-                
                 line.operando_hex[0]= (etiquetas[line.operando]+Number(memoria_inicio)).toString(16).toUpperCase()
 
                 line.errores.splice(line.errores.indexOf(2),1)  //Elimina el error 2
@@ -666,12 +666,12 @@ function impresoraFormato(lines){
                 lines[i].operando_hex.push('')
             }
             if (lines[i].instruccion == 'ORG'){
-                memoria_inicio = parseInt(lines[i].operando[0].replace('$', ''),16)   
+                var memoria_inicio = parseInt(lines[i].operando[0].replace('$', ''),16)   
             }
             
 
             lines[i].memoria += Number(memoria_inicio)  //Primera columna
-            lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
+            lines[i].memoria = lines[i].memoria.toString(16).toUpperCase()
             impresionColor += "\n<tr><td style='color:"+color1+";'>"
             impresion += renglon.toString().padStart(3)+'  '+status;
             impresionColor += impresion+"</td><td style='color:"+color2+";'>"+lines[i].memoria
@@ -690,7 +690,7 @@ function impresoraFormato(lines){
             var n = i
             var encontrado=false
             while(n<lines.length && !encontrado){ //busca siguiente memoria
-                if(lines[n].tipo=="INSTRUCCION"){
+                if(lines[n].tipo=="INSTRUCCION" || lines[n].tipo=="EXCEPCION"){
                     lines[i].memoria=lines[n].memoria
                     encontrado=true
                 }
