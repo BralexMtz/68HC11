@@ -96,385 +96,377 @@
  96  A                         *PROGRAMA PRINCIPAL
  97  A                         **********************************
  98  A  802D                  MAIN  
- 99  A  802D  BD80A7                  JSR    INICIA
+ 99  A  802D  BD                      JSR    INICIA
 100  A                                 
-101  E                        INICIO  CLR    U4
-   ^^^^   09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN 
-102  E                        NO_S1   CLR    U3
-   ^^^^   09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN 
-103  E                        NO_S    CLR    U2
-   ^^^^   09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN 
-104  A  802E  7F000E                  CLR    U1 
+101  A  8030  7F0011          INICIO  CLR    U4
+102  A  8033  7F0010          NO_S1   CLR    U3
+103  A  8036  7F000F          NO_S    CLR    U2
+104  A  8039  7F000E                  CLR    U1 
 105  A                         
 106  A                          
 107  A                         
 108  A                         
-109  A  8031                  OTRO    
-110  A  8031  863F                    LDAA    #'?
-111  A  8033  B7000C                  STAA    ORDEN
+109  A  803C                  OTRO    
+110  A  803C  863F                    LDAA    #'?
+111  A  803E  970C                    STAA    ORDEN
 112  A                                
-113  A  8036                  CICLO
-114  A  8036  B6000C                  LDAA    ORDEN
-115  A  8039  813F                    CMPA    #'?
-116  A  803B  27F5                    BEQ     CICLO
+113  A  8040                  CICLO
+114  A  8040  960C                    LDAA    ORDEN
+115  A  8042  813F                    CMPA    #'?
+116  A  8044  27F2                    BEQ     CICLO
 117  A                         
-118  A  803C  F6000E                  LDAB    U1
-119  A  803F  2606                    BNE     CHECA_U2
-120  A  8040  8173                    CMPA    #'s
-121  A  8042  2611                    BNE     OTRO
-122  A  8043  B7000E                  STAA    U1
-123  A  8046  7E8031                  JMP     OTRO
+118  A  8046  D60E                    LDAB    U1
+119  A  8048  2609                    BNE     CHECA_U2
+120  A  804A  8173                    CMPA    #'s
+121  A  804C  26FE                    BNE     OTRO
+122  A  804E  970E                    STAA    U1
+123  A  8050  7E                      JMP     OTRO
 124  A                         
 125  A                         
-126  A  8047                  CHECA_U2
+126  A  8053                  CHECA_U2
 127  A                         
-128  A  8047  F6000F                  LDAB    U2
-129  A  804A  260A                    BNE     CHECA_U3
-130  A  804B  8154                    CMPA    #'T
-131  E                                BEQ     ES_T
-   ^^^^   03- ETIQUETA INEXISTENTE 08- SALTO RELATIVO MUY LEJANO 
-132  A  804E  8153                    CMPA    #'S
-133  A  8050  271F                    BEQ     OTRO
-134  A  8051  7F000E                  CLR     U1
-135  A  8054  7E8031                  JMP     OTRO
-136  E                        ES_T    STAA    U2
-   ^^^^   09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN 
-137  A  8055  7E8031                  JMP     OTRO
+128  A  8053  D60F                    LDAB    U2
+129  A  8055  2613                    BNE     CHECA_U3
+130  A  8057  8154                    CMPA    #'T
+131  A  8059  270A                    BEQ     ES_T
+132  A  805B  8153                    CMPA    #'S
+133  A  805D  2721                    BEQ     OTRO
+134  A  805F  7F000E                  CLR     U1
+135  A  8062  7E                      JMP     OTRO
+136  A  8065  970F            ES_T    STAA    U2
+137  A  8067  7E                      JMP     OTRO
 138  A                         
-139  A  8056                  CHECA_U3
+139  A  806A                  CHECA_U3
 140  A                         
-141  A  8056  F60010                  LDAB    U3
-142  A  8059  260D                    BNE     CHECA_U4
-143  A  805A  8141                    CMPA    #'A
-144  A  805C  2706                    BEQ     ES_A
-145  A  805D  8153                    CMPA    #'S
-146  E                                BNE     NO_S
-   ^^^^   03- ETIQUETA INEXISTENTE 08- SALTO RELATIVO MUY LEJANO 
-147  A  8060  7F000F                  CLR     U2 
-148  A  8063  7E8031                  JMP     OTRO
+141  A  806A  D610                    LDAB    U3
+142  A  806C  2613                    BNE     CHECA_U4
+143  A  806E  8141                    CMPA    #'A
+144  A  8070  270A                    BEQ     ES_A
+145  A  8072  8153                    CMPA    #'S
+146  A  8074  2640                    BNE     NO_S
+147  A  8076  7F000F                  CLR     U2
+148  A  8079  7E                      JMP     OTRO
 149  A                         
-150  A  8064                  ES_A
+150  A  807C                  ES_A
 151  A                         
-152  A  8064  B70010                  STAA    U3
-153  A  8067  7E8031                  JMP     OTRO
+152  A  807C  9710                    STAA    U3
+153  A  807E  7E                      JMP     OTRO
 154  A                         
-155  A  8068                  CHECA_U4
+155  A  8081                  CHECA_U4
 156  A                         
-157  A  8068  F60011                  LDAB    U4
-158  A  806B  2610                    BNE     CHECA_T
-159  A  806C  8152                    CMPA    #'R
-160  A  806E  2709                    BEQ     ES_R
-161  A  806F  8153                    CMPA    #'S
-162  E                                BNE     NO_S1
-   ^^^^   03- ETIQUETA INEXISTENTE 08- SALTO RELATIVO MUY LEJANO 
-163  A  8072  7F0010                  CLR     U3
-164  A  8075  7F000F                  CLR     U2
-165  A  8078  7E8031                  JMP     OTRO
+157  A  8081  D611                    LDAB    U4
+158  A  8083  2616                    BNE     CHECA_T
+159  A  8085  8152                    CMPA    #'R
+160  A  8087  270D                    BEQ     ES_R
+161  A  8089  8153                    CMPA    #'S
+162  A  808B  2636                    BNE     NO_S1
+163  A  808D  7F0010                  CLR     U3
+164  A  8090  7F000F                  CLR     U2
+165  A  8093  7E                      JMP     OTRO
 166  A                         
-167  A  8079                  ES_R
+167  A  8096                  ES_R
 168  A                         
-169  A  8079  B70011                  STAA    U4
-170  A  807C  7E8031                  JMP     OTRO
+169  A  8096  9711                    STAA    U4
+170  A  8098  7E                      JMP     OTRO
 171  A                          
-172  A  807D                  CHECA_T
+172  A  809B                  CHECA_T
 173  A                         
-174  A  807D  8154                    CMPA    #'T
-175  A  807F  270C                    BEQ     EXITO
-176  A  8080  8153                    CMPA    #'S
-177  E                                BNE     INICIO
-   ^^^^   03- ETIQUETA INEXISTENTE 08- SALTO RELATIVO MUY LEJANO 
-178  A  8083  7F0011                  CLR     U4
-179  A  8086  7F0010                  CLR     U3
-180  A  8089  7F000F                  CLR     U2
-181  A  808C  7E8031                  JMP     OTRO
+174  A  809B  8154                    CMPA    #'T
+175  A  809D  2710                    BEQ     EXITO
+176  A  809F  8153                    CMPA    #'S
+177  A  80A1  2651                    BNE     INICIO
+178  A  80A3  7F0011                  CLR     U4
+179  A  80A6  7F0010                  CLR     U3
+180  A  80A9  7F000F                  CLR     U2
+181  A  80AC  7E                      JMP     OTRO
 182  A                         
-183  A  808D                  EXITO
-184  A  808D  8645                    LDAA  #'E
-185  A  808F  B70019                  STAA  ALTO
-186  A  8092  8658                    LDAA  #'X
-187  A  8094  B7001A                  STAA  BAJO
-188  A  8097  8649                    LDAA  #'I
-189  A  8099  B7001B                  STAA  BASE_H
-190  A  809C  8654                    LDAA  #'T
-191  A  809E  B7001C                  STAA  BASE_L
-192  A  80A1  864F                    LDAA  #'O
-193  A  80A3  B7001D                  STAA  V3
+183  A  80AF                  EXITO
+184  A  80AF  8645                    LDAA  #'E
+185  A  80B1  9719                    STAA  ALTO
+186  A  80B3  8658                    LDAA  #'X
+187  A  80B5  971A                    STAA  BAJO
+188  A  80B7  8649                    LDAA  #'I
+189  A  80B9  971B                    STAA  BASE_H
+190  A  80BB  8654                    LDAA  #'T
+191  A  80BD  971C                    STAA  BASE_L
+192  A  80BF  864F                    LDAA  #'O
+193  A  80C1  971D                    STAA  V3
 194  A                         
-195  A  80A6  7E802D                  JMP MAIN       
+195  A  80C3  7E                      JMP MAIN       
 196  A                         
 197  A                         
 198  A                         ***********************************
 199  A                         * INICIA
 200  A                         ***********************************
-201  A  80A7                  INICIA
+201  A  80C6                  INICIA
 202  A                              
-203  A  80A7  7F000D                CLR  SEG
+203  A  80C6  7F000D                CLR  SEG
 204  A                         
-205  A  80AA  7F1002                CLR  PORTG
-206  A  80AD  86F4                  LDAA #$F4         
-207  A  80AF  B70018                STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
+205  A  80C9  7F1002                CLR  PORTG
+206  A  80CC  86F4                  LDAA #$F4         
+207  A  80CE  9718                  STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
 208  A                         
-209  A  80B2  CE1024                LDX #TMSK2
-210  A  80B5  1C0040                BSET $00,X,#$40    * HABILITA INTERRUPCION TIMER T-REAL
-211  A  80B8  0E                    CLI
+209  A  80D0  CE1024                LDX #TMSK2
+210  A  80D3  1C0040                BSET $00,X,#$40    * HABILITA INTERRUPCION TIMER T-REAL
+211  A  80D6  0E                    CLI
 212  A                         
-213  A  80B9  CE1026                LDX #PACTL
-214  A  80BC  1C0050                BSET $00,X,#$50    * HABILITA PAEN -ACUMULADOR PULSOS ALTOS-
-215  A  80BF  7F1027                CLR PACNT          * BORRA ACUMULADOR DE PULSOS
+213  A  80D7  CE1026                LDX #PACTL
+214  A  80DA  1C0050                BSET $00,X,#$50    * HABILITA PAEN -ACUMULADOR PULSOS ALTOS-
+215  A  80DD  7F1027                CLR PACNT          * BORRA ACUMULADOR DE PULSOS
 216  A                         
-217  A  80C2  8610                  LDAA #$10
-218  A  80C4  B7001B                STAA BASE_H        * PONE UN #1060 COMO DIRECCION BASE INICIAL
-219  A  80C7  8660                  LDAA #$60
-220  A  80C9  B7001C                STAA BASE_L    
+217  A  80E0  8610                  LDAA #$10
+218  A  80E2  971B                  STAA BASE_H        * PONE UN #1060 COMO DIRECCION BASE INICIAL
+219  A  80E4  8660                  LDAA #$60
+220  A  80E6  971C                  STAA BASE_L    
 221  A                               
-222  A  80CC  18CE1060              LDY  #$1060      
+222  A  80E8  18CE1060              LDY  #$1060      
 223  A                               
-224  A  80D0  8616                  LDAA #$16
-225  A  80D2  B70015                STAA BAS_H        * PONE UN #1653 NUMERO TOTAL DE JUEGO DE MUESTRAS
-226  A  80D5  8653                  LDAA #$53
-227  A  80D7  B70016                STAA BAS_L   
+224  A  80EC  8616                  LDAA #$16
+225  A  80EE  9715                  STAA BAS_H        * PONE UN #1653 NUMERO TOTAL DE JUEGO DE MUESTRAS
+226  A  80F0  8653                  LDAA #$53
+227  A  80F2  9716                  STAA BAS_L   
 228  A                         
 229  A                         
-230  A  80DA  7F0019                CLR  ALTO          * INICIA INDICE MUESTRA EN 0
-231  A  80DD  7F001A                CLR  BAJO
+230  A  80F4  7F0019                CLR  ALTO          * INICIA INDICE MUESTRA EN 0
+231  A  80F7  7F001A                CLR  BAJO
 232  A                         
-233  A  80E0  39                     RTS
+233  A  80FA  39                     RTS
 234  A                         ***********************************
 235  A                         * SACA
 236  A                         ***********************************
-237  A  80E1                  SACA
+237  A  80FB                  SACA
 238  A                                     
 239  A                                
-240  A  80E1  B60019                 LDAA  ALTO         * INDICE DE MUESTRA (SEGUNDO)
-241  A  80E4  F6001A                 LDAB  BAJO
-242  A  80E7  188F                   XGDY
-243  A  80E9  1808                   INY
-244  A  80EB  188F                   XGDY
-245  A  80ED  BD8205                 JSR   BINBCD
-246  A  80EE  BD813D                 JSR   DISPLAY
-247  A  80EF  BD812E                 JSR   COMA
+240  A  80FB  9619                   LDAA  ALTO         * INDICE DE MUESTRA (SEGUNDO)
+241  A  80FD  D61A                   LDAB  BAJO
+242  A  80FF  188F                   XGDY
+243  A  8101  1808                   INY
+244  A  8103  188F                   XGDY
+245  A  8105  BD                     JSR   BINBCD
+246  A  8108  BD                     JSR   DISPLAY
+247  A  810B  BD                     JSR   COMA
 248  A                          
-249  A  80F0  B6001B                 LDAA  BASE_H       * INDICE DE MUESTRA (PARTICULAR)
-250  A  80F3  F6001C                 LDAB  BASE_L
-251  A  80F6  188F                   XGDY
+249  A  810E  961B                   LDAA  BASE_H       * INDICE DE MUESTRA (PARTICULAR)
+250  A  8110  D61C                   LDAB  BASE_L
+251  A  8112  188F                   XGDY
 252  A                                
-253  A  80F8  1808                   INY
-254  A  80FA  4F                     CLRA
-255  A  80FB  18E600                 LDAB  $00,Y  
-256  A  80FE  BD8217                 JSR   BNBCD
-257  A  80FF  BD815C                 JSR   DSPLY
-258  A  8100  BD812E                 JSR   COMA
+253  A  8114  1808                   INY
+254  A  8116  4F                     CLRA
+255  A  8117  18E600                 LDAB  $00,Y  
+256  A  811A  BD                     JSR   BNBCD
+257  A  811D  BD                     JSR   DSPLY
+258  A  8120  BD                     JSR   COMA
 259  A                         
-260  A  8101  1808                   INY
-261  A  8103  4F                     CLRA
-262  A  8104  18E600                 LDAB  $00,Y
-263  A  8107  BD8217                 JSR   BNBCD
-264  A  8108  BD815C                 JSR   DSPLY
-265  A  8109  BD812E                 JSR   COMA
+260  A  8123  1808                   INY
+261  A  8125  4F                     CLRA
+262  A  8126  18E600                 LDAB  $00,Y
+263  A  8129  BD                     JSR   BNBCD
+264  A  812C  BD                     JSR   DSPLY
+265  A  812F  BD                     JSR   COMA
 266  A                         
-267  A  810A  1808                   INY
-268  A  810C  4F                     CLRA
-269  A  810D  18E600                 LDAB  $00,Y
-270  A  8110  BD8217                 JSR   BNBCD
-271  A  8111  BD815C                 JSR   DSPLY
-272  A  8112  BD812E                 JSR   COMA
+267  A  8132  1808                   INY
+268  A  8134  4F                     CLRA
+269  A  8135  18E600                 LDAB  $00,Y
+270  A  8138  BD                     JSR   BNBCD
+271  A  813B  BD                     JSR   DSPLY
+272  A  813E  BD                     JSR   COMA
 273  A                         
-274  A  8113  1808                   INY
-275  A  8115  4F                     CLRA
-276  A  8116  18E600                 LDAB  $00,Y
-277  A  8119  BD8217                 JSR   BNBCD
-278  A  811A  BD815C                 JSR   DSPLY
-279  A  811B  BD812E                 JSR   COMA
+274  A  8141  1808                   INY
+275  A  8143  4F                     CLRA
+276  A  8144  18E600                 LDAB  $00,Y
+277  A  8147  BD                     JSR   BNBCD
+278  A  814A  BD                     JSR   DSPLY
+279  A  814D  BD                     JSR   COMA
 280  A                          
-281  A  811C  1808                   INY
-282  A  811E  4F                     CLRA 
-283  A  811F  18E600                 LDAB  $00,Y
-284  A  8122  BD8217                 JSR   BNBCD
-285  A  8123  BD815C                 JSR   DSPLY
+281  A  8150  1808                   INY
+282  A  8152  4F                     CLRA 
+283  A  8153  18E600                 LDAB  $00,Y
+284  A  8156  BD                     JSR   BNBCD
+285  A  8159  BD                     JSR   DSPLY
 286  A                                
-287  A  8124  188F                   XGDY
-288  A  8126  B7001B                 STAA BASE_H
-289  A  8129  F7001C                 STAB BASE_L
+287  A  815C  188F                   XGDY
+288  A  815E  971B                   STAA BASE_H
+289  A  8160  D71C                   STAB BASE_L
 290  A                         
-291  A  812C  BD818A                 JSR   CRYTRN
+291  A  8162  BD                     JSR   CRYTRN
 292  A                         
-293  A  812D  39                     RTS
+293  A  8165  39                     RTS
 294  A                         ***********************************
 295  A                         * COMA
 296  A                         ***********************************
-297  A  812E                  COMA
-298  A  812E  CE102E                 LDX   #SCSR 
+297  A  8166                  COMA
+298  A  8166  CE102E                 LDX   #SCSR 
 299  A                                
-300  A  8131  B6102E                 LDAA  SCSR
-301  A  8134  862C                   LDAA  #$2C             * COMA
-302  A  8136  B7102F                 STAA  SCDR
-303  A  813C                  C1
-304  A  8139  1F0080F4               BRCLR $00,X,#$80 C1 
-305  A  813C  39                     RTS
+300  A  8169  B6102E                 LDAA  SCSR
+301  A  816C  862C                   LDAA  #$2C             * COMA
+302  A  816E  B7102F                 STAA  SCDR
+303  A  8174                  C1
+304  A  8171  1F0080F4               BRCLR $00,X,#$80 C1 
+305  A  8174  39                     RTS
 306  A                         ***********************************
 307  A                         * DESPLIEGA
 308  A                         ***********************************
-309  A  813D                  DISPLAY
+309  A  8175                  DISPLAY
 310  A                                
-311  A  813D  CE102E                 LDX   #SCSR 
+311  A  8175  CE102E                 LDX   #SCSR 
 312  A                                
-313  A  8140  B6102E                 LDAA  SCSR
-314  A  8143  B6000E                 LDAA  U1             * U1
-315  A  8146  8B30                   ADDA  #$30
-316  A  8148  B7102F                 STAA  SCDR
-317  A  814E                  T1
-318  A  814B  1F0080F4               BRCLR $00,X,#$80 T1 
+313  A  8178  B6102E                 LDAA  SCSR
+314  A  817B  960E                   LDAA  U1             * U1
+315  A  817D  8B30                   ADDA  #$30
+316  A  817F  B7102F                 STAA  SCDR
+317  A  8185                  T1
+318  A  8182  1F0080F4               BRCLR $00,X,#$80 T1 
 319  A                               
-320  A  814E  B6102E                 LDAA  SCSR
-321  A  8151  B6000F                 LDAA  U2             * U2
-322  A  8154  8B30                   ADDA  #$30
-323  A  8156  B7102F                 STAA  SCDR
-324  A  815C                  T2
-325  A  8159  1F0080F4               BRCLR $00,X,#$80 T2 
+320  A  8185  B6102E                 LDAA  SCSR
+321  A  8188  960F                   LDAA  U2             * U2
+322  A  818A  8B30                   ADDA  #$30
+323  A  818C  B7102F                 STAA  SCDR
+324  A  8192                  T2
+325  A  818F  1F0080F4               BRCLR $00,X,#$80 T2 
 326  A                         
-327  A  815C                  DSPLY  
-328  A  815C  CE102E                 LDX   #SCSR
+327  A  8192                  DSPLY  
+328  A  8192  CE102E                 LDX   #SCSR
 329  A                             
-330  A  815F  B6102E                 LDAA SCSR
-331  A  8162  B60010                 LDAA  U3             * U3
-332  A  8165  8B30                   ADDA  #$30
-333  A  8167  B7102F                 STAA  SCDR
-334  A  816D                  T3
-335  A  816A  1F0080F4               BRCLR $00,X,#$80 T3 
+330  A  8195  B6102E                 LDAA SCSR
+331  A  8198  9610                   LDAA  U3             * U3
+332  A  819A  8B30                   ADDA  #$30
+333  A  819C  B7102F                 STAA  SCDR
+334  A  81A2                  T3
+335  A  819F  1F0080F4               BRCLR $00,X,#$80 T3 
 336  A                               
-337  A  816D  B6102E                 LDAA SCSR 
-338  A  8170  B60011                 LDAA  U4             * U4
-339  A  8173  8B30                   ADDA  #$30
-340  A  8175  B7102F                 STAA  SCDR
-341  A  817B                  T4
-342  A  8178  1F0080F4               BRCLR $00,X,#$80 T4 
+337  A  81A2  B6102E                 LDAA SCSR 
+338  A  81A5  9611                   LDAA  U4             * U4
+339  A  81A7  8B30                   ADDA  #$30
+340  A  81A9  B7102F                 STAA  SCDR
+341  A  81AF                  T4
+342  A  81AC  1F0080F4               BRCLR $00,X,#$80 T4 
 343  A                            
-344  A  817B  B6102E                 LDAA SCSR
-345  A  817E  B60012                 LDAA  U5             * U5
-346  A  8181  8B30                   ADDA  #$30
-347  A  8183  B7102F                 STAA  SCDR
-348  A  8189                  T5
-349  A  8186  1F0080F4               BRCLR $00,X,#$80 T5  
+344  A  81AF  B6102E                 LDAA SCSR
+345  A  81B2  9612                   LDAA  U5             * U5
+346  A  81B4  8B30                   ADDA  #$30
+347  A  81B6  B7102F                 STAA  SCDR
+348  A  81BC                  T5
+349  A  81B9  1F0080F4               BRCLR $00,X,#$80 T5  
 350  A                                
-351  A  8189  39                     RTS
+351  A  81BC  39                     RTS
 352  A                         
 353  A                         ***********************************
 354  A                         * CARRY RETURN
 355  A                         ***********************************
 356  A                         
-357  A  818A                  CRYTRN
-358  A  818A  CE102E                 LDX   #SCSR 
-359  A  818D  B6102E                 LDAA  SCSR
-360  A  8190  860A                   LDAA  #$0A             * NEW LINE     
-361  A  8192  B7102F                 STAA  SCDR
-362  A  8198                  CR1
-363  A  8195  1F0080F4               BRCLR $00,X,#$80 CR1        
+357  A  81BD                  CRYTRN
+358  A  81BD  CE102E                 LDX   #SCSR 
+359  A  81C0  B6102E                 LDAA  SCSR
+360  A  81C3  860A                   LDAA  #$0A             * NEW LINE     
+361  A  81C5  B7102F                 STAA  SCDR
+362  A  81CB                  CR1
+363  A  81C8  1F0080F4               BRCLR $00,X,#$80 CR1        
 364  A                         
-365  A  8198  B6102E                 LDAA SCSR
-366  A  819B  860D                   LDAA #$0D              * CARRY RETURN     
-367  A  819D  B7102F                 STAA SCDR
-368  A  81A3                  CR2
-369  A  81A0  1F0080F4               BRCLR $00,X,#$80 CR2        
+365  A  81CB  B6102E                 LDAA SCSR
+366  A  81CE  860D                   LDAA #$0D              * CARRY RETURN     
+367  A  81D0  B7102F                 STAA SCDR
+368  A  81D6                  CR2
+369  A  81D3  1F0080F4               BRCLR $00,X,#$80 CR2        
 370  A                         
-371  A  81A3  39                     RTS
+371  A  81D6  39                     RTS
 372  A                         ***********************************
 373  A                         *  DESPLIEGUE DE DATO RECIBIDO
 374  A                         ***********************************
 375  A                         
-376  A  81A4                  DATARX
-377  A  81A4  CE102E                 LDX   #SCSR 
-378  A  81A7  B6102E                 LDAA  SCSR
-379  A  81AA  B6000C                 LDAA  ORDEN             * NEW LINE     
-380  A  81AD  B7102F                 STAA  SCDR
-381  A  81B3                  DT1
-382  A  81B0  1F0080F4               BRCLR $00,X,#$80 DT1        
+376  A  81D7                  DATARX
+377  A  81D7  CE102E                 LDX   #SCSR 
+378  A  81DA  B6102E                 LDAA  SCSR
+379  A  81DD  960C                   LDAA  ORDEN             * NEW LINE     
+380  A  81DF  B7102F                 STAA  SCDR
+381  A  81E5                  DT1
+382  A  81E2  1F0080F4               BRCLR $00,X,#$80 DT1        
 383  A                         
-384  A  81B3  B6102E                 LDAA SCSR 
-385  A  81B6  863A                   LDAA #$3A              * DOS PUNTOS    
-386  A  81B8  B7102F                 STAA SCDR
-387  A  81BE                  DT2
-388  A  81BB  1F0080F4               BRCLR $00,X,#$80 DT2        
+384  A  81E5  B6102E                 LDAA SCSR 
+385  A  81E8  863A                   LDAA #$3A              * DOS PUNTOS    
+386  A  81EA  B7102F                 STAA SCDR
+387  A  81F0                  DT2
+388  A  81ED  1F0080F4               BRCLR $00,X,#$80 DT2        
 389  A                         
-390  A  81BE  39                     RTS
+390  A  81F0  39                     RTS
 391  A                         ***********************************
 392  A                         * voltimetro
 393  A                         ***********************************
-394  A  81BF                  VOLTA
-395  A  81BF  CE1030                LDX #ADCTL      
+394  A  81F1                  VOLTA
+395  A  81F1  CE1030                LDX #ADCTL      
 396  A                         
-397  A  81C2  8680                  LDAA #$80
-398  A  81C4  B71039                STAA OPTION        * PONE EN MARCHA EL ADC
+397  A  81F4  8680                  LDAA #$80
+398  A  81F6  B71039                STAA OPTION        * PONE EN MARCHA EL ADC
 399  A                             
-400  A  81C7  8610                  LDAA #$10
-401  A  81C9  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 0
+400  A  81F9  8610                  LDAA #$10
+401  A  81FB  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 0
 402  A                         
-403  A  81CF                  E1
-404  A  81CC  1F0080F4              BRCLR $00,X,#$80 E1  
-405  A  81CF  F61031                LDAB ADR1
-406  A  81D2  F70013                STAB V1
+403  A  8201                  E1
+404  A  81FE  1F0080F4              BRCLR $00,X,#$80 E1  
+405  A  8201  F61031                LDAB ADR1
+406  A  8204  D713                  STAB V1
 407  A                               
-408  A  81D5  8680                  LDAA #$80
-409  A  81D7  B71039                STAA OPTION        * PONE EN MARCHA EL ADC
+408  A  8206  8680                  LDAA #$80
+409  A  8208  B71039                STAA OPTION        * PONE EN MARCHA EL ADC
 410  A                             
-411  A  81DA  8611                  LDAA #$11
-412  A  81DC  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 1
+411  A  820B  8611                  LDAA #$11
+412  A  820D  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 1
 413  A                         
-414  A  81E2                  E2
-415  A  81DF  1F0080F4              BRCLR $00,X,#$80 E2  
-416  A  81E2  F61032                LDAB ADR2
-417  A  81E5  F70014                STAB V2
+414  A  8213                  E2
+415  A  8210  1F0080F4              BRCLR $00,X,#$80 E2  
+416  A  8213  F61032                LDAB ADR2
+417  A  8216  D714                  STAB V2
 418  A                              
-419  A  81E8  8612                  LDAA #$12
-420  A  81EA  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 2
+419  A  8218  8612                  LDAA #$12
+420  A  821A  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 2
 421  A                         
-422  A  81F0                  E3
-423  A  81ED  1F0080F4              BRCLR $00,X,#$80 E3  
-424  A  81F0  F61033                LDAB ADR3
-425  A  81F3  F7001D                STAB V3 
+422  A  8220                  E3
+423  A  821D  1F0080F4              BRCLR $00,X,#$80 E3  
+424  A  8220  F61033                LDAB ADR3
+425  A  8223  D71D                  STAB V3 
 426  A                         
-427  A  81F6  8613                  LDAA #$13
-428  A  81F8  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 3
+427  A  8225  8613                  LDAA #$13
+428  A  8227  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 3
 429  A                         
-430  A  81FE                  E4
-431  A  81FB  1F0080F4              BRCLR $00,X,#$80 E4  
-432  A  81FE  F61034                LDAB ADR4
-433  A  8201  F7001E                STAB V4
+430  A  822D                  E4
+431  A  822A  1F0080F4              BRCLR $00,X,#$80 E4  
+432  A  822D  F61034                LDAB ADR4
+433  A  8230  D71E                  STAB V4
 434  A                         
 435  A                                    
-436  A  8204  39                    RTS
+436  A  8232  39                    RTS
 437  A                         ***********************************
 438  A                         * CONVIERTE A BCD
 439  A                         ***********************************
 440  A                         
-441  A  8205                  BINBCD
+441  A  8233                  BINBCD
 442  A                              
-443  A  8205  CE2710                LDX  #$2710
-444  A  8208  02                    IDIV 
-445  A  8209  8F                    XGDX
-446  A  820A  F7000E                STAB U1
-447  A  820D  8F                    XGDX
-448  A  820E  CE03E8                LDX  #$3E8
-449  A  8211  02                    IDIV
-450  A  8212  8F                    XGDX
-451  A  8213  F7000F                STAB U2
-452  A  8216  8F                    XGDX
+443  A  8233  CE2710                LDX  #$2710
+444  A  8236  02                    IDIV 
+445  A  8237  8F                    XGDX
+446  A  8238  D70E                  STAB U1
+447  A  823A  8F                    XGDX
+448  A  823B  CE03E8                LDX  #$3E8
+449  A  823E  02                    IDIV
+450  A  823F  8F                    XGDX
+451  A  8240  D70F                  STAB U2
+452  A  8242  8F                    XGDX
 453  A                         
-454  A  8217                  BNBCD
-455  A  8217  CE0064                LDX  #$64
-456  A  821A  02                    IDIV
-457  A  821B  8F                    XGDX
-458  A  821C  F70010                STAB U3
-459  A  821F  8F                    XGDX
-460  A  8220  CE000A                LDX  #$A
-461  A  8223  02                    IDIV
-462  A  8224  8F                    XGDX
-463  A  8225  F70011                STAB U4
-464  A  8228  8F                    XGDX
-465  A  8229  F70012                STAB U5
+454  A  8243                  BNBCD
+455  A  8243  CE0064                LDX  #$64
+456  A  8246  02                    IDIV
+457  A  8247  8F                    XGDX
+458  A  8248  D710                  STAB U3
+459  A  824A  8F                    XGDX
+460  A  824B  CE000A                LDX  #$A
+461  A  824E  02                    IDIV
+462  A  824F  8F                    XGDX
+463  A  8250  D711                  STAB U4
+464  A  8252  8F                    XGDX
+465  A  8253  D712                  STAB U5
 466  A                         
 467  A                         
 468  A                         
-469  A  822C  39                    RTS
+469  A  8255  39                    RTS
 470  A                         
 471  A                         
 472  A                         
@@ -483,43 +475,43 @@
 475  A                         ***********************************
 476  A  F100                         ORG  $F100
 477  A                           
-478  A  F32D  36                     PSHA
+478  A  F356  36                     PSHA
 479  A                          
-480  A  F32E  B6102E                 LDAA SCSR
-481  A  F331  B6102F                 LDAA SCDR
-482  A  F334  B7000C                 STAA ORDEN
+480  A  F357  B6102E                 LDAA SCSR
+481  A  F35A  B6102F                 LDAA SCDR
+482  A  F35D  970C                   STAA ORDEN
 483  A                         
-484  A  F337  32                     PULA  
+484  A  F35F  32                     PULA  
 485  A                         
-486  A  F338  3B                     RTI
+486  A  F360  3B                     RTI
 487  A                         
 488  A                         ***********************************
 489  A                         * ATENCION A INTERRUPCION REAL TIME
 490  A                         ***********************************
 491  A  F110                        ORG  $F110
 492  A                         
-493  A  F349  36                    PSHA
-494  A  F34A  3C                    PSHX
+493  A  F371  36                    PSHA
+494  A  F372  3C                    PSHX
 495  A                         
-496  A  F34B  CE1025                LDX #TFLG2
-497  A  F34E  1C0040                BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
-498  A  F351  7A0018                DEC TEMPO
-499  A  F354  2702                  BEQ SEGUNDO
+496  A  F373  CE1025                LDX #TFLG2
+497  A  F376  1C0040                BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
+498  A  F379  7A0018                DEC TEMPO
+499  A  F37C  2703                  BEQ SEGUNDO
 500  A                               
-501  A  F355  32                    PULA
-502  A  F356  38                    PULX
-503  A  F357  3B                    RTI
+501  A  F37E  32                    PULA
+502  A  F37F  38                    PULX
+503  A  F380  3B                    RTI
 504  A                         
-505  A  F358                  SEGUNDO
-506  A  F358  86FF                  LDAA #$FF
-507  A  F35A  B7000D                STAA SEG           * SEG ES UNA BANDERA DE SEGUNDO    
-508  A  F35D  86F4                  LDAA #$F4         
-509  A  F35F  B70018                STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
-510  A  F362  7C1002                INC  PORTG
+505  A  F381                  SEGUNDO
+506  A  F381  86FF                  LDAA #$FF
+507  A  F383  970D                  STAA SEG           * SEG ES UNA BANDERA DE SEGUNDO    
+508  A  F385  86F4                  LDAA #$F4         
+509  A  F387  9718                  STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS
+510  A  F389  7C1002                INC  PORTG
 511  A                              
-512  A  F365  32                    PULA
-513  A  F366  38                    PULX
-514  A  F367  3B                    RTI
+512  A  F38C  32                    PULA
+513  A  F38D  38                    PULX
+514  A  F38E  3B                    RTI
 515  A                         ***********************************
 516  A                         * VECTOR INTERRUPCION SERIAL
 517  A                         ***********************************

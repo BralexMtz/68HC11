@@ -18,7 +18,7 @@ function linea(){
     this.operando_hex=[]
     this.memoria
     this.linea_str;
-    
+    this.etiqueta=""
     this.get_bytes= function (numOperando) {
         var operatorBytes;
         operatorBytes = numOperando.replace('#', '')
@@ -53,6 +53,8 @@ function is_anweisung_tipo(instruccion, rows, column){
             bandera=true
         }
     }
+
+    
     return bandera
 }
 function is_numeric(cadena){
@@ -97,18 +99,17 @@ function tipo_direccionamiento(rows){
                     }else if (is_anweisung_tipo(line.instruccion,rows,13)){ // si es tipo relativo 
                         line.tipo_direccionamiento = 'RELATIVO'
                         if(!Object.keys(etiquetas).includes(line_operando)){
-                               // line.errores.push()
-
-                        //else
                             line.errores.push(3) //ERROR 03 Etiqueta inexistente
                         }
-                    } else{
+                    }else if(is_anweisung_tipo(line.instruccion,rows,9) && Object.keys(etiquetas).includes(operando_etiqueta)){
+                        line.tipo_direccionamiento='EXTENDIDO'
+                    }else{
                         //if (!Object.keys(etiquetas).includes(line_operando)){
                             if(line.operando[0].indexOf("#") != -1){ // si contiene # y no es una directiva 
-                                line.errores.push(1); console.log(line)   //ERROR 1 Constante inexistente
+                                line.errores.push(1);  //ERROR 1 Constante inexistente
                             }else 
                                 line.errores.push(2)    //ERROR 2   Variable inexistente
-                        //}
+                        //} //DESCOMENTADO
                         
                     }
                 } 
@@ -126,7 +127,7 @@ function tipo_direccionamiento(rows){
                         //PASARLO A HEXADECIMAL
                         line_operando = Number(parseInt(line_operando, 10)).toString(16);
                     }
-
+                    
                     if (line_operando.endsWith(',X')){
                         //POSIBLE INDEXADO CON RESPECTO DE X
                         line.tipo_direccionamiento = 'INDEXADO_X'
@@ -135,14 +136,13 @@ function tipo_direccionamiento(rows){
                         //POSIBLE INDEXADO CON RESPECTO DE Y
                         line.tipo_direccionamiento = 'INDEXADO_Y'
                         
-                    }
-                    else if (numBytesOperando == 1){
+                    }else if (numBytesOperando == 1){
                         line.tipo_direccionamiento = 'DIRECTO'
     
                     }else if (numBytesOperando == 2){
                         line.tipo_direccionamiento = 'EXTENDIDO'
 
-                    }else if (numBytesOperando >0.5 && !Object.keys(etiquetas).includes(line_operando)){
+                    }else if (numBytesOperando > 2 && !Object.keys(etiquetas).includes(operando_etiqueta)){
                         line.tipo_direccionamiento = 'EXTENDIDO'
                         line.errores.push(7)
                     }
@@ -194,7 +194,7 @@ function get_operandos_exception (instruccion, operandos){
     
 }
 
-function get_lines(data){
+function get_lines(data,rows){
     lineas = data.split("\n"); //separa por renglon
     var renglones=[]
     for (var index in lineas) {
@@ -216,6 +216,15 @@ function get_lines(data){
         if (renglones[index][0] == 'ORG'){
             if(memoria_inicio.length==0)
                 memoria_inicio = parseInt(renglones[index][1].replace("$", ""),16).toString()
+        }
+        if(!is_anweisung_tipo(renglones[index][0],rows,0) && longitud>1 && !is_identado(lineas[index])){//si el primero es etiqueta y la longitud es mayor a uno
+            if(is_anweisung_tipo(renglones[index][1],rows,0)){//si el siguiente es mnemonico
+                let etiqueta_nombre=renglones[index][0]
+                renglones[index]=renglones[index].slice(1)
+                etiquetas[etiqueta_nombre]="x"
+                lineas[index]="   "+lines[index]
+                linea_X.etiqueta=etiqueta_nombre
+            }
         }
 
         if(longitud == 1 && renglones[index][0].length != 0 && !is_identado(lineas[index])){
@@ -251,8 +260,8 @@ function get_lines(data){
             linea_X.comentario = comentario
             values[renglones[index][0]] =  renglones[index][2]
         }else if(longitud > 1 && !is_identado(lineas[index])){ //pegado al margen con operandos
-            linea_X.tipo='COMENTARIO'
-            linea_X.errores.push(9)
+                linea_X.errores.push(9)
+                linea_X.tipo='COMENTARIO'
         }else{
             //ES PURO COMENTARIO O NADA(\n)
             linea_X.tipo = 'COMENTARIO'
@@ -301,6 +310,7 @@ function get_operando_hex(operandoFormato){//PASAMOS EL VALOR EN LUGAR DE LA LIS
     operando=operando.replace(",Y","") //QUITA LA Y
     if(operando.startsWith('$')){    //hexadecimal
         resultado= operando.replace("$","")
+        
     }else if(is_numeric(operando)){  //decimal
         resultado= Number(parseInt(operando, 10)).toString(16)
     }else if (operando.startsWith("'")){  //Es un caracter
@@ -308,7 +318,7 @@ function get_operando_hex(operandoFormato){//PASAMOS EL VALOR EN LUGAR DE LA LIS
         resultado = Number(resultado).toString(16).toUpperCase()
         
     } else {
-        console.log("operando mal redactado: ",operando)
+        console.log("operando mal redactado: ",operando,operandoFormato)
     }
     if(resultado.length%2==1){ //SÍ ES IMPAR
         resultado.length='0'+resultado
@@ -324,9 +334,11 @@ function traduccion(excel){
     var memoria_actual=0; 
     for (const line of lines) {
         //VALIDAR QUE NO SEA UNA EXCEPCION
-        if((line.tipo=="INSTRUCCION" || line.tipo=="EXCEPCION") && !line.errores.includes(4) && !directives.includes(line.instruccion)){
-            //if(!is_excepcion(line.instruccion)){
-                                
+        if((line.tipo=="INSTRUCCION" || line.tipo=="EXCEPCION") && !line.errores.includes(4) 
+        && !directives.includes(line.instruccion)){
+                
+                if(line.etiqueta.length != 0)
+                    etiquetas[line.etiqueta]=memoria_actual
                 var columna;
                     // INHERENTE, INMEDIATO, DIRECTO, EXTENDIDO, INDEXADO_X, INDEXADO_Y, RELATIVO
                 switch (line.tipo_direccionamiento) {
@@ -359,6 +371,27 @@ function traduccion(excel){
                 //IF DE VALIDACION DE EXCEPCION
                 for (var row of excel){
                     if(line.instruccion.toLowerCase()==row[0]){  ///menonico
+                        if(is_anweisung_tipo(line.instruccion,excel,3) && line.tipo_direccionamiento=="EXTENDIDO" 
+                            && line.operando[0] != null){
+
+                            var hexadecimal_variables=line.operando[0]
+                            if(Object.keys(values).includes(line.operando[0])){
+                                hexadecimal_variables = values[line.operando[0]]   
+                            }
+                            
+                            var temporal_hexa=hexadecimal_variables
+                            hexadecimal_variables=hexadecimal_variables.replace('$','')
+                        
+                            if(hexadecimal_variables.startsWith("00")){
+                                if(temporal_hexa.startsWith('$'))
+                                    hexadecimal_variables='$'+hexadecimal_variables
+                                   
+                                line.operando[0] = hexadecimal_variables.replace("00","")
+                                line.tipo_direccionamiento = 'DIRECTO'
+                                columna = 3
+                            }
+                        }
+
                         var opcode=row[columna]  
                         if(opcode=='--'){ //INSTRUCCION INHERENTE QUE LLEVA OPERANDO y se tomo como directo, indexado o otro
                             if(is_anweisung_tipo(line.instruccion,excel,11)){//si es inmediato
@@ -384,19 +417,20 @@ function traduccion(excel){
                             line.memoria=memoria_actual
                             memoria_actual +=line.get_bytes(line.opcode)
                         }
+                        
                         if(line.tipo_direccionamiento!="RELATIVO" && line.tipo_direccionamiento!="INHERENTE" 
                             && !line.errores.includes(1) && !line.errores.includes(2) && !line.errores.includes(6) 
-                            && !line.errores.includes(5) && !is_excepcion(line.instruccion) && !line.errores.includes(7)){
-                            
+                            && !line.errores.includes(5) && !is_excepcion(line.instruccion) && !line.errores.includes(7) 
+                            && !Object.keys(etiquetas).includes(line.operando[0])){
+                           
                             var operando_hex = get_operando_hex(line.operando[0]) 
+                            
                             //    TRADUCCION DE OPERANDOS
                             var bytes_contados = (line.opcode.length/2)+(operando_hex.length/2);
                             if (bytes_contados == numBytesTotales){
-                                //console.log("Bytes chidos ;)")
                                 //asigna
                                 memoria_actual+=(operando_hex.length/2)
                                 line.operando_hex.push(operando_hex)  
-                                //console.log(line)
                                 
                             }else if (bytes_contados < numBytesTotales){ //si es menor a los bytes del excel
                                 while(operando_hex.length<=numBytesTotales){
@@ -408,11 +442,13 @@ function traduccion(excel){
                             } else if (bytes_contados > numBytesTotales){
                                 line.errores.push(7)
                             }
-                            
+
+
+                        
     
                         }else if(line.tipo_direccionamiento=="RELATIVO"){
                             line.operando_hex.push({etiqueta:line.operando[0],memoria_sig:memoria_actual+1})
-
+                            memoria_actual++
                             
                         }else if(line.tipo == 'EXCEPCION'){
                             let oper1=get_operando_hex(line.operando[0])
@@ -424,12 +460,17 @@ function traduccion(excel){
                             if (line.operando.length >= 3){ //Se trata de BRCLR ó BRSET
                                 line.operando_hex.push({etiqueta:line.operando[2],memoria_sig:memoria_actual+1})//HACEMOS LO DEL RELATIVO CON LA ETIQUETA
                             } 
+                        }else if(line.tipo_direccionamiento="EXTENDIDO" && line.operando!=null ){
+                             if(Object.keys(etiquetas).includes(line.operando[0]))
+                                 memoria_actual+=2
                         }
+                    
                     }
                 }
-        }else if(line.tipo=="ETIQUETA"){
+        }else if(line.tipo=="ETIQUETA")
             etiquetas[line.instruccion]=memoria_actual
-        }
+        
+        
     }
 }
 
@@ -496,6 +537,7 @@ function relative_generation(){
             var lugar_etiqueta=etiquetas[line.operando_hex[index].etiqueta]    
             var lugar_relativo=line.operando_hex[index].memoria_sig
             var resultado=lugar_etiqueta - lugar_relativo;
+            
             if(resultado<=128 && resultado>= -127){ 
                 //PASAR DE DECIMAL A HEXADECIMAL INCLUYENDO NEGATIVOS
                 if(resultado<0){
@@ -562,11 +604,17 @@ function impresoraFormato(lines){
             return console.log(err)
         }
     })
+    fs.writeFile('compilacion.s19','',(err)=>{
+        if(err){
+            return console.log(err)
+        }
+    })
     var impresion
     var status ='A';
     var elementos;
     var impresionGlobal='';
     var impresionColor ='<html>\n<body>\n<table>'; // Quitar Borde
+    var impresionS19='';
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
         // if (renglon.toString().length == 1){
@@ -690,16 +738,14 @@ function impresoraFormato(lines){
 function main(data){
     //assets/INSTRUCCIONES.xlsx ====> FINAL LINE, BUT NOW FOR TESTING 
     xlsxFile('../assets/INSTRUCCIONES.xlsx').then((rows)=>{
-        lines = get_lines(data)
+        lines = get_lines(data,rows)
         exist_mnemonicos(rows);        // CHECK IF EXIST THE INSTRUCCION
         
         tipo_direccionamiento(rows)
         traduccion(rows)
-
         relative_generation()
         //escribir archivos LST    
         impresoraFormato(lines)
-
     });
 }
 
