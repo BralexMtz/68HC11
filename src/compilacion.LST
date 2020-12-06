@@ -301,7 +301,7 @@
 301  A  816C  862C                   LDAA  #$2C             * COMA
 302  A  816E  B7102F                 STAA  SCDR
 303  A  8171                  C1
-304  A  8171  1F0080F4               BRCLR $00,X,#$80 C1 
+304  A  8171  1F0080FC               BRCLR $00,X,#$80 C1 
 305  A  8175  39                     RTS
 306  A                         ***********************************
 307  A                         * DESPLIEGA
@@ -315,14 +315,14 @@
 315  A  817E  8B30                   ADDA  #$30
 316  A  8180  B7102F                 STAA  SCDR
 317  A  8183                  T1
-318  A  8183  1F0080F4               BRCLR $00,X,#$80 T1 
+318  A  8183  1F0080FC               BRCLR $00,X,#$80 T1 
 319  A                               
 320  A  8187  B6102E                 LDAA  SCSR
 321  A  818A  960F                   LDAA  U2             * U2
 322  A  818C  8B30                   ADDA  #$30
 323  A  818E  B7102F                 STAA  SCDR
 324  A  8191                  T2
-325  A  8191  1F0080F4               BRCLR $00,X,#$80 T2 
+325  A  8191  1F0080FC               BRCLR $00,X,#$80 T2 
 326  A                         
 327  A  8195                  DSPLY  
 328  A  8195  CE102E                 LDX   #SCSR
@@ -332,21 +332,21 @@
 332  A  819D  8B30                   ADDA  #$30
 333  A  819F  B7102F                 STAA  SCDR
 334  A  81A2                  T3
-335  A  81A2  1F0080F4               BRCLR $00,X,#$80 T3 
+335  A  81A2  1F0080FC               BRCLR $00,X,#$80 T3 
 336  A                               
 337  A  81A6  B6102E                 LDAA SCSR 
 338  A  81A9  9611                   LDAA  U4             * U4
 339  A  81AB  8B30                   ADDA  #$30
 340  A  81AD  B7102F                 STAA  SCDR
 341  A  81B0                  T4
-342  A  81B0  1F0080F4               BRCLR $00,X,#$80 T4 
+342  A  81B0  1F0080FC               BRCLR $00,X,#$80 T4 
 343  A                            
 344  A  81B4  B6102E                 LDAA SCSR
 345  A  81B7  9612                   LDAA  U5             * U5
 346  A  81B9  8B30                   ADDA  #$30
 347  A  81BB  B7102F                 STAA  SCDR
 348  A  81BE                  T5
-349  A  81BE  1F0080F4               BRCLR $00,X,#$80 T5  
+349  A  81BE  1F0080FC               BRCLR $00,X,#$80 T5  
 350  A                                
 351  A  81C2  39                     RTS
 352  A                         
@@ -360,13 +360,13 @@
 360  A  81C9  860A                   LDAA  #$0A             * NEW LINE     
 361  A  81CB  B7102F                 STAA  SCDR
 362  A  81CE                  CR1
-363  A  81CE  1F0080F4               BRCLR $00,X,#$80 CR1        
+363  A  81CE  1F0080FC               BRCLR $00,X,#$80 CR1        
 364  A                         
 365  A  81D2  B6102E                 LDAA SCSR
 366  A  81D5  860D                   LDAA #$0D              * CARRY RETURN     
 367  A  81D7  B7102F                 STAA SCDR
 368  A  81DA                  CR2
-369  A  81DA  1F0080F4               BRCLR $00,X,#$80 CR2        
+369  A  81DA  1F0080FC               BRCLR $00,X,#$80 CR2        
 370  A                         
 371  A  81DE  39                     RTS
 372  A                         ***********************************
@@ -379,13 +379,13 @@
 379  A  81E5  960C                   LDAA  ORDEN             * NEW LINE     
 380  A  81E7  B7102F                 STAA  SCDR
 381  A  81EA                  DT1
-382  A  81EA  1F0080F4               BRCLR $00,X,#$80 DT1        
+382  A  81EA  1F0080FC               BRCLR $00,X,#$80 DT1        
 383  A                         
 384  A  81EE  B6102E                 LDAA SCSR 
 385  A  81F1  863A                   LDAA #$3A              * DOS PUNTOS    
 386  A  81F3  B7102F                 STAA SCDR
 387  A  81F6                  DT2
-388  A  81F6  1F0080F4               BRCLR $00,X,#$80 DT2        
+388  A  81F6  1F0080FC               BRCLR $00,X,#$80 DT2        
 389  A                         
 390  A  81FA  39                     RTS
 391  A                         ***********************************
@@ -401,7 +401,7 @@
 401  A  8205  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 0
 402  A                         
 403  A  8208                  E1
-404  A  8208  1F0080F4              BRCLR $00,X,#$80 E1  
+404  A  8208  1F0080FC              BRCLR $00,X,#$80 E1  
 405  A  820C  F61031                LDAB ADR1
 406  A  820F  D713                  STAB V1
 407  A                               
@@ -412,7 +412,7 @@
 412  A  8218  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 1
 413  A                         
 414  A  821B                  E2
-415  A  821B  1F0080F4              BRCLR $00,X,#$80 E2  
+415  A  821B  1F0080FC              BRCLR $00,X,#$80 E2  
 416  A  821F  F61032                LDAB ADR2
 417  A  8222  D714                  STAB V2
 418  A                              
@@ -420,7 +420,7 @@
 420  A  8226  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 2
 421  A                         
 422  A  8229                  E3
-423  A  8229  1F0080F4              BRCLR $00,X,#$80 E3  
+423  A  8229  1F0080FC              BRCLR $00,X,#$80 E3  
 424  A  822D  F61033                LDAB ADR3
 425  A  8230  D71D                  STAB V3 
 426  A                         
@@ -428,7 +428,7 @@
 428  A  8234  B71030                STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 3
 429  A                         
 430  A  8237                  E4
-431  A  8237  1F0080F4              BRCLR $00,X,#$80 E4  
+431  A  8237  1F0080FC              BRCLR $00,X,#$80 E4  
 432  A  823B  F61034                LDAB ADR4
 433  A  823E  D71E                  STAB V4
 434  A                         

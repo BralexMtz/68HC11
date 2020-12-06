@@ -546,8 +546,8 @@ function relative_generation(){
             if(resultado<=128 && resultado>= -127){ 
                 //PASAR DE DECIMAL A HEXADECIMAL INCLUYENDO NEGATIVOS
                 if(resultado<0){
-                    resultado*=-1;
-                    resultado=resultado.toString(2)
+                    resultado*=-1; 
+                    resultado=resultado.toString(2).padStart(4,'0')
                     resultado=complementoADos(resultado)
                 }else{
                     let hexa= resultado.toString(16).toUpperCase()

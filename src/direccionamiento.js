@@ -54,3 +54,4 @@ function complementoADos(binario){
 
 }
 
+console.log(complementoADos('0100'))
