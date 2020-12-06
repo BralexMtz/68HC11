@@ -1,0 +1,620 @@
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+   1 A                 ********************************** 
+   2 A                 *PROGRAMA DE EJEMPLO 
+   3 A                 ********************************** 
+   4 A      1026       PACTL     EQU       $1026                 
+   5 A      1027       PACNT     EQU       $1027                 
+   6 A      1030       ADCTL     EQU       $1030                 
+   7 A      1031       ADR1      EQU       $1031                 
+   8 A      1032       ADR2      EQU       $1032                 
+   9 A      1033       ADR3      EQU       $1033                 
+  10 A      1034       ADR4      EQU       $1034                 
+  11 A      1039       OPTION    EQU       $1039                 
+  12 A 0000                                                      
+  13 A      1000       PORTA     EQU       $1000                 
+  14 A      1008       PORTD     EQU       $1008                 
+  15 A      100A       PORTE     EQU       $100A                 
+  16 A      1002       PORTG     EQU       $1002                 
+  17 A 0000                                                      
+  18 A      1001       DDRA      EQU       $1001                 
+  19 A      1009       DDRD      EQU       $1009                 
+  20 A      1003       DDRG      EQU       $1003                 
+  21 A 0000                                                      
+  22 A      1024       TMSK2     EQU       $1024                 
+  23 A      1025       TFLG2     EQU       $1025                 
+  24 A 0000                                                      
+  25 A      102F       SCDR      EQU       $102F                 
+  26 A      102D       SCCR2     EQU       $102D                 
+  27 A      102E       SCSR      EQU       $102E                 
+  28 A      102C       SCCR1     EQU       $102C                 
+  29 A      102B       BAUD      EQU       $102B                 
+  30 A      103C       HPRIO     EQU       $103C                 
+  31 A      1028       SPCR      EQU       $1028                 
+  32 A      105D       CSCTL     EQU       $105D                 
+  33 A      1038       OPT2      EQU       $1038                 
+  34 A 0000                                                      
+  35 A                 * VARIABLES ********************* 
+  36 A                  
+  37 A      000C       ORDEN     EQU       $000C                 
+  38 A      000D       SEG       EQU       $000D                 
+  39 A      000E       U1        EQU       $000E                 
+  40 A      000F       U2        EQU       $000F                 
+  41 A      0010       U3        EQU       $0010                 
+  42 A      0011       U4        EQU       $0011                 
+  43 A      0012       U5        EQU       $0012                 
+  44 A      0013       V1        EQU       $0013                 
+  45 A      0014       V2        EQU       $0014                 
+  46 A      0015       BAS_H     EQU       $0015                 
+  47 A      0016       BAS_L     EQU       $0016                 
+  48 A      0017       V5        EQU       $0017                 
+  49 A      0018       TEMPO     EQU       $0018                 
+  50 A      0019       ALTO      EQU       $0019                 
+  51 A      001A       BAJO      EQU       $001A                 
+  52 A      001B       BASE_H    EQU       $001B                 
+  53 A      001C       BASE_L    EQU       $001C                 
+  54 A      001D       V3        EQU       $001D                 
+  55 A      001E       V4        EQU       $001E                 
+  56 A 0000                                                      
+  57 A                 ********************************** 
+  58 A                 *CONFIGURA REGISTROS 
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+  59 A                 ********************************** 
+  60 A      8000                 ORG       $8000                 * DIR DE INICIO 
+  61 A 8000 8E00FF               LDS       #$00FF                * APUNTADOR DE STAK 
+  62 A                  
+  63 A 8003                                                      
+  64 A 8003 8600                 LDAA      #$00                  * CONFIG TODO EL PUERTO  A COMO ENTRADAS 
+  65 A 8005 B71001               STAA      DDRA                  * EL PUERTO A 
+  66 A 8008                                                      
+  67 A 8008 86FF                 LDAA      #$FF                  * CONFIG TODO EL PUERTO  G COMO SALIDAS 
+  68 A 800A B71003               STAA      DDRG                  * EL PUERTO G  
+  69 A                  
+  70 A 800D 8600                 LDAA      #$00                  * SE PONE PUERTO G EN CEROS 
+  71 A 800F B71002               STAA      PORTG                 
+  72 A 8012                                                      
+  73 A 8012 CC302C               LDD       #$302C                * CONFIGURA PUERTO SERIAL 
+  74 A 8015 B7102B               STAA      BAUD                  * BAUD  9600  para cristal de 8MHz 
+  75 A 8018 F7102D               STAB      SCCR2                 * HABILITA  RX Y TX PERO INTERRUPCN SOLO RX 
+  76 A 801B 8600                 LDAA      #$00                  
+  77 A 801D B7102C               STAA      SCCR1                 * 8 BITS 
+  78 A                  
+  79 A 8020 86FE                 LDAA      #$FE                  * CONFIG PUERTO D COMO SALIDAS (EXCEPTO PD0) 
+  80 A 8022 B71009               STAA      DDRD                  * SEA  ENABLE DEL DISPLAY  PD4  Y RS PD3 
+  81 A                                       
+  82 A                        
+  83 A 8025 8604                 LDAA      #$04                  
+  84 A 8027 B7103C               STAA      HPRIO                 
+  85 A                  
+  86 A 802A 8600                 LDAA      #$00                  
+  87 A 802C 06                   TAP                             
+  88 A                  
+  89 A                  
+  90 A                  
+  91 A 802D                                                      
+  92 A                  
+  93 A                  
+  94 A                  
+  95 A                 ********************************** 
+  96 A                 *PROGRAMA PRINCIPAL 
+  97 A                 ********************************** 
+  98 A 802D            MAIN                                      
+  99 A 802D BD80C6               JSR       INICIA                
+ 100 A 8030                                                      
+ 101 A 8030 7F0011     INICIO    CLR       U4                    
+ 102 A 8033 7F0010     NO_S1     CLR       U3                    
+ 103 A 8036 7F000F     NO_S      CLR       U2                    
+ 104 A 8039 7F000E               CLR       U1                    
+ 105 A                  
+ 106 A                   
+ 107 A                  
+ 108 A                  
+ 109 A 803C            OTRO                                      
+ 110 A 803C 863F                 LDAA      #'?                   
+ 111 A 803E 970C                 STAA      ORDEN                 
+ 112 A 8040                                                      
+ 113 A 8040            CICLO                                     
+ 114 A 8040 960C                 LDAA      ORDEN                 
+ 115 A 8042 813F                 CMPA      #'?                   
+ 116 A 8044 27FA                 BEQ       CICLO                 
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 117 A 8046 D60E                 LDAB      U1                    
+ 118 A 8048 2609                 BNE       CHECA_U2              
+ 119 A 804A 8173                 CMPA      #'s                   
+ 120 A 804C 26EE                 BNE       OTRO                  
+ 121 A 804E 970E                 STAA      U1                    
+ 122 A 8050 7E803C               JMP       OTRO                  
+ 123 A                  
+ 124 A                  
+ 125 A 8053            CHECA_U2                                  
+ 126 A 8053                                                      
+ 127 A 8053 D60F                 LDAB      U2                    
+ 128 A 8055 2613                 BNE       CHECA_U3              
+ 129 A 8057 8154                 CMPA      #'T                   
+ 130 A 8059 270A                 BEQ       ES_T                  
+ 131 A 805B 8153                 CMPA      #'S                   
+ 132 A 805D 27DD                 BEQ       OTRO                  
+ 133 A 805F 7F000E               CLR       U1                    
+ 134 A 8062 7E803C               JMP       OTRO                  
+ 135 A 8065 970F       ES_T      STAA      U2                    
+ 136 A 8067 7E803C               JMP       OTRO                  
+ 137 A                  
+ 138 A 806A            CHECA_U3                                  
+ 139 A 806A                                                      
+ 140 A 806A D610                 LDAB      U3                    
+ 141 A 806C 2613                 BNE       CHECA_U4              
+ 142 A 806E 8141                 CMPA      #'A                   
+ 143 A 8070 270A                 BEQ       ES_A                  
+ 144 A 8072 8153                 CMPA      #'S                   
+ 145 A 8074 26C0                 BNE       NO_S                  
+ 146 A 8076 7F000F               CLR       U2                    
+ 147 A 8079 7E803C               JMP       OTRO                  
+ 148 A                  
+ 149 A 807C            ES_A                                      
+ 150 A 807C                                                      
+ 151 A 807C 9710                 STAA      U3                    
+ 152 A 807E 7E803C               JMP       OTRO                  
+ 153 A                  
+ 154 A 8081            CHECA_U4                                  
+ 155 A 8081                                                      
+ 156 A 8081 D611                 LDAB      U4                    
+ 157 A 8083 2616                 BNE       CHECA_T               
+ 158 A 8085 8152                 CMPA      #'R                   
+ 159 A 8087 270D                 BEQ       ES_R                  
+ 160 A 8089 8153                 CMPA      #'S                   
+ 161 A 808B 26A6                 BNE       NO_S1                 
+ 162 A 808D 7F0010               CLR       U3                    
+ 163 A 8090 7F000F               CLR       U2                    
+ 164 A 8093 7E803C               JMP       OTRO                  
+ 165 A                  
+ 166 A 8096            ES_R                                      
+ 167 A 8096                                                      
+ 168 A 8096 9711                 STAA      U4                    
+ 169 A 8098 7E803C               JMP       OTRO                  
+ 170 A                   
+ 171 A 809B            CHECA_T                                   
+ 172 A 809B                                                      
+ 173 A 809B 8154                 CMPA      #'T                   
+ 174 A 809D 2710                 BEQ       EXITO                 
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 175 A 809F 8153                 CMPA      #'S                   
+ 176 A 80A1 268D                 BNE       INICIO                
+ 177 A 80A3 7F0011               CLR       U4                    
+ 178 A 80A6 7F0010               CLR       U3                    
+ 179 A 80A9 7F000F               CLR       U2                    
+ 180 A 80AC 7E803C               JMP       OTRO                  
+ 181 A                  
+ 182 A 80AF            EXITO                                     
+ 183 A 80AF 8645                 LDAA      #'E                   
+ 184 A 80B1 9719                 STAA      ALTO                  
+ 185 A 80B3 8658                 LDAA      #'X                   
+ 186 A 80B5 971A                 STAA      BAJO                  
+ 187 A 80B7 8649                 LDAA      #'I                   
+ 188 A 80B9 971B                 STAA      BASE_H                
+ 189 A 80BB 8654                 LDAA      #'T                   
+ 190 A 80BD 971C                 STAA      BASE_L                
+ 191 A 80BF 864F                 LDAA      #'O                   
+ 192 A 80C1 971D                 STAA      V3                    
+ 193 A                  
+ 194 A 80C3 7E802D               JMP       MAIN                  
+ 195 A                  
+ 196 A                  
+ 197 A                 *********************************** 
+ 198 A                 * INICIA 
+ 199 A                 *********************************** 
+ 200 A 80C6            INICIA                                    
+ 201 A                       
+ 202 A 80C6 7F000D               CLR       SEG                   
+ 203 A                  
+ 204 A 80C9 7F1002               CLR       PORTG                 
+ 205 A 80CC 86F4                 LDAA      #$F4                  
+ 206 A 80CE 9718                 STAA      TEMPO                 * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS 
+ 207 A                  
+ 208 A 80D0 CE1024               LDX       #TMSK2                
+ 209 A 80D3 1C0040               BSET      $00,X,#$40            * HABILITA INTERRUPCION TIMER T-REAL 
+ 210 A 80D6 0E                   CLI                             
+ 211 A                  
+ 212 A 80D7 CE1026               LDX       #PACTL                
+ 213 A 80DA 1C0050               BSET      $00,X,#$50            * HABILITA PAEN -ACUMULADOR PULSOS ALTOS- 
+ 214 A 80DD 7F1027               CLR       PACNT                 * BORRA ACUMULADOR DE PULSOS 
+ 215 A                  
+ 216 A 80E0 8610                 LDAA      #$10                  
+ 217 A 80E2 971B                 STAA      BASE_H                * PONE UN #1060 COMO DIRECCION BASE INICIAL 
+ 218 A 80E4 8660                 LDAA      #$60                  
+ 219 A 80E6 971C                 STAA      BASE_L                
+ 220 A 80E8                                                      
+ 221 A 80E8 18CE1060             LDY       #$1060                
+ 222 A 80EC                                                      
+ 223 A 80EC 8616                 LDAA      #$16                  
+ 224 A 80EE 9715                 STAA      BAS_H                 * PONE UN #1653 NUMERO TOTAL DE JUEGO DE MUESTRAS 
+ 225 A 80F0 8653                 LDAA      #$53                  
+ 226 A 80F2 9716                 STAA      BAS_L                 
+ 227 A                  
+ 228 A                  
+ 229 A 80F4 7F0019               CLR       ALTO                  * INICIA INDICE MUESTRA EN 0 
+ 230 A 80F7 7F001A               CLR       BAJO                  
+ 231 A                  
+ 232 A 80FA 39                   RTS                             
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 233 A                 *********************************** 
+ 234 A                 * SACA 
+ 235 A                 *********************************** 
+ 236 A 80FB            SACA                                      
+ 237 A                              
+ 238 A                         
+ 239 A 80FB 9619                 LDAA      ALTO                  * INDICE DE MUESTRA (SEGUNDO) 
+ 240 A 80FD D61A                 LDAB      BAJO                  
+ 241 A 80FF 188F                 XGDY                            
+ 242 A 8101 1808                 INY                             
+ 243 A 8103 188F                 XGDY                            
+ 244 A 8105 BD8241               JSR       BINBCD                
+ 245 A 8108 BD8176               JSR       DISPLAY               
+ 246 A 810B BD8166               JSR       COMA                  
+ 247 A                   
+ 248 A 810E 961B                 LDAA      BASE_H                * INDICE DE MUESTRA (PARTICULAR) 
+ 249 A 8110 D61C                 LDAB      BASE_L                
+ 250 A 8112 188F                 XGDY                            
+ 251 A 8114                                                      
+ 252 A 8114 1808                 INY                             
+ 253 A 8116 4F                   CLRA                            
+ 254 A 8117 18E600               LDAB      $00,Y                 
+ 255 A 811A BD8251               JSR       BNBCD                 
+ 256 A 811D BD8195               JSR       DSPLY                 
+ 257 A 8120 BD8166               JSR       COMA                  
+ 258 A                  
+ 259 A 8123 1808                 INY                             
+ 260 A 8125 4F                   CLRA                            
+ 261 A 8126 18E600               LDAB      $00,Y                 
+ 262 A 8129 BD8251               JSR       BNBCD                 
+ 263 A 812C BD8195               JSR       DSPLY                 
+ 264 A 812F BD8166               JSR       COMA                  
+ 265 A                  
+ 266 A 8132 1808                 INY                             
+ 267 A 8134 4F                   CLRA                            
+ 268 A 8135 18E600               LDAB      $00,Y                 
+ 269 A 8138 BD8251               JSR       BNBCD                 
+ 270 A 813B BD8195               JSR       DSPLY                 
+ 271 A 813E BD8166               JSR       COMA                  
+ 272 A                  
+ 273 A 8141 1808                 INY                             
+ 274 A 8143 4F                   CLRA                            
+ 275 A 8144 18E600               LDAB      $00,Y                 
+ 276 A 8147 BD8251               JSR       BNBCD                 
+ 277 A 814A BD8195               JSR       DSPLY                 
+ 278 A 814D BD8166               JSR       COMA                  
+ 279 A                   
+ 280 A 8150 1808                 INY                             
+ 281 A 8152 4F                   CLRA                            
+ 282 A 8153 18E600               LDAB      $00,Y                 
+ 283 A 8156 BD8251               JSR       BNBCD                 
+ 284 A 8159 BD8195               JSR       DSPLY                 
+ 285 A 815C                                                      
+ 286 A 815C 188F                 XGDY                            
+ 287 A 815E 971B                 STAA      BASE_H                
+ 288 A 8160 D71C                 STAB      BASE_L                
+ 289 A                  
+ 290 A 8162 BD81C3               JSR       CRYTRN                
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 291 A                  
+ 292 A 8165 39                   RTS                             
+ 293 A                 *********************************** 
+ 294 A                 * COMA 
+ 295 A                 *********************************** 
+ 296 A 8166            COMA                                      
+ 297 A 8166 CE102E               LDX       #SCSR                 
+ 298 A 8169                                                      
+ 299 A 8169 B6102E               LDAA      SCSR                  
+ 300 A 816C 862C                 LDAA      #$2C                  * COMA 
+ 301 A 816E B7102F               STAA      SCDR                  
+ 302 A 8171            C1                                        
+ 303 A 8171 1F0080FC             BRCLR     $00,X,#$80 C1         
+ 304 A 8175 39                   RTS                             
+ 305 A                 *********************************** 
+ 306 A                 * DESPLIEGA 
+ 307 A                 *********************************** 
+ 308 A 8176            DISPLAY                                   
+ 309 A                         
+ 310 A 8176 CE102E               LDX       #SCSR                 
+ 311 A 8179                                                      
+ 312 A 8179 B6102E               LDAA      SCSR                  
+ 313 A 817C 960E                 LDAA      U1                    * U1 
+ 314 A 817E 8B30                 ADDA      #$30                  
+ 315 A 8180 B7102F               STAA      SCDR                  
+ 316 A 8183            T1                                        
+ 317 A 8183 1F0080FC             BRCLR     $00,X,#$80 T1         
+ 318 A 8187                                                      
+ 319 A 8187 B6102E               LDAA      SCSR                  
+ 320 A 818A 960F                 LDAA      U2                    * U2 
+ 321 A 818C 8B30                 ADDA      #$30                  
+ 322 A 818E B7102F               STAA      SCDR                  
+ 323 A 8191            T2                                        
+ 324 A 8191 1F0080FC             BRCLR     $00,X,#$80 T2         
+ 325 A                  
+ 326 A 8195            DSPLY                                     
+ 327 A 8195 CE102E               LDX       #SCSR                 
+ 328 A                      
+ 329 A 8198 B6102E               LDAA      SCSR                  
+ 330 A 819B 9610                 LDAA      U3                    * U3 
+ 331 A 819D 8B30                 ADDA      #$30                  
+ 332 A 819F B7102F               STAA      SCDR                  
+ 333 A 81A2            T3                                        
+ 334 A 81A2 1F0080FC             BRCLR     $00,X,#$80 T3         
+ 335 A 81A6                                                      
+ 336 A 81A6 B6102E               LDAA      SCSR                  
+ 337 A 81A9 9611                 LDAA      U4                    * U4 
+ 338 A 81AB 8B30                 ADDA      #$30                  
+ 339 A 81AD B7102F               STAA      SCDR                  
+ 340 A 81B0            T4                                        
+ 341 A 81B0 1F0080FC             BRCLR     $00,X,#$80 T4         
+ 342 A                     
+ 343 A 81B4 B6102E               LDAA      SCSR                  
+ 344 A 81B7 9612                 LDAA      U5                    * U5 
+ 345 A 81B9 8B30                 ADDA      #$30                  
+ 346 A 81BB B7102F               STAA      SCDR                  
+ 347 A 81BE            T5                                        
+ 348 A 81BE 1F0080FC             BRCLR     $00,X,#$80 T5         
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 349 A 81C2                                                      
+ 350 A 81C2 39                   RTS                             
+ 351 A                  
+ 352 A                 *********************************** 
+ 353 A                 * CARRY RETURN 
+ 354 A                 *********************************** 
+ 355 A                  
+ 356 A 81C3            CRYTRN                                    
+ 357 A 81C3 CE102E               LDX       #SCSR                 
+ 358 A 81C6 B6102E               LDAA      SCSR                  
+ 359 A 81C9 860A                 LDAA      #$0A                  * NEW LINE      
+ 360 A 81CB B7102F               STAA      SCDR                  
+ 361 A 81CE            CR1                                       
+ 362 A 81CE 1F0080FC             BRCLR     $00,X,#$80 CR1        
+ 363 A                  
+ 364 A 81D2 B6102E               LDAA      SCSR                  
+ 365 A 81D5 860D                 LDAA      #$0D                  * CARRY RETURN      
+ 366 A 81D7 B7102F               STAA      SCDR                  
+ 367 A 81DA            CR2                                       
+ 368 A 81DA 1F0080FC             BRCLR     $00,X,#$80 CR2        
+ 369 A                  
+ 370 A 81DE 39                   RTS                             
+ 371 A                 *********************************** 
+ 372 A                 *  DESPLIEGUE DE DATO RECIBIDO 
+ 373 A                 *********************************** 
+ 374 A                  
+ 375 A 81DF            DATARX                                    
+ 376 A 81DF CE102E               LDX       #SCSR                 
+ 377 A 81E2 B6102E               LDAA      SCSR                  
+ 378 A 81E5 960C                 LDAA      ORDEN                 * NEW LINE      
+ 379 A 81E7 B7102F               STAA      SCDR                  
+ 380 A 81EA            DT1                                       
+ 381 A 81EA 1F0080FC             BRCLR     $00,X,#$80 DT1        
+ 382 A                  
+ 383 A 81EE B6102E               LDAA      SCSR                  
+ 384 A 81F1 863A                 LDAA      #$3A                  * DOS PUNTOS     
+ 385 A 81F3 B7102F               STAA      SCDR                  
+ 386 A 81F6            DT2                                       
+ 387 A 81F6 1F0080FC             BRCLR     $00,X,#$80 DT2        
+ 388 A                  
+ 389 A 81FA 39                   RTS                             
+ 390 A                 *********************************** 
+ 391 A                 * voltimetro 
+ 392 A                 *********************************** 
+ 393 A 81FB            VOLTA                                     
+ 394 A 81FB CE1030               LDX       #ADCTL                
+ 395 A                  
+ 396 A 81FE 8680                 LDAA      #$80                  
+ 397 A 8200 B71039               STAA      OPTION                * PONE EN MARCHA EL ADC 
+ 398 A                      
+ 399 A 8203 8610                 LDAA      #$10                  
+ 400 A 8205 B71030               STAA      ADCTL                 * ENTRADA MULTIPLE SELECCIONA CANAL 0 
+ 401 A                  
+ 402 A 8208            E1                                        
+ 403 A 8208 1F0080FC             BRCLR     $00,X,#$80 E1         
+ 404 A 820C F61031               LDAB      ADR1                  
+ 405 A 820F D713                 STAB      V1                    
+ 406 A 8211                                                      
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 407 A 8211 8680                 LDAA      #$80                  
+ 408 A 8213 B71039               STAA      OPTION                * PONE EN MARCHA EL ADC 
+ 409 A                      
+ 410 A 8216 8611                 LDAA      #$11                  
+ 411 A 8218 B71030               STAA      ADCTL                 * ENTRADA MULTIPLE SELECCIONA CANAL 1 
+ 412 A                  
+ 413 A 821B            E2                                        
+ 414 A 821B 1F0080FC             BRCLR     $00,X,#$80 E2         
+ 415 A 821F F61032               LDAB      ADR2                  
+ 416 A 8222 D714                 STAB      V2                    
+ 417 A 8224                                                      
+ 418 A 8224 8612                 LDAA      #$12                  
+ 419 A 8226 B71030               STAA      ADCTL                 * ENTRADA MULTIPLE SELECCIONA CANAL 2 
+ 420 A                  
+ 421 A 8229            E3                                        
+ 422 A 8229 1F0080FC             BRCLR     $00,X,#$80 E3         
+ 423 A 822D F61033               LDAB      ADR3                  
+ 424 A 8230 D71D                 STAB      V3                    
+ 425 A                  
+ 426 A 8232 8613                 LDAA      #$13                  
+ 427 A 8234 B71030               STAA      ADCTL                 * ENTRADA MULTIPLE SELECCIONA CANAL 3 
+ 428 A                  
+ 429 A 8237            E4                                        
+ 430 A 8237 1F0080FC             BRCLR     $00,X,#$80 E4         
+ 431 A 823B F61034               LDAB      ADR4                  
+ 432 A 823E D71E                 STAB      V4                    
+ 433 A                  
+ 434 A 8240                                                      
+ 435 A 8240 39                   RTS                             
+ 436 A                 *********************************** 
+ 437 A                 * CONVIERTE A BCD 
+ 438 A                 *********************************** 
+ 439 A                  
+ 440 A 8241            BINBCD                                    
+ 441 A                       
+ 442 A 8241 CE2710               LDX       #$2710                
+ 443 A 8244 02                   IDIV                            
+ 444 A 8245 8F                   XGDX                            
+ 445 A 8246 D70E                 STAB      U1                    
+ 446 A 8248 8F                   XGDX                            
+ 447 A 8249 CE03E8               LDX       #$3E8                 
+ 448 A 824C 02                   IDIV                            
+ 449 A 824D 8F                   XGDX                            
+ 450 A 824E D70F                 STAB      U2                    
+ 451 A 8250 8F                   XGDX                            
+ 452 A                  
+ 453 A 8251            BNBCD                                     
+ 454 A 8251 CE0064               LDX       #$64                  
+ 455 A 8254 02                   IDIV                            
+ 456 A 8255 8F                   XGDX                            
+ 457 A 8256 D710                 STAB      U3                    
+ 458 A 8258 8F                   XGDX                            
+ 459 A 8259 CE000A               LDX       #$A                   
+ 460 A 825C 02                   IDIV                            
+ 461 A 825D 8F                   XGDX                            
+ 462 A 825E D711                 STAB      U4                    
+ 463 A 8260 8F                   XGDX                            
+ 464 A 8261 D712                 STAB      U5                    
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 465 A                  
+ 466 A                  
+ 467 A                  
+ 468 A 8263 39                   RTS                             
+ 469 A                  
+ 470 A                  
+ 471 A                  
+ 472 A                 *********************************** 
+ 473 A                 * ATENCION A INTERRUPCION SERIAL 
+ 474 A                 *********************************** 
+ 475 A      F100                 ORG       $F100                 
+ 476 A                    
+ 477 A F100 36                   PSHA                            
+ 478 A                   
+ 479 A F101 B6102E               LDAA      SCSR                  
+ 480 A F104 B6102F               LDAA      SCDR                  
+ 481 A F107 970C                 STAA      ORDEN                 
+ 482 A                  
+ 483 A F109 32                   PULA                            
+ 484 A                  
+ 485 A F10A 3B                   RTI                             
+ 486 A                  
+ 487 A                 *********************************** 
+ 488 A                 * ATENCION A INTERRUPCION REAL TIME 
+ 489 A                 *********************************** 
+ 490 A      F110                 ORG       $F110                 
+ 491 A                  
+ 492 A F110 36                   PSHA                            
+ 493 A F111 3C                   PSHX                            
+ 494 A                  
+ 495 A F112 CE1025               LDX       #TFLG2                
+ 496 A F115 1C0040               BSET      $00,X,#$40            * BORRA BANDERA INTERRUPCION 
+ 497 A F118 7A0018               DEC       TEMPO                 
+ 498 A F11B 2703                 BEQ       SEGUNDO               
+ 499 A F11D                                                      
+ 500 A F11D 32                   PULA                            
+ 501 A F11E 38                   PULX                            
+ 502 A F11F 3B                   RTI                             
+ 503 A                  
+ 504 A F120            SEGUNDO                                   
+ 505 A F120 86FF                 LDAA      #$FF                  
+ 506 A F122 970D                 STAA      SEG                   * SEG ES UNA BANDERA DE SEGUNDO     
+ 507 A F124 86F4                 LDAA      #$F4                  
+ 508 A F126 9718                 STAA      TEMPO                 * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS 
+ 509 A F128 7C1002               INC       PORTG                 
+ 510 A F12B                                                      
+ 511 A F12B 32                   PULA                            
+ 512 A F12C 38                   PULX                            
+ 513 A F12D 3B                   RTI                             
+ 514 A                 *********************************** 
+ 515 A                 * VECTOR INTERRUPCION SERIAL 
+ 516 A                 *********************************** 
+ 517 A      FFD6                 ORG       $FFD6                 
+ 518 A FFD6 F100                 FCB       $F1,$00               
+ 519 A                  
+ 520 A                 *********************************** 
+ 521 A                 * VECTOR INTERRUPCION REAL TIME 
+ 522 A                 *********************************** 
+
+M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
+
+
+ 523 A      FFF0                 ORG       $FFF0                 
+ 524 A FFF0 F110                 FCB       $F1,$10               
+ 525 A                  
+ 526 A                 *********************************** 
+ 527 A                 *RESET 
+ 528 A                 *********************************** 
+ 529 A      FFFE                 ORG       $FFFE                 
+ 530 A FFFE 8000       RESET     FCB       $80,$00               
+ 531 A                 *********************************** 
+ 532 A                           END       $8000                 
+
+SYMBOL TABLE:  Total Entries=   85
+
+ADCTL               1030    INICIO              8030
+ADR1                1031    MAIN                802D
+ADR2                1032    NO_S                8036
+ADR3                1033    NO_S1               8033
+ADR4                1034    OPT2                1038
+ALTO                0019    OPTION              1039
+BAJO                001A    ORDEN               000C
+BASE_H              001B    OTRO                803C
+BASE_L              001C    PACNT               1027
+BAS_H               0015    PACTL               1026
+BAS_L               0016    PORTA               1000
+BAUD                102B    PORTD               1008
+BINBCD              8241    PORTE               100A
+BNBCD               8251    PORTG               1002
+C1                  8171    RESET               FFFE
+CHECA_T             809B    SACA                80FB
+CHECA_U2            8053    SCCR1               102C
+CHECA_U3            806A    SCCR2               102D
+CHECA_U4            8081    SCDR                102F
+CICLO               8040    SCSR                102E
+COMA                8166    SEG                 000D
+CR1                 81CE    SEGUNDO             F120
+CR2                 81DA    SPCR                1028
+CRYTRN              81C3    T1                  8183
+CSCTL               105D    T2                  8191
+DATARX              81DF    T3                  81A2
+DDRA                1001    T4                  81B0
+DDRD                1009    T5                  81BE
+DDRG                1003    TEMPO               0018
+DISPLAY             8176    TFLG2               1025
+DSPLY               8195    TMSK2               1024
+DT1                 81EA    U1                  000E
+DT2                 81F6    U2                  000F
+E1                  8208    U3                  0010
+E2                  821B    U4                  0011
+E3                  8229    U5                  0012
+E4                  8237    V1                  0013
+ES_A                807C    V2                  0014
+ES_R                8096    V3                  001D
+ES_T                8065    V4                  001E
+EXITO               80AF    V5                  0017
+HPRIO               103C    VOLTA               81FB
+INICIA              80C6    
+
+Total errors: 0
