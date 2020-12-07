@@ -8,8 +8,8 @@
     - Extendido     (Osvaldo) :)
     - Indexado      (Brandon) :)
 
-2.- Crear archivo lst (binario-Ensamblador)  + bonito 
-3.- Generacion del archivo con el codigo objeto, formato propuesto (binario) +feo .s19
+2.- Crear archivo lst (binario-Ensamblador)  + bonito :)
+3.- Generacion del archivo con el codigo objeto, formato propuesto (binario) +feo .s19 :)
 5.- Deteccion de errores.
     001 CONSTANTE INEXISTENTE  :)
     002 VARIABLE INEXISTENTE   :)

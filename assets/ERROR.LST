@@ -1,0 +1,616 @@
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       1
+
+                   **********************************
+                   *PROGRAMA DE EJEMPLO
+                   **********************************
+                   PACTL  EQU   $1026
+                   ADCTL  EQU   $1030
+                   ADR1   EQU   $1031
+                   ADR2   EQU   $1032
+                   ADR3   EQU   $1033
+                   ADR4   EQU   $1034
+                   OPTION EQU   $1039
+
+                   PORTA  EQU   $1000
+                   PORTD  EQU   $1008
+                   PORTE  EQU   $100A
+                   PORTG  EQU   $1002
+
+                   DDRA   EQU   $1001
+                   DDRD   EQU   $1009
+                   DDRG   EQU   $1003
+
+                   TMSK2  EQU   $1024
+                   TFLG2  EQU   $1025
+
+                   SCDR   EQU   $102F
+                   SCCR2  EQU   $102D
+                   SCSR   EQU   $102E
+                   SCCR1  EQU   $102C
+                   BAUD   EQU   $102B
+                   HPRIO  EQU   $103C
+                   SPCR   EQU   $1028
+                   CSCTL  EQU   $105D
+                   OPT2   EQU   $1038
+
+                   * VARIABLES *********************
+
+                   ORDEN  EQU   $000C
+                   SEG    EQU   $000D
+                   U1     EQU   $000E
+                   U2     EQU   $000F
+                   U3     EQU   $0010
+                   U4     EQU   $0011
+                   U5     EQU   $0012
+                   V1     EQU   $0013
+                   BAS_L  EQU   $0016
+                   V5     EQU   $0017
+                   TEMPO  EQU   $0018
+                   ALTO   EQU   $0019
+                   BAJO   EQU   $001A
+                   BASE_H EQU   $001B
+                   BASE_L EQU   $001C
+                   V3     EQU   $001D
+                   V4     EQU   $001E
+ 
+                   **********************************
+                   *CONFIGURA REGISTROS
+                   **********************************
+                   ORG   $8000   * DIR DE INICIO
+E                        ^ Unexpected character in instruction or directive.
+                   LDS   #$03FF  * APUNTADOR DE STAK
+E                        ^ Unexpected character in instruction or directive.
+
+
+                   LDAA  #$00    * CONFIG TODO EL PUERTO  A COMO ENTRADAS
+E                        ^ Unexpected character in instruction or directive.
+                   STAA  DDRA    * EL PUERTO A
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       2
+
+E                        ^ Unknown instruction or directive.
+
+  F100 86 0F              LDAA  #$F    * CONFIG TODO EL PUERTO  G COMO SALIDAS
+  F102 B7 10 03           STAA  DDRG    * EL PUERTO G
+
+  F105 86 00              LDAA  #$00    * SE PONE PUERTO G EN CEROS
+  F107 B7 10 02           STAA  PORTG
+
+                          LDD   #$302C5  * CONFIGURA PUERTO SERIAL
+E                                ^ The value of this expression must fit in 16
+.                                  bits.
+                          STAA  BAU    * BAUD  9600  para cristal de 8MHz
+E                               ^ Unknown identifier.
+  F10A F7 10 2D           STAB  SCCR2   * HABILITA  RX Y TX PERO INTERRUPCN SOLO
+.                  RX
+  F10D 86 00              LDAA  #$00
+  F10F B7 10 2C           STAA  SCCR1   * 8 BITS
+
+  F112 86 FE              LDAA  #$FE    * CONFIG PUERTO D COMO SALIDAS (EXCEPTO
+.                  PD0)
+  F114 B7 10 09           STAA  DDRD    * SEA  ENABLE DEL DISPLAY  PD4  Y RS PD3
+
+
+  F117 86 04              LDAA  #$04
+  F119 B7 10 3C           STAA  HPRIO
+
+  F11C 86 00              LDAA  #$00
+  F11E 06                 TAP
+
+
+
+
+
+
+
+                   **********************************
+                   *PROGRAMA PRINCIPAL
+                   **********************************
+                   MAIN
+  F11F BD F1 96           JSR   INICIA
+  F122 86 3F              LDAA  #$3F
+  F124 97 0C              STAA  ORDEN         * CARGO UN (?) en 000A
+
+
+                   CICLO
+  F126 96 0D              LDAA  SEG
+  F128 27 FC              BEQ   CICLO
+  F12A 7F 00 0D           CLR   SEG
+
+                          LDAA  PACNT
+E                               ^ Unknown identifier.
+  F12D 97 17              STAA  V5
+                          CLR   PACNT
+E                               ^ Unknown identifier.
+
+
+  F12F BD F2 AD           JSR   DATARXESELMEJORDETODOS        * DESPLIEGA DATO
+.                  TRANSMITIDO
+  F132 18 09              DEY
+  F134 18 8F              XGDY
+                          STAA  ALTER
+E                               ^ Unknown identifier.
+  F136 D7 1A              STAB  BAJO
+  F138 18 8F              XGDY
+  F13A 96 19              LDAA  ALTO
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       3
+
+  F13C D6 1A              LDAB  BAJO
+  F13E BD F3 10           JSR   BINBCD
+  F141 BD F2 44           JSR   DISPLAY
+  F144 BD F2 34           JSR   COMA
+  F147 BD F2 C9           JSR   VOLTA
+
+  F14A 4F                 CLRA
+  F14B D6 13              LDAB  V1
+  F14D BD F3 20           JSR   BNBCD
+  F150 BD F2 63           JSR   DSPLY
+  F153 BD F2 34           JSR   COMA
+
+                          CLR
+E                            ^ Operand (expression) expected.
+                          LDAB  V2
+E                               ^ Unknown identifier.
+  F156 BD F3 20           JSR   BNBCD
+  F159 BD F2 63           JSR   DSPLY
+  F15C BD F2 34           JSR   COMA
+
+  F15F 4F                 CLRA
+                          LDB  V3
+E                         ^ Unknown instruction or directive.
+  F160 BD F3 20           JSR   BNBCD
+  F163 BD F2 63           JSR   DSPLY
+  F166 BD F2 34           JSR   COMA
+
+  F169 4F                 CLRA
+  F16A D6 1E              LDAB  V4
+  F16C BD F3 20           JSR   BNBCD
+  F16F BD F2 63           JSR   DSPLY
+  F172 BD F2 34           JSR   COMA
+
+  F175 4F                 CLRA
+  F176 D6 17              LDAB  V5
+  F178 BD F3 20           JSR   BNBCD
+  F17B BD F2 63           JSR   DSPLY
+
+  F17E BD F2 91           JSR   CRYTRN
+
+  F181 7E F1 26           JMP   CICLO
+
+
+                   ***********************************
+                   * INICIA
+                   ***********************************
+                   INICIA
+
+  F184 7F 00 0D          CLR  SEG
+
+  F187 7F 10 02          CLR  PORTG
+  F18A 86 F4             LDAA #$F4
+  F18C 97 18             STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244
+.                  CICLOS
+
+  F18E CE 10 24          LDX #TMSK2
+  F191 1C 00 40          BSET $00,X,#$40    * HABILITA INTERRUPCION TIMER T-REAL
+  F194 0E                CLI
+
+  F195 CE 10 26          LDX #PACTL
+  F198 1C 00 50          BSET $00,X,#$50    * HABILITA PAEN -ACUMULADOR PULSOS
+.                  ALTOS-
+                         CLR PACNT          * BORRA ACUMULADOR DE PULSOS
+E                            ^ Unknown identifier.
+
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       4
+
+  F19B 86 10             LDAA #$10
+  F19D 97 1B             STAA BASE_H        * PONE UN #1060 COMO DIRECCION BASE
+.                  INICIAL
+  F19F 86 60             LDAA #$60
+  F1A1 97 1C             STAA BASE_L
+
+  F1A3 18 CE 10 60       LDY  #$1060
+
+  F1A7 86 16             LDAA #$16
+                         STAA BAS_H        * PONE UN #1653 NUMERO TOTAL DE JUEGO
+.                  DE MUESTRAS
+E                             ^ Unknown identifier.
+  F1A9 86 53             LDAA #$53
+  F1AB 97 16             STAA BAS_L
+
+
+  F1AD 7F 00 19          CLR  ALTO          * INICIA INDICE MUESTRA EN 0
+  F1B0 7F 00 1A          CLR  BAJO
+
+  F1B3 39                 RTS
+                   ***********************************
+                   * SACA
+                   ***********************************
+                   SACA
+
+
+  F1B4 96 19              LDAA  ALTO         * INDICE DE MUESTRA (SEGUNDO)
+  F1B6 D6 1A              LDAB  BAJO
+  F1B8 18 8F              XGDY
+  F1BA 18 08              INY
+  F1BC 18 8F              XGDY
+  F1BE BD F3 10           JSR   BINBCD
+  F1C1 BD F2 44           JSR   DISPLAY
+  F1C4 BD F2 34           JSR   COMA
+
+  F1C7 96 1B              LDAA  BASE_H       * INDICE DE MUESTRA (PARTICULAR)
+  F1C9 D6 1C              LDAB  BASE_L
+  F1CB 18 8F              XGDY
+
+  F1CD 18 08              INY
+  F1CF 4F                 CLRA
+  F1D0 18 E6 00           LDAB  $00,Y
+  F1D3 BD F3 20           JSR   BNBCD
+  F1D6 BD F2 63           JSR   DSPLY
+  F1D9 BD F2 34           JSR   COMA
+
+  F1DC 18 08              INY
+  F1DE 4F                 CLRA
+  F1DF 18 E6 00           LDAB  $00,Y
+  F1E2 BD F3 20           JSR   BNBCD
+  F1E5 BD F2 63           JSR   DSPLY
+  F1E8 BD F2 34           JSR   COMA
+
+  F1EB 18 08              INY
+  F1ED 4F                 CLRA
+  F1EE 18 E6 00           LDAB  $00,Y
+  F1F1 BD F3 20           JSR   BNBCD
+  F1F4 BD F2 63           JSR   DSPLY
+  F1F7 BD F2 34           JSR   COMA
+
+  F1FA 18 08              INY
+  F1FC 4F                 CLRA
+  F1FD 18 E6 00           LDAB  $00,Y
+  F200 BD F3 20           JSR   BNBCD
+  F203 BD F2 63           JSR   DSPLY
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       5
+
+  F206 BD F2 34           JSR   COMA
+
+  F209 18 08              INY
+  F20B 4F                 CLRA
+  F20C 18 E6 00           LDAB  $00,Y
+  F20F BD F3 20           JSR   BNBCD
+  F212 BD F2 63           JSR   DSPLY
+
+  F215 18 8F              XGDY
+  F217 97 1B              STAA BASE_H
+  F219 D7 1C              STAB BASE_L
+
+                          JR   CRYTRN
+E                         ^ Unknown instruction or directive.
+
+  F21B 39                 RTS
+                   ***********************************
+                   * COMA
+                   ***********************************
+                   COMA
+  F21C CE 10 2E           LDX   #SCSR
+
+  F21F B6 10 2E           LDAA  SCSR
+  F222 86 2C              LDAA  #$2C             * COMA
+  F224 B7 10 2F           STAA  SCDR
+                   C1
+  F227 1F 00 80 FC        BRCLR $00,X,#$80 C1
+  F22B 39                 RTS
+                   ***********************************
+                   * DESPLIEGA
+                   ***********************************
+                   DISPLAY
+
+  F22C CE 10 2E           LDX   #SCSR
+
+  F22F B6 10 2E           LDAA  SCSR
+  F232 96 0E              LDAA  U1             * U
+  F234 8B 30              ADDA  #$30
+  F236 B7 10 2F           STAA  SCDR
+                   T1
+  F239 1F 00 80 FC        BRCLR $00,X,#$80 T1
+
+  F23D B6 10 2E           LDAA  SCSR
+  F240 96 0F              LDAA  U2             * U2
+  F242 8B 30              ADDA  #$30
+  F244 B7 10 2F           STAA  SCDR
+                   T2
+  F247 1F 00 80 FC        BRCLR $00,X,#$80 T2
+
+                   DSPLY
+  F24B CE 10 2E           LDX   #SCSR
+
+  F24E B6 10 2E           LDAA SCSR
+  F251 96 10              LDAA  U3             * U3
+  F253 8B 30              ADDA  #$30
+  F255 B7 10 2F           STAA  SCDR
+                   T3
+  F258 1F 00 80 FC        BRCLR $00,X,#$80 T3
+
+  F25C B6 10 2E           LDAA SCSR
+  F25F 96 11              LDAA  U4             * U4
+  F261 8B 30              ADDA  #$30
+  F263 B7 10 2F           STAA  SCDR
+                   T4
+  F266 1F 00 80 FC        BRCLR $00,X,#$80 T4
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       6
+
+
+  F26A B6 10 2E           LDAA SCSR
+  F26D 96 12              LDAA  U5             * U5
+  F26F 8B 30              ADDA  #$30
+  F271 B7 10 2F           STAA  SCDR
+                   T5
+  F274 1F 00 80 FC        BRCLR $00,X,#$80 T5
+
+  F278 39                 RTS
+
+                   ***********************************
+                   * CARRY RETURN
+                   ***********************************
+
+                   CRYTRN
+  F279 CE 10 2E           LDX   #SCSR
+  F27C B6 10 2E           LDAA  SCSR
+  F27F 86 0A              LDAA  #$0A             * NEW LINE
+  F281 B7 10 2F           STAA  SCDR
+                   CR1
+  F284 1F 00 80 FC        BRCLR $00,X,#$80 CR1
+
+  F288 B6 10 2E           LDAA SCSR
+  F28B 86 0D              LDAA #$0D              * CARRY RETURN
+  F28D B7 10 2F           STAA SCDR
+                   CR2
+  F290 1F 00 80 FC        BRCLR $00,X,#$80 CR2
+
+  F294 39                 RTS
+                   ***********************************
+                   *  DESPLIEGUE DE DATO RECIBIDO
+                   ***********************************
+
+                   DATARXESELMEJORDETODOS
+
+  F295 CE 10 2E           LDX   #SCSR
+  F298 B6 10 2E           LDAA  SCSR
+  F29B 96 0C              LDAA  ORDEN             * NEW LINE
+  F29D B7 10 2F           STAA  SCDR
+                   DT1
+  F2A0 1F 00 80 FC        BRCLR $00,X,#$80 DT1
+
+  F2A4 B6 10 2E           LDAA SCSR
+  F2A7 86 3A              LDAA #$3A              * DOS PUNTOS
+  F2A9 B7 10 2F           STAA SCDR
+                   DT2
+  F2AC 1F 00 80 FC        BRCLR $00,X,#$80 DT2
+
+  F2B0 39                 RTS
+                   ***********************************
+                   * voltimetro
+                   ***********************************
+                   VOLTA
+  F2B1 CE 10 30          LDX #ADCTL
+
+  F2B4 86 80             LDAA #$80
+  F2B6 B7 10 39          STAA OPTION        * PONE EN MARCHA EL ADC
+
+  F2B9 86 10             LDAA #$10
+  F2BB B7 10 30          STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL
+.                  0
+
+                   E1
+  F2BE 1F 00 80 FC       BRCLR $00,X,#$80 E1
+  F2C2 F6 10 31          LDAB ADR1
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       7
+
+  F2C5 D7 13             STAB V1
+
+  F2C7 86 80             LDAA #$80
+  F2C9 B7 10 39          STAA OPTION        * PONE EN MARCHA EL ADC
+
+  F2CC 86 11             LDAA #$11
+  F2CE B7 10 30          STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL
+.                  1
+
+                   E2
+  F2D1 1F 00 80 FC       BRCLR $00,X,#$80 E2
+  F2D5 F6 10 32          LDAB ADR2
+                         STAB V2
+E                             ^ Unknown identifier.
+
+  F2D8 86 12             LDAA #$12
+  F2DA B7 10 30          STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL
+.                  2
+
+                   E3
+  F2DD 1F 00 80 FC       BRCLR $00,X,#$80 E3
+  F2E1 F6 10 33          LDAB ADR3
+  F2E4 D7 1D             STAB V3
+
+  F2E6 86 13             LDAA #$13
+  F2E8 B7 10 30          STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL
+.                  3
+
+                   E4
+  F2EB 1F 00 80 FC       BRCLR $00,X,#$80 E4
+  F2EF F6 10 34          LDAB ADR4
+  F2F2 D7 1E             STAB V4
+
+
+  F2F4 39                RTS
+                   ***********************************
+                   * CONVIERTE A BCD
+                   ***********************************
+
+                   BINBCD
+
+  F2F5 CE 27 10          LDX  #$2710
+  F2F8 02                IDIV
+  F2F9 8F                XGDX
+  F2FA D7 0E             STAB U1
+  F2FC 8F                XGDX
+  F2FD CE 03 E8          LDX  #$3E8
+  F300 02                IDIV
+  F301 8F                XGDX
+  F302 D7 0F             STAB U2
+  F304 8F                XGDX
+
+                   BNBCD
+  F305 CE 00 64          LDX  #$64
+  F308 02                IDIV
+  F309 8F                XGDX
+  F30A D7 10             STAB U3
+  F30C 8F                XGDX
+  F30D CE 00 0A          LDX  #$A
+  F310 02                IDIV
+  F311 8F                XGDX
+  F312 D7 11             STAB U4
+  F314 8F                XGDX
+  F315 D7 12             STAB U5
+
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       8
+
+
+
+  F317 39                RTS
+
+
+
+                   ***********************************
+                   * ATENCION A INTERRUPCION SERIAL
+                   ***********************************
+                          ORG  $F100
+
+  F100 36                 PSHA
+
+  F101 B6 10 2E           LDAA SCSR
+  F104 B6 10 2F           LDAA SCDR
+  F107 97 0C              STAA ORDEN
+
+  F109 32                 PULA
+
+  F10A 3B                 RTI
+
+                   ***********************************
+                   * ATENCION A INTERRUPCION REAL TIME
+                   ***********************************
+                         ORG  $F110
+
+  F110 36                PSHA
+  F111 3C                PSHX
+
+  F112 CE 10 25          LDX #TFLG2
+  F115 1C 00 40          BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION
+  F118 7A 00 18          DEC TEMPO
+  F11B 27 03             BEQ SEGUNDO
+
+  F11D 32                PULA
+  F11E 38                PULX
+  F11F 3B                RTI
+
+                   SEGUNDO
+  F120 86 FF             LDAA #$FF
+  F122 97 0D             STAA SEG           * SEG ES UNA BANDERA DE SEGUNDO
+  F124 86 F4             LDAA #$F4
+  F126 97 18             STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244
+.                  CICLOS
+  F128 7C 10 02          INC  PORTG
+
+  F12B 32                PULA
+  F12C 38                PULX
+  F12D 3B                RTI
+                   ***********************************
+                   * VECTOR INTERRUPCION SERIAL
+                   ***********************************
+                          ORG   $FFD6
+  FFD6 F1 00              FCB   $F1,$00
+
+                   ***********************************
+                   * VECTOR INTERRUPCION REAL TIME
+                   ***********************************
+                          ORG   $FFF0
+  FFF0 F1 10              FCB   $F1,$10
+
+                   ***********************************
+                   *RESET
+                   ***********************************
+                          ORG    $FFFE
+  ADDR B1 B2 B3 B4 E:\68hc11\MIO\ERROR.ASC                          PAGE       9
+
+  FFFE 80 00       RESET  FCB    $80,$00
+                   ***********************************
+                          END   $8000
+
+  Symbol Table 
+
+  U2                 000F
+  U3                 0010
+  VOLTA              F2B1
+  BASE_L             001C
+  U4                 0011
+  U5                 0012
+  V1                 0013
+  V3                 001D
+  V4                 001E
+  V5                 0017
+  OPTION             1039
+  E1                 F2BE
+  E2                 F2D1
+  E3                 F2DD
+  E4                 F2EB
+  SACA               F1B4
+  DATARXESELMEJORDETODOS F295
+  CR1                F284
+  SEGUNDO            F120
+  CR2                F290
+  CSCTL              105D
+  PACTL              1026
+  TMSK2              1024
+  SCCR1              102C
+  SCCR2              102D
+  BAUD               102B
+  BNBCD              F305
+  CICLO              F126
+  ADCTL              1030
+  CRYTRN             F279
+  TFLG2              1025
+  MAIN               F11F
+  OPT2               1038
+  ALTO               0019
+  BINBCD             F2F5
+  RESET              FFFE
+  SEG                000D
+  ORDEN              000C
+  DT1                F2A0
+  DT2                F2AC
+  HPRIO              103C
+  COMA               F21C
+  SCSR               102E
+  BAJO               001A
+  ADR1               1031
+  ADR2               1032
+  ADR3               1033
+  ADR4               1034
+  PORTA              1000
+  PORTD              1008
+  PORTE              100A
+  PORTG              1002
+  DDRA               1001
+  DSPLY              F24B
+  DDRD               1009
+  DDRG               1003
+  SCDR               102F
+  DISPLAY            F22C
+  INICIA             F184
+  Symbol Table     E:\68hc11\MIO\ERROR.ASC                          PAGE      10
+
+  T1                 F239
+  SPCR               1028
+  T2                 F247
+  T3                 F258
+  T4                 F266
+  T5                 F274
+  BAS_L              0016
+  C1                 F227
+  BASE_H             001B
+  TEMPO              0018
+  U1                 000E
