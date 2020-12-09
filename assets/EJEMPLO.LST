@@ -566,7 +566,7 @@ M68HC11 Absolute Assembler   Version 2.70D:/MIO/EJEMPLO.ASC
  526 A                 *********************************** 
  527 A                 *RESET 
  528 A                 *********************************** 
- 529 A      FFFE                 ORG       $FFFE                 
+ 529 A      FFFE                 ORG       $FFFE                  
  530 A FFFE 8000       RESET     FCB       $80,$00               
  531 A                 *********************************** 
  532 A                           END       $8000                 
