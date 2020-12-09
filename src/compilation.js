@@ -1,4 +1,8 @@
+var tipo_compilado=1
+const direcciones=[['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx'],
+                    ['../assets/compilados/compilacion.LST','html/lst.html','../assets/compilados/compilacion.s19','../assets/INSTRUCCIONES.xlsx']]
 const xlsxFile = require('read-excel-file/node');
+const cabecera = require('./header.js');
 // global variables
 var lines=[]; 
 var values=[];
@@ -598,12 +602,12 @@ function impresoraFormato(lines){
                                 '09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN',
                                 '10- INSTRUCCION CARECE DE AL MENOS UN ESPACIO AL MARGEN', 
                                 '11- NO SE ENCUENTRA END']
-    fs.writeFile('compilacion.LST','',(err)=>{
+    fs.writeFile(direcciones[tipo_compilado][0],'',(err)=>{
         if(err){
             return console.log(err)
         }
     }) //dejamos limpio el archivo
-    fs.writeFile('compilacion.html','',(err)=>{
+    fs.writeFile(direcciones[tipo_compilado][1],cabecera.header,(err)=>{
         if(err){
             return console.log(err)
         }
@@ -613,7 +617,7 @@ function impresoraFormato(lines){
     var status ='A';
     var elementos;
     var impresionGlobal='';
-    var impresionColor ='<html>\n<body>\n<table>'; // Quitar Borde
+    var impresionColor ="\n<table class='container'>"; // Quitar Borde <html>\n<body>
 
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
@@ -687,6 +691,7 @@ function impresoraFormato(lines){
             
         }else if(lines[i].tipo == 'ETIQUETA'){
             //Imprime con memoria actual
+            //var n = innot GET /src/inicio.html
             var n = i
             var encontrado=false
             while(n<lines.length && !encontrado){ //busca siguiente memoria
@@ -724,18 +729,25 @@ function impresoraFormato(lines){
         
         
     }
-    impresionColor+='\n</table>\n</body>\n</html>'
-     fs.appendFile('compilacion.LST',impresionGlobal, function (err) {
+
+    impresionGlobal += "\n Tabla de Variables \n"
+    impresionColor += "<tr><td colspan='4'>Tabla de Variables</td></tr>\n"
+    for (var val in values){
+        impresionGlobal+= val.padStart(10)+"    "+values[val].substring(1)+"\n"
+        impresionColor += "<tr><td colspan='2'></td><td>"+val.padStart(10)+"<td><td>"+values[val].substring(1)+"</td></tr>\n"
+    }
+    impresionColor+='\n</table>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>'
+    impresionColor+='\n</body>\n</html>'
+     fs.appendFile(direcciones[tipo_compilado][0],impresionGlobal, function (err) {
          if (err) throw err;
      });
-     fs.appendFile('compilacion.html',impresionColor, function (err) {
+     fs.appendFile(direcciones[tipo_compilado][1],impresionColor, function (err) {
         if (err) throw err;
     });
     
 }
 
 function impresionS19(lines){
-    
     var impresion = '';
     var memoria_izquierda = []
     var indice = 0
@@ -759,7 +771,9 @@ function impresionS19(lines){
     }
 
     if(!error){
-        fs.writeFile('compilacion.s19','',(err)=>{
+        var fs = require('fs');
+
+        fs.writeFile(direcciones[tipo_compilado][2],'',(err)=>{
             if(err){
                 return console.log(err)
             }
@@ -778,7 +792,7 @@ function impresionS19(lines){
             }
         }
 
-        fs.appendFile('compilacion.s19',impresion, function (err) {
+        fs.appendFile(direcciones[tipo_compilado][2],impresion, function (err) {
             if (err) throw err;
         });
     }
@@ -787,8 +801,8 @@ function impresionS19(lines){
 }
 
 function main(data){
-    //assets/INSTRUCCIONES.xlsx ====> FINAL LINE, BUT NOW FOR TESTING 
-    xlsxFile('../assets/INSTRUCCIONES.xlsx').then((rows)=>{
+    //assets/INSTRUCCIONES.xlsx // ====> FINAL LINE, BUT NOW FOR TESTING 
+    xlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
         lines = get_lines(data,rows)
         exist_mnemonicos(rows);        // CHECK IF EXIST THE INSTRUCCION
         
@@ -801,13 +815,10 @@ function main(data){
     });
 }
 
+if (tipo_compilado==0){
+    module.exports={main}
 
-// module.exports={ check_syntax,
-//  tipo_direccionamiento,
-// lectura_excel,
-// main}
-////####### JUST FOR TESTING ######
-/// ENGINERS WORKING
+}else{
 const fs = require('fs'); 
 const { equal } = require('assert');
 fs.readFile('codigo.asc', 'utf-8', function (err,data) {
@@ -816,4 +827,8 @@ fs.readFile('codigo.asc', 'utf-8', function (err,data) {
     }
     main(data)
   });
+}
+
+////####### JUST FOR TESTING ######
+/// ENGINERS WORKING
 

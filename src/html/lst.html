@@ -1,0 +1,650 @@
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <title>LTS</title>
+  </head>
+  <body>
+      <style>
+          body{
+              background-color: #05668d;
+          }
+          .nav-link:hover{
+                background-color: #05668d;
+                text-decoration:  underline;
+                color:white !important;
+          }
+          svg{
+              color: #05668d;
+          }
+          #upload:hover{
+            background-color: #6f12d3;
+             /* width: 5em;
+              height: 5em;*/
+          }
+          #section-01{
+            color: white;
+          }
+
+      </style>
+    <!-- Navbar -->
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light mt-3 rounded-top " style="background-color: #D39D22">
+            <div class="container-fluid">
+                <a href="../index.html">
+                    <svg width="4em" height="4em" viewBox="0 0 16 16" class="bi bi-journal-code ms-3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                        <path fill-rule="evenodd" d="M8.646 5.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 8 8.646 6.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 8l1.647-1.646a.5.5 0 0 0 0-.708z"/>
+                    </svg>
+                </a>
+                
+              <!-- <a class="navbar-brand fs-2 fw-bold" href="#">68HC11 UuU</a> -->
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                    
+                </span>
+              </button>
+              <div class="collapse navbar-collapse justify-content-end me-3" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  <a class="nav-link rounded fs-4" href="./asc.html">ASC</a>
+                  <a class="nav-link rounded fs-4" href="./lst.html">LST</a>
+                  <a class="nav-link rounded fs-4" href="./s19.html">S19</a>
+                </div>
+              </div>
+            </div>
+          </nav>
+    </div>
+      <!-- Navbar -->
+
+<table class='container'>
+<tr><td style='color:#0000FF;'>  1  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>**********************************</td></tr>
+<tr><td style='color:#0000FF;'>  2  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>*PROGRAMA DE EJEMPLO</td></tr>
+<tr><td style='color:#0000FF;'>  3  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>**********************************</td></tr>
+<tr><td style='color:#0000FF;'>  4  A</td><td></td><td style='color:#00FF00;'>1026</td><td style='color:#FF0000;'>PACTL  EQU   $1026</td></tr>
+<tr><td style='color:#0000FF;'>  5  A</td><td></td><td style='color:#00FF00;'>1027</td><td style='color:#FF0000;'>PACNT  EQU   $1027</td></tr>
+<tr><td style='color:#0000FF;'>  6  A</td><td></td><td style='color:#00FF00;'>1030</td><td style='color:#FF0000;'>ADCTL  EQU   $1030</td></tr>
+<tr><td style='color:#0000FF;'>  7  A</td><td></td><td style='color:#00FF00;'>1031</td><td style='color:#FF0000;'>ADR1   EQU   $1031</td></tr>
+<tr><td style='color:#0000FF;'>  8  A</td><td></td><td style='color:#00FF00;'>1032</td><td style='color:#FF0000;'>ADR2   EQU   $1032</td></tr>
+<tr><td style='color:#0000FF;'>  9  A</td><td></td><td style='color:#00FF00;'>1033</td><td style='color:#FF0000;'>ADR3   EQU   $1033</td></tr>
+<tr><td style='color:#0000FF;'> 10  A</td><td></td><td style='color:#00FF00;'>1034</td><td style='color:#FF0000;'>ADR4   EQU   $1034</td></tr>
+<tr><td style='color:#0000FF;'> 11  A</td><td></td><td style='color:#00FF00;'>1039</td><td style='color:#FF0000;'>OPTION EQU   $1039</td></tr>
+<tr><td style='color:#0000FF;'> 12  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 13  A</td><td></td><td style='color:#00FF00;'>1000</td><td style='color:#FF0000;'>PORTA  EQU   $1000</td></tr>
+<tr><td style='color:#0000FF;'> 14  A</td><td></td><td style='color:#00FF00;'>1008</td><td style='color:#FF0000;'>PORTD  EQU   $1008</td></tr>
+<tr><td style='color:#0000FF;'> 15  A</td><td></td><td style='color:#00FF00;'>100A</td><td style='color:#FF0000;'>PORTE  EQU   $100A</td></tr>
+<tr><td style='color:#0000FF;'> 16  A</td><td></td><td style='color:#00FF00;'>1002</td><td style='color:#FF0000;'>PORTG  EQU   $1002</td></tr>
+<tr><td style='color:#0000FF;'> 17  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 18  A</td><td></td><td style='color:#00FF00;'>1001</td><td style='color:#FF0000;'>DDRA   EQU   $1001</td></tr>
+<tr><td style='color:#0000FF;'> 19  A</td><td></td><td style='color:#00FF00;'>1009</td><td style='color:#FF0000;'>DDRD   EQU   $1009</td></tr>
+<tr><td style='color:#0000FF;'> 20  A</td><td></td><td style='color:#00FF00;'>1003</td><td style='color:#FF0000;'>DDRG   EQU   $1003</td></tr>
+<tr><td style='color:#0000FF;'> 21  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 22  A</td><td></td><td style='color:#00FF00;'>1024</td><td style='color:#FF0000;'>TMSK2  EQU   $1024</td></tr>
+<tr><td style='color:#0000FF;'> 23  A</td><td></td><td style='color:#00FF00;'>1025</td><td style='color:#FF0000;'>TFLG2  EQU   $1025</td></tr>
+<tr><td style='color:#0000FF;'> 24  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 25  A</td><td></td><td style='color:#00FF00;'>102F</td><td style='color:#FF0000;'>SCDR   EQU   $102F</td></tr>
+<tr><td style='color:#0000FF;'> 26  A</td><td></td><td style='color:#00FF00;'>102D</td><td style='color:#FF0000;'>SCCR2  EQU   $102D</td></tr>
+<tr><td style='color:#0000FF;'> 27  A</td><td></td><td style='color:#00FF00;'>102E</td><td style='color:#FF0000;'>SCSR   EQU   $102E</td></tr>
+<tr><td style='color:#0000FF;'> 28  A</td><td></td><td style='color:#00FF00;'>102C</td><td style='color:#FF0000;'>SCCR1  EQU   $102C</td></tr>
+<tr><td style='color:#0000FF;'> 29  A</td><td></td><td style='color:#00FF00;'>102B</td><td style='color:#FF0000;'>BAUD   EQU   $102B</td></tr>
+<tr><td style='color:#0000FF;'> 30  A</td><td></td><td style='color:#00FF00;'>103C</td><td style='color:#FF0000;'>HPRIO  EQU   $103C</td></tr>
+<tr><td style='color:#0000FF;'> 31  A</td><td></td><td style='color:#00FF00;'>1028</td><td style='color:#FF0000;'>SPCR   EQU   $1028</td></tr>
+<tr><td style='color:#0000FF;'> 32  A</td><td></td><td style='color:#00FF00;'>105D</td><td style='color:#FF0000;'>CSCTL  EQU   $105D</td></tr>
+<tr><td style='color:#0000FF;'> 33  A</td><td></td><td style='color:#00FF00;'>1038</td><td style='color:#FF0000;'>OPT2   EQU   $1038</td></tr>
+<tr><td style='color:#0000FF;'> 34  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 35  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* VARIABLES *********************</td></tr>
+<tr><td style='color:#0000FF;'> 36  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 37  A</td><td></td><td style='color:#00FF00;'>000C</td><td style='color:#FF0000;'>ORDEN  EQU   $000C</td></tr>
+<tr><td style='color:#0000FF;'> 38  A</td><td></td><td style='color:#00FF00;'>000D</td><td style='color:#FF0000;'>SEG    EQU   $000D</td></tr>
+<tr><td style='color:#0000FF;'> 39  A</td><td></td><td style='color:#00FF00;'>000E</td><td style='color:#FF0000;'>U1     EQU   $000E</td></tr>
+<tr><td style='color:#0000FF;'> 40  A</td><td></td><td style='color:#00FF00;'>000F</td><td style='color:#FF0000;'>U2     EQU   $000F</td></tr>
+<tr><td style='color:#0000FF;'> 41  A</td><td></td><td style='color:#00FF00;'>0010</td><td style='color:#FF0000;'>U3     EQU   $0010</td></tr>
+<tr><td style='color:#0000FF;'> 42  A</td><td></td><td style='color:#00FF00;'>0011</td><td style='color:#FF0000;'>U4     EQU   $0011</td></tr>
+<tr><td style='color:#0000FF;'> 43  A</td><td></td><td style='color:#00FF00;'>0012</td><td style='color:#FF0000;'>U5     EQU   $0012</td></tr>
+<tr><td style='color:#0000FF;'> 44  A</td><td></td><td style='color:#00FF00;'>0013</td><td style='color:#FF0000;'>V1     EQU   $0013</td></tr>
+<tr><td style='color:#0000FF;'> 45  A</td><td></td><td style='color:#00FF00;'>0014</td><td style='color:#FF0000;'>V2     EQU   $0014</td></tr>
+<tr><td style='color:#0000FF;'> 46  A</td><td></td><td style='color:#00FF00;'>0015</td><td style='color:#FF0000;'>BAS_H  EQU   $0015</td></tr>
+<tr><td style='color:#0000FF;'> 47  A</td><td></td><td style='color:#00FF00;'>0016</td><td style='color:#FF0000;'>BAS_L  EQU   $0016</td></tr>
+<tr><td style='color:#0000FF;'> 48  A</td><td></td><td style='color:#00FF00;'>0017</td><td style='color:#FF0000;'>V5     EQU   $0017</td></tr>
+<tr><td style='color:#0000FF;'> 49  A</td><td></td><td style='color:#00FF00;'>0018</td><td style='color:#FF0000;'>TEMPO  EQU   $0018</td></tr>
+<tr><td style='color:#0000FF;'> 50  A</td><td></td><td style='color:#00FF00;'>0019</td><td style='color:#FF0000;'>ALTO   EQU   $0019</td></tr>
+<tr><td style='color:#0000FF;'> 51  A</td><td></td><td style='color:#00FF00;'>001A</td><td style='color:#FF0000;'>BAJO   EQU   $001A</td></tr>
+<tr><td style='color:#0000FF;'> 52  A</td><td></td><td style='color:#00FF00;'>001B</td><td style='color:#FF0000;'>BASE_H EQU   $001B</td></tr>
+<tr><td style='color:#0000FF;'> 53  A</td><td></td><td style='color:#00FF00;'>001C</td><td style='color:#FF0000;'>BASE_L EQU   $001C</td></tr>
+<tr><td style='color:#0000FF;'> 54  A</td><td></td><td style='color:#00FF00;'>001D</td><td style='color:#FF0000;'>V3     EQU   $001D</td></tr>
+<tr><td style='color:#0000FF;'> 55  A</td><td></td><td style='color:#00FF00;'>001E</td><td style='color:#FF0000;'>V4     EQU   $001E</td></tr>
+<tr><td style='color:#0000FF;'> 56  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 57  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>**********************************</td></tr>
+<tr><td style='color:#0000FF;'> 58  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>*CONFIGURA REGISTROS</td></tr>
+<tr><td style='color:#0000FF;'> 59  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>**********************************</td></tr>
+<tr><td style='color:#0000FF;'> 60  A</td><td style='color:#00FF00;'>8000</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       ORG   $8000   * DIR DE INICIO</td></tr>
+<tr><td style='color:#0000FF;'> 61  A</td><td style='color:#00FF00;'>8000</td><td style='color:#000000;'>8E00FF</td><td style='color:#FF0000;'>       LDS   #$00FF  * APUNTADOR DE STAK</td></tr>
+<tr><td style='color:#0000FF;'> 62  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 63  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>               </td></tr>
+<tr><td style='color:#0000FF;'> 64  A</td><td style='color:#00FF00;'>8003</td><td style='color:#000000;'>8600</td><td style='color:#FF0000;'>       LDAA  #$00    * CONFIG TODO EL PUERTO  A COMO ENTRADAS</td></tr>
+<tr><td style='color:#0000FF;'> 65  A</td><td style='color:#00FF00;'>8005</td><td style='color:#000000;'>B71001</td><td style='color:#FF0000;'>       STAA  DDRA    * EL PUERTO A</td></tr>
+<tr><td style='color:#0000FF;'> 66  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'> 67  A</td><td style='color:#00FF00;'>8008</td><td style='color:#000000;'>86FF</td><td style='color:#FF0000;'>       LDAA  #$FF    * CONFIG TODO EL PUERTO  G COMO SALIDAS</td></tr>
+<tr><td style='color:#0000FF;'> 68  A</td><td style='color:#00FF00;'>800A</td><td style='color:#000000;'>B71003</td><td style='color:#FF0000;'>       STAA  DDRG    * EL PUERTO G </td></tr>
+<tr><td style='color:#0000FF;'> 69  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 70  A</td><td style='color:#00FF00;'>800D</td><td style='color:#000000;'>8600</td><td style='color:#FF0000;'>       LDAA  #$00    * SE PONE PUERTO G EN CEROS</td></tr>
+<tr><td style='color:#0000FF;'> 71  A</td><td style='color:#00FF00;'>800F</td><td style='color:#000000;'>B71002</td><td style='color:#FF0000;'>       STAA  PORTG</td></tr>
+<tr><td style='color:#0000FF;'> 72  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'> 73  A</td><td style='color:#00FF00;'>8012</td><td style='color:#000000;'>CC302C</td><td style='color:#FF0000;'>       LDD   #$302C  * CONFIGURA PUERTO SERIAL</td></tr>
+<tr><td style='color:#0000FF;'> 74  A</td><td style='color:#00FF00;'>8015</td><td style='color:#000000;'>B7102B</td><td style='color:#FF0000;'>       STAA  BAUD    * BAUD  9600  para cristal de 8MHz</td></tr>
+<tr><td style='color:#0000FF;'> 75  A</td><td style='color:#00FF00;'>8018</td><td style='color:#000000;'>F7102D</td><td style='color:#FF0000;'>       STAB  SCCR2   * HABILITA  RX Y TX PERO INTERRUPCN SOLO RX</td></tr>
+<tr><td style='color:#0000FF;'> 76  A</td><td style='color:#00FF00;'>801B</td><td style='color:#000000;'>8600</td><td style='color:#FF0000;'>       LDAA  #$00</td></tr>
+<tr><td style='color:#0000FF;'> 77  A</td><td style='color:#00FF00;'>801D</td><td style='color:#000000;'>B7102C</td><td style='color:#FF0000;'>       STAA  SCCR1   * 8 BITS</td></tr>
+<tr><td style='color:#0000FF;'> 78  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 79  A</td><td style='color:#00FF00;'>8020</td><td style='color:#000000;'>86FE</td><td style='color:#FF0000;'>       LDAA  #$FE    * CONFIG PUERTO D COMO SALIDAS (EXCEPTO PD0)</td></tr>
+<tr><td style='color:#0000FF;'> 80  A</td><td style='color:#00FF00;'>8022</td><td style='color:#000000;'>B71009</td><td style='color:#FF0000;'>       STAA  DDRD    * SEA  ENABLE DEL DISPLAY  PD4  Y RS PD3</td></tr>
+<tr><td style='color:#0000FF;'> 81  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>                     </td></tr>
+<tr><td style='color:#0000FF;'> 82  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>      </td></tr>
+<tr><td style='color:#0000FF;'> 83  A</td><td style='color:#00FF00;'>8025</td><td style='color:#000000;'>8604</td><td style='color:#FF0000;'>       LDAA  #$04</td></tr>
+<tr><td style='color:#0000FF;'> 84  A</td><td style='color:#00FF00;'>8027</td><td style='color:#000000;'>B7103C</td><td style='color:#FF0000;'>       STAA  HPRIO</td></tr>
+<tr><td style='color:#0000FF;'> 85  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 86  A</td><td style='color:#00FF00;'>802A</td><td style='color:#000000;'>8600</td><td style='color:#FF0000;'>       LDAA  #$00</td></tr>
+<tr><td style='color:#0000FF;'> 87  A</td><td style='color:#00FF00;'>802C</td><td style='color:#000000;'>06</td><td style='color:#FF0000;'>       TAP</td></tr>
+<tr><td style='color:#0000FF;'> 88  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 89  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 90  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 91  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'> 92  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 93  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 94  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'> 95  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>**********************************</td></tr>
+<tr><td style='color:#0000FF;'> 96  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>*PROGRAMA PRINCIPAL</td></tr>
+<tr><td style='color:#0000FF;'> 97  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>**********************************</td></tr>
+<tr><td style='color:#0000FF;'> 98  A</td><td style='color:#00FF00;'>802D</td><td></td><td style='color:#FF0000;'>MAIN  </td></tr>
+<tr><td style='color:#0000FF;'> 99  A</td><td style='color:#00FF00;'>802D</td><td style='color:#000000;'>BD80C6</td><td style='color:#FF0000;'>        JSR    INICIA</td></tr>
+<tr><td style='color:#0000FF;'>100  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>        </td></tr>
+<tr><td style='color:#0000FF;'>101  A</td><td style='color:#00FF00;'>8030</td><td style='color:#000000;'>7F0011</td><td style='color:#FF0000;'>INICIO  CLR    U4</td></tr>
+<tr><td style='color:#0000FF;'>102  A</td><td style='color:#00FF00;'>8033</td><td style='color:#000000;'>7F0010</td><td style='color:#FF0000;'>NO_S1   CLR    U3</td></tr>
+<tr><td style='color:#0000FF;'>103  A</td><td style='color:#00FF00;'>8036</td><td style='color:#000000;'>7F000F</td><td style='color:#FF0000;'>NO_S    CLR    U2</td></tr>
+<tr><td style='color:#0000FF;'>104  A</td><td style='color:#00FF00;'>8039</td><td style='color:#000000;'>7F000E</td><td style='color:#FF0000;'>        CLR    U1 </td></tr>
+<tr><td style='color:#0000FF;'>105  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>106  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'> </td></tr>
+<tr><td style='color:#0000FF;'>107  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>108  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>109  A</td><td style='color:#00FF00;'>803C</td><td></td><td style='color:#FF0000;'>OTRO    </td></tr>
+<tr><td style='color:#0000FF;'>110  A</td><td style='color:#00FF00;'>803C</td><td style='color:#000000;'>863F</td><td style='color:#FF0000;'>        LDAA    #'?</td></tr>
+<tr><td style='color:#0000FF;'>111  A</td><td style='color:#00FF00;'>803E</td><td style='color:#000000;'>970C</td><td style='color:#FF0000;'>        STAA    ORDEN</td></tr>
+<tr><td style='color:#0000FF;'>112  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>113  A</td><td style='color:#00FF00;'>8040</td><td></td><td style='color:#FF0000;'>CICLO</td></tr>
+<tr><td style='color:#0000FF;'>114  A</td><td style='color:#00FF00;'>8040</td><td style='color:#000000;'>960C</td><td style='color:#FF0000;'>        LDAA    ORDEN</td></tr>
+<tr><td style='color:#0000FF;'>115  A</td><td style='color:#00FF00;'>8042</td><td style='color:#000000;'>813F</td><td style='color:#FF0000;'>        CMPA    #'?</td></tr>
+<tr><td style='color:#0000FF;'>116  A</td><td style='color:#00FF00;'>8044</td><td style='color:#000000;'>27F2</td><td style='color:#FF0000;'>        BEQ     CICLO</td></tr>
+<tr><td style='color:#0000FF;'>117  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>118  A</td><td style='color:#00FF00;'>8046</td><td style='color:#000000;'>D60E</td><td style='color:#FF0000;'>        LDAB    U1</td></tr>
+<tr><td style='color:#0000FF;'>119  A</td><td style='color:#00FF00;'>8048</td><td style='color:#000000;'>2609</td><td style='color:#FF0000;'>        BNE     CHECA_U2</td></tr>
+<tr><td style='color:#0000FF;'>120  A</td><td style='color:#00FF00;'>804A</td><td style='color:#000000;'>8173</td><td style='color:#FF0000;'>        CMPA    #'s</td></tr>
+<tr><td style='color:#0000FF;'>121  A</td><td style='color:#00FF00;'>804C</td><td style='color:#000000;'>26FE</td><td style='color:#FF0000;'>        BNE     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>122  A</td><td style='color:#00FF00;'>804E</td><td style='color:#000000;'>970E</td><td style='color:#FF0000;'>        STAA    U1</td></tr>
+<tr><td style='color:#0000FF;'>123  A</td><td style='color:#00FF00;'>8050</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>124  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>125  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>126  A</td><td style='color:#00FF00;'>8053</td><td></td><td style='color:#FF0000;'>CHECA_U2</td></tr>
+<tr><td style='color:#0000FF;'>127  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>128  A</td><td style='color:#00FF00;'>8053</td><td style='color:#000000;'>D60F</td><td style='color:#FF0000;'>        LDAB    U2</td></tr>
+<tr><td style='color:#0000FF;'>129  A</td><td style='color:#00FF00;'>8055</td><td style='color:#000000;'>2613</td><td style='color:#FF0000;'>        BNE     CHECA_U3</td></tr>
+<tr><td style='color:#0000FF;'>130  A</td><td style='color:#00FF00;'>8057</td><td style='color:#000000;'>8154</td><td style='color:#FF0000;'>        CMPA    #'T</td></tr>
+<tr><td style='color:#0000FF;'>131  A</td><td style='color:#00FF00;'>8059</td><td style='color:#000000;'>270A</td><td style='color:#FF0000;'>        BEQ     ES_T</td></tr>
+<tr><td style='color:#0000FF;'>132  A</td><td style='color:#00FF00;'>805B</td><td style='color:#000000;'>8153</td><td style='color:#FF0000;'>        CMPA    #'S</td></tr>
+<tr><td style='color:#0000FF;'>133  A</td><td style='color:#00FF00;'>805D</td><td style='color:#000000;'>2721</td><td style='color:#FF0000;'>        BEQ     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>134  A</td><td style='color:#00FF00;'>805F</td><td style='color:#000000;'>7F000E</td><td style='color:#FF0000;'>        CLR     U1</td></tr>
+<tr><td style='color:#0000FF;'>135  A</td><td style='color:#00FF00;'>8062</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>136  A</td><td style='color:#00FF00;'>8065</td><td style='color:#000000;'>970F</td><td style='color:#FF0000;'>ES_T    STAA    U2</td></tr>
+<tr><td style='color:#0000FF;'>137  A</td><td style='color:#00FF00;'>8067</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>138  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>139  A</td><td style='color:#00FF00;'>806A</td><td></td><td style='color:#FF0000;'>CHECA_U3</td></tr>
+<tr><td style='color:#0000FF;'>140  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>141  A</td><td style='color:#00FF00;'>806A</td><td style='color:#000000;'>D610</td><td style='color:#FF0000;'>        LDAB    U3</td></tr>
+<tr><td style='color:#0000FF;'>142  A</td><td style='color:#00FF00;'>806C</td><td style='color:#000000;'>2613</td><td style='color:#FF0000;'>        BNE     CHECA_U4</td></tr>
+<tr><td style='color:#0000FF;'>143  A</td><td style='color:#00FF00;'>806E</td><td style='color:#000000;'>8141</td><td style='color:#FF0000;'>        CMPA    #'A</td></tr>
+<tr><td style='color:#0000FF;'>144  A</td><td style='color:#00FF00;'>8070</td><td style='color:#000000;'>270A</td><td style='color:#FF0000;'>        BEQ     ES_A</td></tr>
+<tr><td style='color:#0000FF;'>145  A</td><td style='color:#00FF00;'>8072</td><td style='color:#000000;'>8153</td><td style='color:#FF0000;'>        CMPA    #'S</td></tr>
+<tr><td style='color:#0000FF;'>146  A</td><td style='color:#00FF00;'>8074</td><td style='color:#000000;'>2640</td><td style='color:#FF0000;'>        BNE     NO_S</td></tr>
+<tr><td style='color:#0000FF;'>147  A</td><td style='color:#00FF00;'>8076</td><td style='color:#000000;'>7F000F</td><td style='color:#FF0000;'>        CLR     U2</td></tr>
+<tr><td style='color:#0000FF;'>148  A</td><td style='color:#00FF00;'>8079</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>149  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>150  A</td><td style='color:#00FF00;'>807C</td><td></td><td style='color:#FF0000;'>ES_A</td></tr>
+<tr><td style='color:#0000FF;'>151  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>152  A</td><td style='color:#00FF00;'>807C</td><td style='color:#000000;'>9710</td><td style='color:#FF0000;'>        STAA    U3</td></tr>
+<tr><td style='color:#0000FF;'>153  A</td><td style='color:#00FF00;'>807E</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>154  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>155  A</td><td style='color:#00FF00;'>8081</td><td></td><td style='color:#FF0000;'>CHECA_U4</td></tr>
+<tr><td style='color:#0000FF;'>156  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>157  A</td><td style='color:#00FF00;'>8081</td><td style='color:#000000;'>D611</td><td style='color:#FF0000;'>        LDAB    U4</td></tr>
+<tr><td style='color:#0000FF;'>158  A</td><td style='color:#00FF00;'>8083</td><td style='color:#000000;'>2616</td><td style='color:#FF0000;'>        BNE     CHECA_T</td></tr>
+<tr><td style='color:#0000FF;'>159  A</td><td style='color:#00FF00;'>8085</td><td style='color:#000000;'>8152</td><td style='color:#FF0000;'>        CMPA    #'R</td></tr>
+<tr><td style='color:#0000FF;'>160  A</td><td style='color:#00FF00;'>8087</td><td style='color:#000000;'>270D</td><td style='color:#FF0000;'>        BEQ     ES_R</td></tr>
+<tr><td style='color:#0000FF;'>161  A</td><td style='color:#00FF00;'>8089</td><td style='color:#000000;'>8153</td><td style='color:#FF0000;'>        CMPA    #'S</td></tr>
+<tr><td style='color:#0000FF;'>162  A</td><td style='color:#00FF00;'>808B</td><td style='color:#000000;'>2636</td><td style='color:#FF0000;'>        BNE     NO_S1</td></tr>
+<tr><td style='color:#0000FF;'>163  A</td><td style='color:#00FF00;'>808D</td><td style='color:#000000;'>7F0010</td><td style='color:#FF0000;'>        CLR     U3</td></tr>
+<tr><td style='color:#0000FF;'>164  A</td><td style='color:#00FF00;'>8090</td><td style='color:#000000;'>7F000F</td><td style='color:#FF0000;'>        CLR     U2</td></tr>
+<tr><td style='color:#0000FF;'>165  A</td><td style='color:#00FF00;'>8093</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>166  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>167  A</td><td style='color:#00FF00;'>8096</td><td></td><td style='color:#FF0000;'>ES_R</td></tr>
+<tr><td style='color:#0000FF;'>168  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>169  A</td><td style='color:#00FF00;'>8096</td><td style='color:#000000;'>9711</td><td style='color:#FF0000;'>        STAA    U4</td></tr>
+<tr><td style='color:#0000FF;'>170  A</td><td style='color:#00FF00;'>8098</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>171  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'> </td></tr>
+<tr><td style='color:#0000FF;'>172  A</td><td style='color:#00FF00;'>809B</td><td></td><td style='color:#FF0000;'>CHECA_T</td></tr>
+<tr><td style='color:#0000FF;'>173  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>174  A</td><td style='color:#00FF00;'>809B</td><td style='color:#000000;'>8154</td><td style='color:#FF0000;'>        CMPA    #'T</td></tr>
+<tr><td style='color:#0000FF;'>175  A</td><td style='color:#00FF00;'>809D</td><td style='color:#000000;'>2710</td><td style='color:#FF0000;'>        BEQ     EXITO</td></tr>
+<tr><td style='color:#0000FF;'>176  A</td><td style='color:#00FF00;'>809F</td><td style='color:#000000;'>8153</td><td style='color:#FF0000;'>        CMPA    #'S</td></tr>
+<tr><td style='color:#0000FF;'>177  A</td><td style='color:#00FF00;'>80A1</td><td style='color:#000000;'>2651</td><td style='color:#FF0000;'>        BNE     INICIO</td></tr>
+<tr><td style='color:#0000FF;'>178  A</td><td style='color:#00FF00;'>80A3</td><td style='color:#000000;'>7F0011</td><td style='color:#FF0000;'>        CLR     U4</td></tr>
+<tr><td style='color:#0000FF;'>179  A</td><td style='color:#00FF00;'>80A6</td><td style='color:#000000;'>7F0010</td><td style='color:#FF0000;'>        CLR     U3</td></tr>
+<tr><td style='color:#0000FF;'>180  A</td><td style='color:#00FF00;'>80A9</td><td style='color:#000000;'>7F000F</td><td style='color:#FF0000;'>        CLR     U2</td></tr>
+<tr><td style='color:#0000FF;'>181  A</td><td style='color:#00FF00;'>80AC</td><td style='color:#000000;'>7E803C</td><td style='color:#FF0000;'>        JMP     OTRO</td></tr>
+<tr><td style='color:#0000FF;'>182  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>183  A</td><td style='color:#00FF00;'>80AF</td><td></td><td style='color:#FF0000;'>EXITO</td></tr>
+<tr><td style='color:#0000FF;'>184  A</td><td style='color:#00FF00;'>80AF</td><td style='color:#000000;'>8645</td><td style='color:#FF0000;'>        LDAA  #'E</td></tr>
+<tr><td style='color:#0000FF;'>185  A</td><td style='color:#00FF00;'>80B1</td><td style='color:#000000;'>9719</td><td style='color:#FF0000;'>        STAA  ALTO</td></tr>
+<tr><td style='color:#0000FF;'>186  A</td><td style='color:#00FF00;'>80B3</td><td style='color:#000000;'>8658</td><td style='color:#FF0000;'>        LDAA  #'X</td></tr>
+<tr><td style='color:#0000FF;'>187  A</td><td style='color:#00FF00;'>80B5</td><td style='color:#000000;'>971A</td><td style='color:#FF0000;'>        STAA  BAJO</td></tr>
+<tr><td style='color:#0000FF;'>188  A</td><td style='color:#00FF00;'>80B7</td><td style='color:#000000;'>8649</td><td style='color:#FF0000;'>        LDAA  #'I</td></tr>
+<tr><td style='color:#0000FF;'>189  A</td><td style='color:#00FF00;'>80B9</td><td style='color:#000000;'>971B</td><td style='color:#FF0000;'>        STAA  BASE_H</td></tr>
+<tr><td style='color:#0000FF;'>190  A</td><td style='color:#00FF00;'>80BB</td><td style='color:#000000;'>8654</td><td style='color:#FF0000;'>        LDAA  #'T</td></tr>
+<tr><td style='color:#0000FF;'>191  A</td><td style='color:#00FF00;'>80BD</td><td style='color:#000000;'>971C</td><td style='color:#FF0000;'>        STAA  BASE_L</td></tr>
+<tr><td style='color:#0000FF;'>192  A</td><td style='color:#00FF00;'>80BF</td><td style='color:#000000;'>864F</td><td style='color:#FF0000;'>        LDAA  #'O</td></tr>
+<tr><td style='color:#0000FF;'>193  A</td><td style='color:#00FF00;'>80C1</td><td style='color:#000000;'>971D</td><td style='color:#FF0000;'>        STAA  V3</td></tr>
+<tr><td style='color:#0000FF;'>194  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>195  A</td><td style='color:#00FF00;'>80C3</td><td style='color:#000000;'>7E802D</td><td style='color:#FF0000;'>        JMP MAIN       </td></tr>
+<tr><td style='color:#0000FF;'>196  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>197  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>198  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>199  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* INICIA</td></tr>
+<tr><td style='color:#0000FF;'>200  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>201  A</td><td style='color:#00FF00;'>80C6</td><td></td><td style='color:#FF0000;'>INICIA</td></tr>
+<tr><td style='color:#0000FF;'>202  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>     </td></tr>
+<tr><td style='color:#0000FF;'>203  A</td><td style='color:#00FF00;'>80C6</td><td style='color:#000000;'>7F000D</td><td style='color:#FF0000;'>      CLR  SEG</td></tr>
+<tr><td style='color:#0000FF;'>204  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>205  A</td><td style='color:#00FF00;'>80C9</td><td style='color:#000000;'>7F1002</td><td style='color:#FF0000;'>      CLR  PORTG</td></tr>
+<tr><td style='color:#0000FF;'>206  A</td><td style='color:#00FF00;'>80CC</td><td style='color:#000000;'>86F4</td><td style='color:#FF0000;'>      LDAA #$F4         </td></tr>
+<tr><td style='color:#0000FF;'>207  A</td><td style='color:#00FF00;'>80CE</td><td style='color:#000000;'>9718</td><td style='color:#FF0000;'>      STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS</td></tr>
+<tr><td style='color:#0000FF;'>208  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>209  A</td><td style='color:#00FF00;'>80D0</td><td style='color:#000000;'>CE1024</td><td style='color:#FF0000;'>      LDX #TMSK2</td></tr>
+<tr><td style='color:#0000FF;'>210  A</td><td style='color:#00FF00;'>80D3</td><td style='color:#000000;'>1C0040</td><td style='color:#FF0000;'>      BSET $00,X,#$40    * HABILITA INTERRUPCION TIMER T-REAL</td></tr>
+<tr><td style='color:#0000FF;'>211  A</td><td style='color:#00FF00;'>80D6</td><td style='color:#000000;'>0E</td><td style='color:#FF0000;'>      CLI</td></tr>
+<tr><td style='color:#0000FF;'>212  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>213  A</td><td style='color:#00FF00;'>80D7</td><td style='color:#000000;'>CE1026</td><td style='color:#FF0000;'>      LDX #PACTL</td></tr>
+<tr><td style='color:#0000FF;'>214  A</td><td style='color:#00FF00;'>80DA</td><td style='color:#000000;'>1C0050</td><td style='color:#FF0000;'>      BSET $00,X,#$50    * HABILITA PAEN -ACUMULADOR PULSOS ALTOS-</td></tr>
+<tr><td style='color:#0000FF;'>215  A</td><td style='color:#00FF00;'>80DD</td><td style='color:#000000;'>7F1027</td><td style='color:#FF0000;'>      CLR PACNT          * BORRA ACUMULADOR DE PULSOS</td></tr>
+<tr><td style='color:#0000FF;'>216  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>217  A</td><td style='color:#00FF00;'>80E0</td><td style='color:#000000;'>8610</td><td style='color:#FF0000;'>      LDAA #$10</td></tr>
+<tr><td style='color:#0000FF;'>218  A</td><td style='color:#00FF00;'>80E2</td><td style='color:#000000;'>971B</td><td style='color:#FF0000;'>      STAA BASE_H        * PONE UN #1060 COMO DIRECCION BASE INICIAL</td></tr>
+<tr><td style='color:#0000FF;'>219  A</td><td style='color:#00FF00;'>80E4</td><td style='color:#000000;'>8660</td><td style='color:#FF0000;'>      LDAA #$60</td></tr>
+<tr><td style='color:#0000FF;'>220  A</td><td style='color:#00FF00;'>80E6</td><td style='color:#000000;'>971C</td><td style='color:#FF0000;'>      STAA BASE_L    </td></tr>
+<tr><td style='color:#0000FF;'>221  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>      </td></tr>
+<tr><td style='color:#0000FF;'>222  A</td><td style='color:#00FF00;'>80E8</td><td style='color:#000000;'>18CE1060</td><td style='color:#FF0000;'>      LDY  #$1060      </td></tr>
+<tr><td style='color:#0000FF;'>223  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>      </td></tr>
+<tr><td style='color:#0000FF;'>224  A</td><td style='color:#00FF00;'>80EC</td><td style='color:#000000;'>8616</td><td style='color:#FF0000;'>      LDAA #$16</td></tr>
+<tr><td style='color:#0000FF;'>225  A</td><td style='color:#00FF00;'>80EE</td><td style='color:#000000;'>9715</td><td style='color:#FF0000;'>      STAA BAS_H        * PONE UN #1653 NUMERO TOTAL DE JUEGO DE MUESTRAS</td></tr>
+<tr><td style='color:#0000FF;'>226  A</td><td style='color:#00FF00;'>80F0</td><td style='color:#000000;'>8653</td><td style='color:#FF0000;'>      LDAA #$53</td></tr>
+<tr><td style='color:#0000FF;'>227  A</td><td style='color:#00FF00;'>80F2</td><td style='color:#000000;'>9716</td><td style='color:#FF0000;'>      STAA BAS_L   </td></tr>
+<tr><td style='color:#0000FF;'>228  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>229  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>230  A</td><td style='color:#00FF00;'>80F4</td><td style='color:#000000;'>7F0019</td><td style='color:#FF0000;'>      CLR  ALTO          * INICIA INDICE MUESTRA EN 0</td></tr>
+<tr><td style='color:#0000FF;'>231  A</td><td style='color:#00FF00;'>80F7</td><td style='color:#000000;'>7F001A</td><td style='color:#FF0000;'>      CLR  BAJO</td></tr>
+<tr><td style='color:#0000FF;'>232  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>233  A</td><td style='color:#00FF00;'>80FA</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>       RTS</td></tr>
+<tr><td style='color:#0000FF;'>234  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>235  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* SACA</td></tr>
+<tr><td style='color:#0000FF;'>236  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>237  A</td><td style='color:#00FF00;'>80FB</td><td></td><td style='color:#FF0000;'>SACA</td></tr>
+<tr><td style='color:#0000FF;'>238  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>            </td></tr>
+<tr><td style='color:#0000FF;'>239  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>240  A</td><td style='color:#00FF00;'>80FB</td><td style='color:#000000;'>9619</td><td style='color:#FF0000;'>       LDAA  ALTO         * INDICE DE MUESTRA (SEGUNDO)</td></tr>
+<tr><td style='color:#0000FF;'>241  A</td><td style='color:#00FF00;'>80FD</td><td style='color:#000000;'>D61A</td><td style='color:#FF0000;'>       LDAB  BAJO</td></tr>
+<tr><td style='color:#0000FF;'>242  A</td><td style='color:#00FF00;'>80FF</td><td style='color:#000000;'>188F</td><td style='color:#FF0000;'>       XGDY</td></tr>
+<tr><td style='color:#0000FF;'>243  A</td><td style='color:#00FF00;'>8101</td><td style='color:#000000;'>1808</td><td style='color:#FF0000;'>       INY</td></tr>
+<tr><td style='color:#0000FF;'>244  A</td><td style='color:#00FF00;'>8103</td><td style='color:#000000;'>188F</td><td style='color:#FF0000;'>       XGDY</td></tr>
+<tr><td style='color:#0000FF;'>245  A</td><td style='color:#00FF00;'>8105</td><td style='color:#000000;'>BD8241</td><td style='color:#FF0000;'>       JSR   BINBCD</td></tr>
+<tr><td style='color:#0000FF;'>246  A</td><td style='color:#00FF00;'>8108</td><td style='color:#000000;'>BD8176</td><td style='color:#FF0000;'>       JSR   DISPLAY</td></tr>
+<tr><td style='color:#0000FF;'>247  A</td><td style='color:#00FF00;'>810B</td><td style='color:#000000;'>BD8166</td><td style='color:#FF0000;'>       JSR   COMA</td></tr>
+<tr><td style='color:#0000FF;'>248  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'> </td></tr>
+<tr><td style='color:#0000FF;'>249  A</td><td style='color:#00FF00;'>810E</td><td style='color:#000000;'>961B</td><td style='color:#FF0000;'>       LDAA  BASE_H       * INDICE DE MUESTRA (PARTICULAR)</td></tr>
+<tr><td style='color:#0000FF;'>250  A</td><td style='color:#00FF00;'>8110</td><td style='color:#000000;'>D61C</td><td style='color:#FF0000;'>       LDAB  BASE_L</td></tr>
+<tr><td style='color:#0000FF;'>251  A</td><td style='color:#00FF00;'>8112</td><td style='color:#000000;'>188F</td><td style='color:#FF0000;'>       XGDY</td></tr>
+<tr><td style='color:#0000FF;'>252  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>253  A</td><td style='color:#00FF00;'>8114</td><td style='color:#000000;'>1808</td><td style='color:#FF0000;'>       INY</td></tr>
+<tr><td style='color:#0000FF;'>254  A</td><td style='color:#00FF00;'>8116</td><td style='color:#000000;'>4F</td><td style='color:#FF0000;'>       CLRA</td></tr>
+<tr><td style='color:#0000FF;'>255  A</td><td style='color:#00FF00;'>8117</td><td style='color:#000000;'>18E600</td><td style='color:#FF0000;'>       LDAB  $00,Y  </td></tr>
+<tr><td style='color:#0000FF;'>256  A</td><td style='color:#00FF00;'>811A</td><td style='color:#000000;'>BD8251</td><td style='color:#FF0000;'>       JSR   BNBCD</td></tr>
+<tr><td style='color:#0000FF;'>257  A</td><td style='color:#00FF00;'>811D</td><td style='color:#000000;'>BD8195</td><td style='color:#FF0000;'>       JSR   DSPLY</td></tr>
+<tr><td style='color:#0000FF;'>258  A</td><td style='color:#00FF00;'>8120</td><td style='color:#000000;'>BD8166</td><td style='color:#FF0000;'>       JSR   COMA</td></tr>
+<tr><td style='color:#0000FF;'>259  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>260  A</td><td style='color:#00FF00;'>8123</td><td style='color:#000000;'>1808</td><td style='color:#FF0000;'>       INY</td></tr>
+<tr><td style='color:#0000FF;'>261  A</td><td style='color:#00FF00;'>8125</td><td style='color:#000000;'>4F</td><td style='color:#FF0000;'>       CLRA</td></tr>
+<tr><td style='color:#0000FF;'>262  A</td><td style='color:#00FF00;'>8126</td><td style='color:#000000;'>18E600</td><td style='color:#FF0000;'>       LDAB  $00,Y</td></tr>
+<tr><td style='color:#0000FF;'>263  A</td><td style='color:#00FF00;'>8129</td><td style='color:#000000;'>BD8251</td><td style='color:#FF0000;'>       JSR   BNBCD</td></tr>
+<tr><td style='color:#0000FF;'>264  A</td><td style='color:#00FF00;'>812C</td><td style='color:#000000;'>BD8195</td><td style='color:#FF0000;'>       JSR   DSPLY</td></tr>
+<tr><td style='color:#0000FF;'>265  A</td><td style='color:#00FF00;'>812F</td><td style='color:#000000;'>BD8166</td><td style='color:#FF0000;'>       JSR   COMA</td></tr>
+<tr><td style='color:#0000FF;'>266  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>267  A</td><td style='color:#00FF00;'>8132</td><td style='color:#000000;'>1808</td><td style='color:#FF0000;'>       INY</td></tr>
+<tr><td style='color:#0000FF;'>268  A</td><td style='color:#00FF00;'>8134</td><td style='color:#000000;'>4F</td><td style='color:#FF0000;'>       CLRA</td></tr>
+<tr><td style='color:#0000FF;'>269  A</td><td style='color:#00FF00;'>8135</td><td style='color:#000000;'>18E600</td><td style='color:#FF0000;'>       LDAB  $00,Y</td></tr>
+<tr><td style='color:#0000FF;'>270  A</td><td style='color:#00FF00;'>8138</td><td style='color:#000000;'>BD8251</td><td style='color:#FF0000;'>       JSR   BNBCD</td></tr>
+<tr><td style='color:#0000FF;'>271  A</td><td style='color:#00FF00;'>813B</td><td style='color:#000000;'>BD8195</td><td style='color:#FF0000;'>       JSR   DSPLY</td></tr>
+<tr><td style='color:#0000FF;'>272  A</td><td style='color:#00FF00;'>813E</td><td style='color:#000000;'>BD8166</td><td style='color:#FF0000;'>       JSR   COMA</td></tr>
+<tr><td style='color:#0000FF;'>273  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>274  A</td><td style='color:#00FF00;'>8141</td><td style='color:#000000;'>1808</td><td style='color:#FF0000;'>       INY</td></tr>
+<tr><td style='color:#0000FF;'>275  A</td><td style='color:#00FF00;'>8143</td><td style='color:#000000;'>4F</td><td style='color:#FF0000;'>       CLRA</td></tr>
+<tr><td style='color:#0000FF;'>276  A</td><td style='color:#00FF00;'>8144</td><td style='color:#000000;'>18E600</td><td style='color:#FF0000;'>       LDAB  $00,Y</td></tr>
+<tr><td style='color:#0000FF;'>277  A</td><td style='color:#00FF00;'>8147</td><td style='color:#000000;'>BD8251</td><td style='color:#FF0000;'>       JSR   BNBCD</td></tr>
+<tr><td style='color:#0000FF;'>278  A</td><td style='color:#00FF00;'>814A</td><td style='color:#000000;'>BD8195</td><td style='color:#FF0000;'>       JSR   DSPLY</td></tr>
+<tr><td style='color:#0000FF;'>279  A</td><td style='color:#00FF00;'>814D</td><td style='color:#000000;'>BD8166</td><td style='color:#FF0000;'>       JSR   COMA</td></tr>
+<tr><td style='color:#0000FF;'>280  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'> </td></tr>
+<tr><td style='color:#0000FF;'>281  A</td><td style='color:#00FF00;'>8150</td><td style='color:#000000;'>1808</td><td style='color:#FF0000;'>       INY</td></tr>
+<tr><td style='color:#0000FF;'>282  A</td><td style='color:#00FF00;'>8152</td><td style='color:#000000;'>4F</td><td style='color:#FF0000;'>       CLRA </td></tr>
+<tr><td style='color:#0000FF;'>283  A</td><td style='color:#00FF00;'>8153</td><td style='color:#000000;'>18E600</td><td style='color:#FF0000;'>       LDAB  $00,Y</td></tr>
+<tr><td style='color:#0000FF;'>284  A</td><td style='color:#00FF00;'>8156</td><td style='color:#000000;'>BD8251</td><td style='color:#FF0000;'>       JSR   BNBCD</td></tr>
+<tr><td style='color:#0000FF;'>285  A</td><td style='color:#00FF00;'>8159</td><td style='color:#000000;'>BD8195</td><td style='color:#FF0000;'>       JSR   DSPLY</td></tr>
+<tr><td style='color:#0000FF;'>286  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>287  A</td><td style='color:#00FF00;'>815C</td><td style='color:#000000;'>188F</td><td style='color:#FF0000;'>       XGDY</td></tr>
+<tr><td style='color:#0000FF;'>288  A</td><td style='color:#00FF00;'>815E</td><td style='color:#000000;'>971B</td><td style='color:#FF0000;'>       STAA BASE_H</td></tr>
+<tr><td style='color:#0000FF;'>289  A</td><td style='color:#00FF00;'>8160</td><td style='color:#000000;'>D71C</td><td style='color:#FF0000;'>       STAB BASE_L</td></tr>
+<tr><td style='color:#0000FF;'>290  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>291  A</td><td style='color:#00FF00;'>8162</td><td style='color:#000000;'>BD81C3</td><td style='color:#FF0000;'>       JSR   CRYTRN</td></tr>
+<tr><td style='color:#0000FF;'>292  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>293  A</td><td style='color:#00FF00;'>8165</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>       RTS</td></tr>
+<tr><td style='color:#0000FF;'>294  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>295  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* COMA</td></tr>
+<tr><td style='color:#0000FF;'>296  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>297  A</td><td style='color:#00FF00;'>8166</td><td></td><td style='color:#FF0000;'>COMA</td></tr>
+<tr><td style='color:#0000FF;'>298  A</td><td style='color:#00FF00;'>8166</td><td style='color:#000000;'>CE102E</td><td style='color:#FF0000;'>       LDX   #SCSR </td></tr>
+<tr><td style='color:#0000FF;'>299  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>300  A</td><td style='color:#00FF00;'>8169</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA  SCSR</td></tr>
+<tr><td style='color:#0000FF;'>301  A</td><td style='color:#00FF00;'>816C</td><td style='color:#000000;'>862C</td><td style='color:#FF0000;'>       LDAA  #$2C             * COMA</td></tr>
+<tr><td style='color:#0000FF;'>302  A</td><td style='color:#00FF00;'>816E</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>303  A</td><td style='color:#00FF00;'>8171</td><td></td><td style='color:#FF0000;'>C1</td></tr>
+<tr><td style='color:#0000FF;'>304  A</td><td style='color:#00FF00;'>8171</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 C1 </td></tr>
+<tr><td style='color:#0000FF;'>305  A</td><td style='color:#00FF00;'>8175</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>       RTS</td></tr>
+<tr><td style='color:#0000FF;'>306  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>307  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* DESPLIEGA</td></tr>
+<tr><td style='color:#0000FF;'>308  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>309  A</td><td style='color:#00FF00;'>8176</td><td></td><td style='color:#FF0000;'>DISPLAY</td></tr>
+<tr><td style='color:#0000FF;'>310  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>311  A</td><td style='color:#00FF00;'>8176</td><td style='color:#000000;'>CE102E</td><td style='color:#FF0000;'>       LDX   #SCSR </td></tr>
+<tr><td style='color:#0000FF;'>312  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>313  A</td><td style='color:#00FF00;'>8179</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA  SCSR</td></tr>
+<tr><td style='color:#0000FF;'>314  A</td><td style='color:#00FF00;'>817C</td><td style='color:#000000;'>960E</td><td style='color:#FF0000;'>       LDAA  U1             * U1</td></tr>
+<tr><td style='color:#0000FF;'>315  A</td><td style='color:#00FF00;'>817E</td><td style='color:#000000;'>8B30</td><td style='color:#FF0000;'>       ADDA  #$30</td></tr>
+<tr><td style='color:#0000FF;'>316  A</td><td style='color:#00FF00;'>8180</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>317  A</td><td style='color:#00FF00;'>8183</td><td></td><td style='color:#FF0000;'>T1</td></tr>
+<tr><td style='color:#0000FF;'>318  A</td><td style='color:#00FF00;'>8183</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 T1 </td></tr>
+<tr><td style='color:#0000FF;'>319  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>      </td></tr>
+<tr><td style='color:#0000FF;'>320  A</td><td style='color:#00FF00;'>8187</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA  SCSR</td></tr>
+<tr><td style='color:#0000FF;'>321  A</td><td style='color:#00FF00;'>818A</td><td style='color:#000000;'>960F</td><td style='color:#FF0000;'>       LDAA  U2             * U2</td></tr>
+<tr><td style='color:#0000FF;'>322  A</td><td style='color:#00FF00;'>818C</td><td style='color:#000000;'>8B30</td><td style='color:#FF0000;'>       ADDA  #$30</td></tr>
+<tr><td style='color:#0000FF;'>323  A</td><td style='color:#00FF00;'>818E</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>324  A</td><td style='color:#00FF00;'>8191</td><td></td><td style='color:#FF0000;'>T2</td></tr>
+<tr><td style='color:#0000FF;'>325  A</td><td style='color:#00FF00;'>8191</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 T2 </td></tr>
+<tr><td style='color:#0000FF;'>326  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>327  A</td><td style='color:#00FF00;'>8195</td><td></td><td style='color:#FF0000;'>DSPLY  </td></tr>
+<tr><td style='color:#0000FF;'>328  A</td><td style='color:#00FF00;'>8195</td><td style='color:#000000;'>CE102E</td><td style='color:#FF0000;'>       LDX   #SCSR</td></tr>
+<tr><td style='color:#0000FF;'>329  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>    </td></tr>
+<tr><td style='color:#0000FF;'>330  A</td><td style='color:#00FF00;'>8198</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA SCSR</td></tr>
+<tr><td style='color:#0000FF;'>331  A</td><td style='color:#00FF00;'>819B</td><td style='color:#000000;'>9610</td><td style='color:#FF0000;'>       LDAA  U3             * U3</td></tr>
+<tr><td style='color:#0000FF;'>332  A</td><td style='color:#00FF00;'>819D</td><td style='color:#000000;'>8B30</td><td style='color:#FF0000;'>       ADDA  #$30</td></tr>
+<tr><td style='color:#0000FF;'>333  A</td><td style='color:#00FF00;'>819F</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>334  A</td><td style='color:#00FF00;'>81A2</td><td></td><td style='color:#FF0000;'>T3</td></tr>
+<tr><td style='color:#0000FF;'>335  A</td><td style='color:#00FF00;'>81A2</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 T3 </td></tr>
+<tr><td style='color:#0000FF;'>336  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>      </td></tr>
+<tr><td style='color:#0000FF;'>337  A</td><td style='color:#00FF00;'>81A6</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA SCSR </td></tr>
+<tr><td style='color:#0000FF;'>338  A</td><td style='color:#00FF00;'>81A9</td><td style='color:#000000;'>9611</td><td style='color:#FF0000;'>       LDAA  U4             * U4</td></tr>
+<tr><td style='color:#0000FF;'>339  A</td><td style='color:#00FF00;'>81AB</td><td style='color:#000000;'>8B30</td><td style='color:#FF0000;'>       ADDA  #$30</td></tr>
+<tr><td style='color:#0000FF;'>340  A</td><td style='color:#00FF00;'>81AD</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>341  A</td><td style='color:#00FF00;'>81B0</td><td></td><td style='color:#FF0000;'>T4</td></tr>
+<tr><td style='color:#0000FF;'>342  A</td><td style='color:#00FF00;'>81B0</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 T4 </td></tr>
+<tr><td style='color:#0000FF;'>343  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>   </td></tr>
+<tr><td style='color:#0000FF;'>344  A</td><td style='color:#00FF00;'>81B4</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA SCSR</td></tr>
+<tr><td style='color:#0000FF;'>345  A</td><td style='color:#00FF00;'>81B7</td><td style='color:#000000;'>9612</td><td style='color:#FF0000;'>       LDAA  U5             * U5</td></tr>
+<tr><td style='color:#0000FF;'>346  A</td><td style='color:#00FF00;'>81B9</td><td style='color:#000000;'>8B30</td><td style='color:#FF0000;'>       ADDA  #$30</td></tr>
+<tr><td style='color:#0000FF;'>347  A</td><td style='color:#00FF00;'>81BB</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>348  A</td><td style='color:#00FF00;'>81BE</td><td></td><td style='color:#FF0000;'>T5</td></tr>
+<tr><td style='color:#0000FF;'>349  A</td><td style='color:#00FF00;'>81BE</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 T5  </td></tr>
+<tr><td style='color:#0000FF;'>350  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>       </td></tr>
+<tr><td style='color:#0000FF;'>351  A</td><td style='color:#00FF00;'>81C2</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>       RTS</td></tr>
+<tr><td style='color:#0000FF;'>352  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>353  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>354  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* CARRY RETURN</td></tr>
+<tr><td style='color:#0000FF;'>355  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>356  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>357  A</td><td style='color:#00FF00;'>81C3</td><td></td><td style='color:#FF0000;'>CRYTRN</td></tr>
+<tr><td style='color:#0000FF;'>358  A</td><td style='color:#00FF00;'>81C3</td><td style='color:#000000;'>CE102E</td><td style='color:#FF0000;'>       LDX   #SCSR </td></tr>
+<tr><td style='color:#0000FF;'>359  A</td><td style='color:#00FF00;'>81C6</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA  SCSR</td></tr>
+<tr><td style='color:#0000FF;'>360  A</td><td style='color:#00FF00;'>81C9</td><td style='color:#000000;'>860A</td><td style='color:#FF0000;'>       LDAA  #$0A             * NEW LINE     </td></tr>
+<tr><td style='color:#0000FF;'>361  A</td><td style='color:#00FF00;'>81CB</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>362  A</td><td style='color:#00FF00;'>81CE</td><td></td><td style='color:#FF0000;'>CR1</td></tr>
+<tr><td style='color:#0000FF;'>363  A</td><td style='color:#00FF00;'>81CE</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 CR1        </td></tr>
+<tr><td style='color:#0000FF;'>364  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>365  A</td><td style='color:#00FF00;'>81D2</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA SCSR</td></tr>
+<tr><td style='color:#0000FF;'>366  A</td><td style='color:#00FF00;'>81D5</td><td style='color:#000000;'>860D</td><td style='color:#FF0000;'>       LDAA #$0D              * CARRY RETURN     </td></tr>
+<tr><td style='color:#0000FF;'>367  A</td><td style='color:#00FF00;'>81D7</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA SCDR</td></tr>
+<tr><td style='color:#0000FF;'>368  A</td><td style='color:#00FF00;'>81DA</td><td></td><td style='color:#FF0000;'>CR2</td></tr>
+<tr><td style='color:#0000FF;'>369  A</td><td style='color:#00FF00;'>81DA</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 CR2        </td></tr>
+<tr><td style='color:#0000FF;'>370  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>371  A</td><td style='color:#00FF00;'>81DE</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>       RTS</td></tr>
+<tr><td style='color:#0000FF;'>372  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>373  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>*  DESPLIEGUE DE DATO RECIBIDO</td></tr>
+<tr><td style='color:#0000FF;'>374  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>375  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>376  A</td><td style='color:#00FF00;'>81DF</td><td></td><td style='color:#FF0000;'>DATARX</td></tr>
+<tr><td style='color:#0000FF;'>377  A</td><td style='color:#00FF00;'>81DF</td><td style='color:#000000;'>CE102E</td><td style='color:#FF0000;'>       LDX   #SCSR </td></tr>
+<tr><td style='color:#0000FF;'>378  A</td><td style='color:#00FF00;'>81E2</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA  SCSR</td></tr>
+<tr><td style='color:#0000FF;'>379  A</td><td style='color:#00FF00;'>81E5</td><td style='color:#000000;'>960C</td><td style='color:#FF0000;'>       LDAA  ORDEN             * NEW LINE     </td></tr>
+<tr><td style='color:#0000FF;'>380  A</td><td style='color:#00FF00;'>81E7</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA  SCDR</td></tr>
+<tr><td style='color:#0000FF;'>381  A</td><td style='color:#00FF00;'>81EA</td><td></td><td style='color:#FF0000;'>DT1</td></tr>
+<tr><td style='color:#0000FF;'>382  A</td><td style='color:#00FF00;'>81EA</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 DT1        </td></tr>
+<tr><td style='color:#0000FF;'>383  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>384  A</td><td style='color:#00FF00;'>81EE</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA SCSR </td></tr>
+<tr><td style='color:#0000FF;'>385  A</td><td style='color:#00FF00;'>81F1</td><td style='color:#000000;'>863A</td><td style='color:#FF0000;'>       LDAA #$3A              * DOS PUNTOS    </td></tr>
+<tr><td style='color:#0000FF;'>386  A</td><td style='color:#00FF00;'>81F3</td><td style='color:#000000;'>B7102F</td><td style='color:#FF0000;'>       STAA SCDR</td></tr>
+<tr><td style='color:#0000FF;'>387  A</td><td style='color:#00FF00;'>81F6</td><td></td><td style='color:#FF0000;'>DT2</td></tr>
+<tr><td style='color:#0000FF;'>388  A</td><td style='color:#00FF00;'>81F6</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>       BRCLR $00,X,#$80 DT2        </td></tr>
+<tr><td style='color:#0000FF;'>389  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>390  A</td><td style='color:#00FF00;'>81FA</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>       RTS</td></tr>
+<tr><td style='color:#0000FF;'>391  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>392  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* voltimetro</td></tr>
+<tr><td style='color:#0000FF;'>393  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>394  A</td><td style='color:#00FF00;'>81FB</td><td></td><td style='color:#FF0000;'>VOLTA</td></tr>
+<tr><td style='color:#0000FF;'>395  A</td><td style='color:#00FF00;'>81FB</td><td style='color:#000000;'>CE1030</td><td style='color:#FF0000;'>      LDX #ADCTL      </td></tr>
+<tr><td style='color:#0000FF;'>396  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>397  A</td><td style='color:#00FF00;'>81FE</td><td style='color:#000000;'>8680</td><td style='color:#FF0000;'>      LDAA #$80</td></tr>
+<tr><td style='color:#0000FF;'>398  A</td><td style='color:#00FF00;'>8200</td><td style='color:#000000;'>B71039</td><td style='color:#FF0000;'>      STAA OPTION        * PONE EN MARCHA EL ADC</td></tr>
+<tr><td style='color:#0000FF;'>399  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>    </td></tr>
+<tr><td style='color:#0000FF;'>400  A</td><td style='color:#00FF00;'>8203</td><td style='color:#000000;'>8610</td><td style='color:#FF0000;'>      LDAA #$10</td></tr>
+<tr><td style='color:#0000FF;'>401  A</td><td style='color:#00FF00;'>8205</td><td style='color:#000000;'>B71030</td><td style='color:#FF0000;'>      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 0</td></tr>
+<tr><td style='color:#0000FF;'>402  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>403  A</td><td style='color:#00FF00;'>8208</td><td></td><td style='color:#FF0000;'>E1</td></tr>
+<tr><td style='color:#0000FF;'>404  A</td><td style='color:#00FF00;'>8208</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>      BRCLR $00,X,#$80 E1  </td></tr>
+<tr><td style='color:#0000FF;'>405  A</td><td style='color:#00FF00;'>820C</td><td style='color:#000000;'>F61031</td><td style='color:#FF0000;'>      LDAB ADR1</td></tr>
+<tr><td style='color:#0000FF;'>406  A</td><td style='color:#00FF00;'>820F</td><td style='color:#000000;'>D713</td><td style='color:#FF0000;'>      STAB V1</td></tr>
+<tr><td style='color:#0000FF;'>407  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>      </td></tr>
+<tr><td style='color:#0000FF;'>408  A</td><td style='color:#00FF00;'>8211</td><td style='color:#000000;'>8680</td><td style='color:#FF0000;'>      LDAA #$80</td></tr>
+<tr><td style='color:#0000FF;'>409  A</td><td style='color:#00FF00;'>8213</td><td style='color:#000000;'>B71039</td><td style='color:#FF0000;'>      STAA OPTION        * PONE EN MARCHA EL ADC</td></tr>
+<tr><td style='color:#0000FF;'>410  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>    </td></tr>
+<tr><td style='color:#0000FF;'>411  A</td><td style='color:#00FF00;'>8216</td><td style='color:#000000;'>8611</td><td style='color:#FF0000;'>      LDAA #$11</td></tr>
+<tr><td style='color:#0000FF;'>412  A</td><td style='color:#00FF00;'>8218</td><td style='color:#000000;'>B71030</td><td style='color:#FF0000;'>      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 1</td></tr>
+<tr><td style='color:#0000FF;'>413  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>414  A</td><td style='color:#00FF00;'>821B</td><td></td><td style='color:#FF0000;'>E2</td></tr>
+<tr><td style='color:#0000FF;'>415  A</td><td style='color:#00FF00;'>821B</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>      BRCLR $00,X,#$80 E2  </td></tr>
+<tr><td style='color:#0000FF;'>416  A</td><td style='color:#00FF00;'>821F</td><td style='color:#000000;'>F61032</td><td style='color:#FF0000;'>      LDAB ADR2</td></tr>
+<tr><td style='color:#0000FF;'>417  A</td><td style='color:#00FF00;'>8222</td><td style='color:#000000;'>D714</td><td style='color:#FF0000;'>      STAB V2</td></tr>
+<tr><td style='color:#0000FF;'>418  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>     </td></tr>
+<tr><td style='color:#0000FF;'>419  A</td><td style='color:#00FF00;'>8224</td><td style='color:#000000;'>8612</td><td style='color:#FF0000;'>      LDAA #$12</td></tr>
+<tr><td style='color:#0000FF;'>420  A</td><td style='color:#00FF00;'>8226</td><td style='color:#000000;'>B71030</td><td style='color:#FF0000;'>      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 2</td></tr>
+<tr><td style='color:#0000FF;'>421  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>422  A</td><td style='color:#00FF00;'>8229</td><td></td><td style='color:#FF0000;'>E3</td></tr>
+<tr><td style='color:#0000FF;'>423  A</td><td style='color:#00FF00;'>8229</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>      BRCLR $00,X,#$80 E3  </td></tr>
+<tr><td style='color:#0000FF;'>424  A</td><td style='color:#00FF00;'>822D</td><td style='color:#000000;'>F61033</td><td style='color:#FF0000;'>      LDAB ADR3</td></tr>
+<tr><td style='color:#0000FF;'>425  A</td><td style='color:#00FF00;'>8230</td><td style='color:#000000;'>D71D</td><td style='color:#FF0000;'>      STAB V3 </td></tr>
+<tr><td style='color:#0000FF;'>426  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>427  A</td><td style='color:#00FF00;'>8232</td><td style='color:#000000;'>8613</td><td style='color:#FF0000;'>      LDAA #$13</td></tr>
+<tr><td style='color:#0000FF;'>428  A</td><td style='color:#00FF00;'>8234</td><td style='color:#000000;'>B71030</td><td style='color:#FF0000;'>      STAA ADCTL         * ENTRADA MULTIPLE SELECCIONA CANAL 3</td></tr>
+<tr><td style='color:#0000FF;'>429  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>430  A</td><td style='color:#00FF00;'>8237</td><td></td><td style='color:#FF0000;'>E4</td></tr>
+<tr><td style='color:#0000FF;'>431  A</td><td style='color:#00FF00;'>8237</td><td style='color:#000000;'>1F0080FC</td><td style='color:#FF0000;'>      BRCLR $00,X,#$80 E4  </td></tr>
+<tr><td style='color:#0000FF;'>432  A</td><td style='color:#00FF00;'>823B</td><td style='color:#000000;'>F61034</td><td style='color:#FF0000;'>      LDAB ADR4</td></tr>
+<tr><td style='color:#0000FF;'>433  A</td><td style='color:#00FF00;'>823E</td><td style='color:#000000;'>D71E</td><td style='color:#FF0000;'>      STAB V4</td></tr>
+<tr><td style='color:#0000FF;'>434  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>435  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>           </td></tr>
+<tr><td style='color:#0000FF;'>436  A</td><td style='color:#00FF00;'>8240</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>      RTS</td></tr>
+<tr><td style='color:#0000FF;'>437  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>438  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* CONVIERTE A BCD</td></tr>
+<tr><td style='color:#0000FF;'>439  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>440  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>441  A</td><td style='color:#00FF00;'>8241</td><td></td><td style='color:#FF0000;'>BINBCD</td></tr>
+<tr><td style='color:#0000FF;'>442  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>     </td></tr>
+<tr><td style='color:#0000FF;'>443  A</td><td style='color:#00FF00;'>8241</td><td style='color:#000000;'>CE2710</td><td style='color:#FF0000;'>      LDX  #$2710</td></tr>
+<tr><td style='color:#0000FF;'>444  A</td><td style='color:#00FF00;'>8244</td><td style='color:#000000;'>02</td><td style='color:#FF0000;'>      IDIV </td></tr>
+<tr><td style='color:#0000FF;'>445  A</td><td style='color:#00FF00;'>8245</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>446  A</td><td style='color:#00FF00;'>8246</td><td style='color:#000000;'>D70E</td><td style='color:#FF0000;'>      STAB U1</td></tr>
+<tr><td style='color:#0000FF;'>447  A</td><td style='color:#00FF00;'>8248</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>448  A</td><td style='color:#00FF00;'>8249</td><td style='color:#000000;'>CE03E8</td><td style='color:#FF0000;'>      LDX  #$3E8</td></tr>
+<tr><td style='color:#0000FF;'>449  A</td><td style='color:#00FF00;'>824C</td><td style='color:#000000;'>02</td><td style='color:#FF0000;'>      IDIV</td></tr>
+<tr><td style='color:#0000FF;'>450  A</td><td style='color:#00FF00;'>824D</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>451  A</td><td style='color:#00FF00;'>824E</td><td style='color:#000000;'>D70F</td><td style='color:#FF0000;'>      STAB U2</td></tr>
+<tr><td style='color:#0000FF;'>452  A</td><td style='color:#00FF00;'>8250</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>453  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>454  A</td><td style='color:#00FF00;'>8251</td><td></td><td style='color:#FF0000;'>BNBCD</td></tr>
+<tr><td style='color:#0000FF;'>455  A</td><td style='color:#00FF00;'>8251</td><td style='color:#000000;'>CE0064</td><td style='color:#FF0000;'>      LDX  #$64</td></tr>
+<tr><td style='color:#0000FF;'>456  A</td><td style='color:#00FF00;'>8254</td><td style='color:#000000;'>02</td><td style='color:#FF0000;'>      IDIV</td></tr>
+<tr><td style='color:#0000FF;'>457  A</td><td style='color:#00FF00;'>8255</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>458  A</td><td style='color:#00FF00;'>8256</td><td style='color:#000000;'>D710</td><td style='color:#FF0000;'>      STAB U3</td></tr>
+<tr><td style='color:#0000FF;'>459  A</td><td style='color:#00FF00;'>8258</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>460  A</td><td style='color:#00FF00;'>8259</td><td style='color:#000000;'>CE000A</td><td style='color:#FF0000;'>      LDX  #$A</td></tr>
+<tr><td style='color:#0000FF;'>461  A</td><td style='color:#00FF00;'>825C</td><td style='color:#000000;'>02</td><td style='color:#FF0000;'>      IDIV</td></tr>
+<tr><td style='color:#0000FF;'>462  A</td><td style='color:#00FF00;'>825D</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>463  A</td><td style='color:#00FF00;'>825E</td><td style='color:#000000;'>D711</td><td style='color:#FF0000;'>      STAB U4</td></tr>
+<tr><td style='color:#0000FF;'>464  A</td><td style='color:#00FF00;'>8260</td><td style='color:#000000;'>8F</td><td style='color:#FF0000;'>      XGDX</td></tr>
+<tr><td style='color:#0000FF;'>465  A</td><td style='color:#00FF00;'>8261</td><td style='color:#000000;'>D712</td><td style='color:#FF0000;'>      STAB U5</td></tr>
+<tr><td style='color:#0000FF;'>466  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>467  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>468  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>469  A</td><td style='color:#00FF00;'>8263</td><td style='color:#000000;'>39</td><td style='color:#FF0000;'>      RTS</td></tr>
+<tr><td style='color:#0000FF;'>470  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>471  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>472  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>473  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>474  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* ATENCION A INTERRUPCION SERIAL</td></tr>
+<tr><td style='color:#0000FF;'>475  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>476  A</td><td style='color:#00FF00;'>F100</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       ORG  $F100</td></tr>
+<tr><td style='color:#0000FF;'>477  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>  </td></tr>
+<tr><td style='color:#0000FF;'>478  A</td><td style='color:#00FF00;'>F100</td><td style='color:#000000;'>36</td><td style='color:#FF0000;'>       PSHA</td></tr>
+<tr><td style='color:#0000FF;'>479  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'> </td></tr>
+<tr><td style='color:#0000FF;'>480  A</td><td style='color:#00FF00;'>F101</td><td style='color:#000000;'>B6102E</td><td style='color:#FF0000;'>       LDAA SCSR</td></tr>
+<tr><td style='color:#0000FF;'>481  A</td><td style='color:#00FF00;'>F104</td><td style='color:#000000;'>B6102F</td><td style='color:#FF0000;'>       LDAA SCDR</td></tr>
+<tr><td style='color:#0000FF;'>482  A</td><td style='color:#00FF00;'>F107</td><td style='color:#000000;'>970C</td><td style='color:#FF0000;'>       STAA ORDEN</td></tr>
+<tr><td style='color:#0000FF;'>483  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>484  A</td><td style='color:#00FF00;'>F109</td><td style='color:#000000;'>32</td><td style='color:#FF0000;'>       PULA  </td></tr>
+<tr><td style='color:#0000FF;'>485  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>486  A</td><td style='color:#00FF00;'>F10A</td><td style='color:#000000;'>3B</td><td style='color:#FF0000;'>       RTI</td></tr>
+<tr><td style='color:#0000FF;'>487  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>488  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>489  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* ATENCION A INTERRUPCION REAL TIME</td></tr>
+<tr><td style='color:#0000FF;'>490  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>491  A</td><td style='color:#00FF00;'>F110</td><td style='color:#000000;'></td><td style='color:#FF0000;'>      ORG  $F110</td></tr>
+<tr><td style='color:#0000FF;'>492  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>493  A</td><td style='color:#00FF00;'>F110</td><td style='color:#000000;'>36</td><td style='color:#FF0000;'>      PSHA</td></tr>
+<tr><td style='color:#0000FF;'>494  A</td><td style='color:#00FF00;'>F111</td><td style='color:#000000;'>3C</td><td style='color:#FF0000;'>      PSHX</td></tr>
+<tr><td style='color:#0000FF;'>495  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>496  A</td><td style='color:#00FF00;'>F112</td><td style='color:#000000;'>CE1025</td><td style='color:#FF0000;'>      LDX #TFLG2</td></tr>
+<tr><td style='color:#0000FF;'>497  A</td><td style='color:#00FF00;'>F115</td><td style='color:#000000;'>1C0040</td><td style='color:#FF0000;'>      BSET $00,X,#$40    * BORRA BANDERA INTERRUPCION</td></tr>
+<tr><td style='color:#0000FF;'>498  A</td><td style='color:#00FF00;'>F118</td><td style='color:#000000;'>7A0018</td><td style='color:#FF0000;'>      DEC TEMPO</td></tr>
+<tr><td style='color:#0000FF;'>499  A</td><td style='color:#00FF00;'>F11B</td><td style='color:#000000;'>2703</td><td style='color:#FF0000;'>      BEQ SEGUNDO</td></tr>
+<tr><td style='color:#0000FF;'>500  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>      </td></tr>
+<tr><td style='color:#0000FF;'>501  A</td><td style='color:#00FF00;'>F11D</td><td style='color:#000000;'>32</td><td style='color:#FF0000;'>      PULA</td></tr>
+<tr><td style='color:#0000FF;'>502  A</td><td style='color:#00FF00;'>F11E</td><td style='color:#000000;'>38</td><td style='color:#FF0000;'>      PULX</td></tr>
+<tr><td style='color:#0000FF;'>503  A</td><td style='color:#00FF00;'>F11F</td><td style='color:#000000;'>3B</td><td style='color:#FF0000;'>      RTI</td></tr>
+<tr><td style='color:#0000FF;'>504  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>505  A</td><td style='color:#00FF00;'>F120</td><td></td><td style='color:#FF0000;'>SEGUNDO</td></tr>
+<tr><td style='color:#0000FF;'>506  A</td><td style='color:#00FF00;'>F120</td><td style='color:#000000;'>86FF</td><td style='color:#FF0000;'>      LDAA #$FF</td></tr>
+<tr><td style='color:#0000FF;'>507  A</td><td style='color:#00FF00;'>F122</td><td style='color:#000000;'>970D</td><td style='color:#FF0000;'>      STAA SEG           * SEG ES UNA BANDERA DE SEGUNDO    </td></tr>
+<tr><td style='color:#0000FF;'>508  A</td><td style='color:#00FF00;'>F124</td><td style='color:#000000;'>86F4</td><td style='color:#FF0000;'>      LDAA #$F4         </td></tr>
+<tr><td style='color:#0000FF;'>509  A</td><td style='color:#00FF00;'>F126</td><td style='color:#000000;'>9718</td><td style='color:#FF0000;'>      STAA TEMPO         * TEMPO ES VARIABLE PARA CONTAR 244 CICLOS</td></tr>
+<tr><td style='color:#0000FF;'>510  A</td><td style='color:#00FF00;'>F128</td><td style='color:#000000;'>7C1002</td><td style='color:#FF0000;'>      INC  PORTG</td></tr>
+<tr><td style='color:#0000FF;'>511  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>     </td></tr>
+<tr><td style='color:#0000FF;'>512  A</td><td style='color:#00FF00;'>F12B</td><td style='color:#000000;'>32</td><td style='color:#FF0000;'>      PULA</td></tr>
+<tr><td style='color:#0000FF;'>513  A</td><td style='color:#00FF00;'>F12C</td><td style='color:#000000;'>38</td><td style='color:#FF0000;'>      PULX</td></tr>
+<tr><td style='color:#0000FF;'>514  A</td><td style='color:#00FF00;'>F12D</td><td style='color:#000000;'>3B</td><td style='color:#FF0000;'>      RTI</td></tr>
+<tr><td style='color:#0000FF;'>515  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>516  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* VECTOR INTERRUPCION SERIAL</td></tr>
+<tr><td style='color:#0000FF;'>517  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>518  A</td><td style='color:#00FF00;'>FFD6</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       ORG   $FFD6</td></tr>
+<tr><td style='color:#0000FF;'>519  A</td><td style='color:#00FF00;'>FFD6</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       FCB   $F1,$00       </td></tr>
+<tr><td style='color:#0000FF;'>520  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>521  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>522  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>* VECTOR INTERRUPCION REAL TIME</td></tr>
+<tr><td style='color:#0000FF;'>523  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>524  A</td><td style='color:#00FF00;'>FFF0</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       ORG   $FFF0</td></tr>
+<tr><td style='color:#0000FF;'>525  A</td><td style='color:#00FF00;'>FFF0</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       FCB   $F1,$10       </td></tr>
+<tr><td style='color:#0000FF;'>526  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'></td></tr>
+<tr><td style='color:#0000FF;'>527  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>528  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>*RESET</td></tr>
+<tr><td style='color:#0000FF;'>529  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>530  A</td><td style='color:#00FF00;'>FFFE</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       ORG    $FFFE</td></tr>
+<tr><td style='color:#0000FF;'>531  A</td><td style='color:#00FF00;'>FFFE</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       FCB    $80,$00</td></tr>
+<tr><td style='color:#0000FF;'>532  A</td><td colspan='2'></td><td colspan='3' style='color:#FF0000;'>***********************************</td></tr>
+<tr><td style='color:#0000FF;'>533  A</td><td style='color:#00FF00;'>FFFE</td><td style='color:#000000;'></td><td style='color:#FF0000;'>       END   $8000</td></tr><tr><td colspan='4'>Tabla de Variables</td></tr>
+<tr><td colspan='2'></td><td>     PACTL<td><td>1026</td></tr>
+<tr><td colspan='2'></td><td>     PACNT<td><td>1027</td></tr>
+<tr><td colspan='2'></td><td>     ADCTL<td><td>1030</td></tr>
+<tr><td colspan='2'></td><td>      ADR1<td><td>1031</td></tr>
+<tr><td colspan='2'></td><td>      ADR2<td><td>1032</td></tr>
+<tr><td colspan='2'></td><td>      ADR3<td><td>1033</td></tr>
+<tr><td colspan='2'></td><td>      ADR4<td><td>1034</td></tr>
+<tr><td colspan='2'></td><td>    OPTION<td><td>1039</td></tr>
+<tr><td colspan='2'></td><td>     PORTA<td><td>1000</td></tr>
+<tr><td colspan='2'></td><td>     PORTD<td><td>1008</td></tr>
+<tr><td colspan='2'></td><td>     PORTE<td><td>100A</td></tr>
+<tr><td colspan='2'></td><td>     PORTG<td><td>1002</td></tr>
+<tr><td colspan='2'></td><td>      DDRA<td><td>1001</td></tr>
+<tr><td colspan='2'></td><td>      DDRD<td><td>1009</td></tr>
+<tr><td colspan='2'></td><td>      DDRG<td><td>1003</td></tr>
+<tr><td colspan='2'></td><td>     TMSK2<td><td>1024</td></tr>
+<tr><td colspan='2'></td><td>     TFLG2<td><td>1025</td></tr>
+<tr><td colspan='2'></td><td>      SCDR<td><td>102F</td></tr>
+<tr><td colspan='2'></td><td>     SCCR2<td><td>102D</td></tr>
+<tr><td colspan='2'></td><td>      SCSR<td><td>102E</td></tr>
+<tr><td colspan='2'></td><td>     SCCR1<td><td>102C</td></tr>
+<tr><td colspan='2'></td><td>      BAUD<td><td>102B</td></tr>
+<tr><td colspan='2'></td><td>     HPRIO<td><td>103C</td></tr>
+<tr><td colspan='2'></td><td>      SPCR<td><td>1028</td></tr>
+<tr><td colspan='2'></td><td>     CSCTL<td><td>105D</td></tr>
+<tr><td colspan='2'></td><td>      OPT2<td><td>1038</td></tr>
+<tr><td colspan='2'></td><td>     ORDEN<td><td>000C</td></tr>
+<tr><td colspan='2'></td><td>       SEG<td><td>000D</td></tr>
+<tr><td colspan='2'></td><td>        U1<td><td>000E</td></tr>
+<tr><td colspan='2'></td><td>        U2<td><td>000F</td></tr>
+<tr><td colspan='2'></td><td>        U3<td><td>0010</td></tr>
+<tr><td colspan='2'></td><td>        U4<td><td>0011</td></tr>
+<tr><td colspan='2'></td><td>        U5<td><td>0012</td></tr>
+<tr><td colspan='2'></td><td>        V1<td><td>0013</td></tr>
+<tr><td colspan='2'></td><td>        V2<td><td>0014</td></tr>
+<tr><td colspan='2'></td><td>     BAS_H<td><td>0015</td></tr>
+<tr><td colspan='2'></td><td>     BAS_L<td><td>0016</td></tr>
+<tr><td colspan='2'></td><td>        V5<td><td>0017</td></tr>
+<tr><td colspan='2'></td><td>     TEMPO<td><td>0018</td></tr>
+<tr><td colspan='2'></td><td>      ALTO<td><td>0019</td></tr>
+<tr><td colspan='2'></td><td>      BAJO<td><td>001A</td></tr>
+<tr><td colspan='2'></td><td>    BASE_H<td><td>001B</td></tr>
+<tr><td colspan='2'></td><td>    BASE_L<td><td>001C</td></tr>
+<tr><td colspan='2'></td><td>        V3<td><td>001D</td></tr>
+<tr><td colspan='2'></td><td>        V4<td><td>001E</td></tr>
+
+</table>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+</body>
+</html>

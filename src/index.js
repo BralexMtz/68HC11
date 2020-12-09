@@ -11,7 +11,7 @@ var uploadFile = document.getElementById('upload');
 let data;
 let rows;
 
-compilator.tipo_direccionamiento();// -----Only test
+//compilator.tipo_direccionamiento();// -----Only test
 // Defining a Global file path Variable to store 
 // user-selected file 
 global.filepath = undefined; 
@@ -47,10 +47,8 @@ uploadFile.addEventListener('click', () => {
                     fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI
                 if (!err) { 
 
-
-					// xlsxFile('assets/INSTRUCCIONES.xlsx').then((rows)=>{
-					// 	compilator.main(data,rows);
-					// });
+					
+					
 					compilator.main(data);
 					
                 } else { 
