@@ -608,17 +608,13 @@ function impresoraFormato(lines){
             return console.log(err)
         }
     })
-    fs.writeFile('compilacion.s19','',(err)=>{
-        if(err){
-            return console.log(err)
-        }
-    })
+    
     var impresion
     var status ='A';
     var elementos;
     var impresionGlobal='';
     var impresionColor ='<html>\n<body>\n<table>'; // Quitar Borde
-    var impresionS19='';
+
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
         // if (renglon.toString().length == 1){
@@ -738,6 +734,57 @@ function impresoraFormato(lines){
     
 }
 
+function impresionS19(lines){
+    
+    var impresion = '';
+    var memoria_izquierda = []
+    var indice = 0
+    var error=false
+    for(var line of lines){
+        if(line.errores.length!=0){
+            error=true
+            break;
+        }
+        if(line.instruccion == 'ORG'){
+            impresion += '\n'
+            memoria_izquierda.push( parseInt(line.operando[0].replace('$', ''),16))
+        }
+        if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
+            impresion += line.opcode
+            for(operando of line.operando_hex){
+                impresion+=operando
+            }
+        }
+
+    }
+
+    if(!error){
+        fs.writeFile('compilacion.s19','',(err)=>{
+            if(err){
+                return console.log(err)
+            }
+        })
+        var orgs = impresion.split('\n')
+        orgs=orgs.slice(1)
+    
+        impresion=''
+        
+        for(var n in orgs){
+            var renglon = orgs[n].match(/.{1,32}/g)
+    
+            for(var index in renglon){
+                impresion+="<"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+">    "
+                impresion+=renglon[index].match(/.{1,2}/g).join(' ')+"\n"
+            }
+        }
+
+        fs.appendFile('compilacion.s19',impresion, function (err) {
+            if (err) throw err;
+        });
+    }
+    
+
+}
 
 function main(data){
     //assets/INSTRUCCIONES.xlsx ====> FINAL LINE, BUT NOW FOR TESTING 
@@ -750,6 +797,7 @@ function main(data){
         relative_generation()
         //escribir archivos LST    
         impresoraFormato(lines)
+        impresionS19(lines)
     });
 }
 
@@ -761,7 +809,6 @@ function main(data){
 ////####### JUST FOR TESTING ######
 /// ENGINERS WORKING
 const fs = require('fs'); 
-const { Console } = require('console');
 const { equal } = require('assert');
 fs.readFile('codigo.asc', 'utf-8', function (err,data) {
     if (err) {
