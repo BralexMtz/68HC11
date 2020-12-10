@@ -617,7 +617,7 @@ function impresoraFormato(lines){
     var status ='A';
     var elementos;
     var impresionGlobal='';
-    var impresionColor ="\n<table class='container'>"; // Quitar Borde <html>\n<body>
+    var impresionColor ="\n<br><table class='container'>"; // Quitar Borde <html>\n<body>
 
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
@@ -749,7 +749,7 @@ function impresoraFormato(lines){
 
 function impresionS19(lines){
     var impresion = '';
-    var impresionColor = "\n<p><p>\n<table class='container'>"
+    var impresionColor = ""
     var memoria_izquierda = []
     var indice = 0
     var error=false
@@ -760,18 +760,14 @@ function impresionS19(lines){
         }
         if(line.instruccion == 'ORG'){
             impresion += '\n'
-            impresionColor += '\n'
             memoria_izquierda.push( parseInt(line.operando[0].replace('$', ''),16))
         }
         if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
             impresion += line.opcode
-            impresionColor += line.opcode
             for(operando of line.operando_hex){
                 impresion+=operando
-                impresionColor += operando
             }
         }
-
     }
 
     if(!error){
@@ -811,12 +807,40 @@ function impresionS19(lines){
 
         fs.appendFile('html/s19.html',impresionColor, function (err) {
             if (err) throw err;
+        });    
+    }else{
+        impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n<body></html>"
+        var fs = require('fs');
+        fs.writeFile('html/s19.html',cabecera.header+impresionColor,(err)=>{
+            if(err){
+                return console.log(err)
+            }
         });
     }
-    
-
 }
 
+function impresionASC(lines){
+    var fs = require('fs');
+    fs.writeFile('html/asc.html',cabecera.header,(err)=>{
+        if(err){
+            return console.log(err)
+        }
+    });
+    var impresion = "\n<html>\n<body>\n<table class='container'><br><tr><td>"
+    for (var line of lines){
+        if(line == '\n')
+            impresion+="</td></tr>"+line+"<tr><td>"
+        else if(line == ' ')
+            impresion += '&nbsp;'
+        else
+            impresion += line
+    }
+    impresion +="\n</table>\n</body>\n</html>"
+    fs.appendFile('html/asc.html',impresion, function (err) {
+        if (err) throw err;
+    });
+
+}
 function main(data){
     //assets/INSTRUCCIONES.xlsx // ====> FINAL LINE, BUT NOW FOR TESTING 
     xlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
@@ -829,6 +853,7 @@ function main(data){
         //escribir archivos LST    
         impresoraFormato(lines)
         impresionS19(lines)
+        impresionASC(data)
     });
 }
 
