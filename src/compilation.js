@@ -749,6 +749,7 @@ function impresoraFormato(lines){
 
 function impresionS19(lines){
     var impresion = '';
+    var impresionColor = "\n<p><p>\n<table class='container'>"
     var memoria_izquierda = []
     var indice = 0
     var error=false
@@ -759,12 +760,15 @@ function impresionS19(lines){
         }
         if(line.instruccion == 'ORG'){
             impresion += '\n'
+            impresionColor += '\n'
             memoria_izquierda.push( parseInt(line.operando[0].replace('$', ''),16))
         }
         if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
             impresion += line.opcode
+            impresionColor += line.opcode
             for(operando of line.operando_hex){
                 impresion+=operando
+                impresionColor += operando
             }
         }
 
@@ -777,27 +781,35 @@ function impresionS19(lines){
             if(err){
                 return console.log(err)
             }
-        })
+        });
         fs.writeFile('html/s19.html',cabecera.header,(err)=>{
             if(err){
                 return console.log(err)
             }
-        })
+        });
         var orgs = impresion.split('\n')
         orgs=orgs.slice(1)
     
         impresion=''
-        impresionColor = '\n<table>'
+        impresionColor = "\n<p>\n<p>\n<table class='container'>\n"
+        color1 = "#00FF00"
+        color2 = "#FF0000"
         for(var n in orgs){
             var renglon = orgs[n].match(/.{1,32}/g)
     
             for(var index in renglon){
                 impresion+="<"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+">    "
                 impresion+=renglon[index].match(/.{1,2}/g).join(' ')+"\n"
+                impresionColor += "<tr><td style='color:"+color1+";'> &#60;"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+"&#62; </td>"
+                impresionColor += "<td style='color:"+color2+";'>"+renglon[index].match(/.{1,2}/g).join(' ')+"</td></tr>\n"
             }
         }
-        impresionColor ="\n</table>\n</body>\n</html>"
+        impresionColor +="\n</table>\n</body>\n</html>"
         fs.appendFile(direcciones[tipo_compilado][2],impresion, function (err) {
+            if (err) throw err;
+        });
+
+        fs.appendFile('html/s19.html',impresionColor, function (err) {
             if (err) throw err;
         });
     }
