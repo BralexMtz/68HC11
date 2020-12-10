@@ -654,7 +654,7 @@ function impresoraFormato(lines){
             elementos = get_operando_hex(elementos[2])
             impresionColor += "\n<tr><td style='color:"+color1+";'>"
             impresion = renglon.toString().padStart(3)+'  '+status;
-            impresionColor += impresion+"</td><td></td><td style='color:"+color2+";'>";
+            impresionColor += impresion+"</td><td></td><td style='color:"+color4+";'>";
             impresion +='  '+lines[i].memoria+'  '+elementos
 
             impresion = generate_column(impresion) + lines[i].linea_str
@@ -734,7 +734,7 @@ function impresoraFormato(lines){
     impresionColor += "<tr><td colspan='4'>Tabla de Variables</td></tr>\n"
     for (var val in values){
         impresionGlobal+= val.padStart(10)+"    "+values[val].substring(1)+"\n"
-        impresionColor += "<tr><td colspan='2'></td><td>"+val.padStart(10)+"<td><td>"+values[val].substring(1)+"</td></tr>\n"
+        impresionColor += "<tr><td colspan='2'></td><td>"+val.padStart(10)+"</td><td>"+values[val].substring(1)+"</td></tr>\n"
     }
     impresionColor+='\n</table>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>'
     impresionColor+='\n</body>\n</html>'
@@ -778,11 +778,16 @@ function impresionS19(lines){
                 return console.log(err)
             }
         })
+        fs.writeFile('html/s19.html',cabecera.header,(err)=>{
+            if(err){
+                return console.log(err)
+            }
+        })
         var orgs = impresion.split('\n')
         orgs=orgs.slice(1)
     
         impresion=''
-        
+        impresionColor = '\n<table>'
         for(var n in orgs){
             var renglon = orgs[n].match(/.{1,32}/g)
     
@@ -791,7 +796,7 @@ function impresionS19(lines){
                 impresion+=renglon[index].match(/.{1,2}/g).join(' ')+"\n"
             }
         }
-
+        impresionColor ="\n</table>\n</body>\n</html>"
         fs.appendFile(direcciones[tipo_compilado][2],impresion, function (err) {
             if (err) throw err;
         });
