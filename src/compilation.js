@@ -761,6 +761,12 @@ function impresionS19(lines){
     var memoria_izquierda = []
     var indice = 0
     var error=false
+    var count = 0
+    var renglon=0;
+    var html = "\n<table class='container'>\n<tr><td>";
+    color1 = "#00FF00"
+    color2 = "#FF0000"
+    color3 = "#000000"
     for(var line of lines){
         if(line.errores.length!=0){
             error=true
@@ -769,13 +775,35 @@ function impresionS19(lines){
         if(line.instruccion == 'ORG'){
             impresion += '\n'
             memoria_izquierda.push( parseInt(line.operando[0].replace('$', ''),16))
+            console.log(memoria_izquierda)
+        }
+        if (count >= 32){
+            html += "</td>"
+            count=0
+            
+            html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+memoria_izquierda[memoria_izquierda.length-1]+(renglon*16).toString(16).toUpperCase()+"&#62; </span>"
+            renglon++;
+            //html = '';
         }
         if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
+            //html += "<td style='color:"+color2+";'>"+line.opcode.match(/.{1,2}/g).join(' ')+"</td>"
+            if(line.opcode.length>2){
+                line.opcode=line.opcode.match(/.{1,2}/g).join(' ')
+            }
+            html += "<span style='color:"+color2+";'>" +line.opcode+ "</span>\n"
+            count+=line.opcode.length
             impresion += line.opcode
             for(operando of line.operando_hex){
                 impresion+=operando
+                count+=operando.length
+                //html += "<td style='color:"+color3+";'>"+operando.match(/.{1,2}/g).join(' ')+"</td>"
+                if(operando.length>2){
+                    operando=operando.match(/.{1,2}/g).join(' ')
+                }
+                html += "<span style='color:"+color3+";'>" +operando+ "</span>\n"
             }
         }
+
     }
 
     if(!error){
@@ -795,25 +823,25 @@ function impresionS19(lines){
         orgs=orgs.slice(1)
     
         impresion=''
-        impresionColor = "\n<p>\n<p>\n<table class='container'>\n"
-        color1 = "#00FF00"
-        color2 = "#FF0000"
+        //impresionColor = "\n<p>\n<p>\n<table class='container'>\n"
+        
         for(var n in orgs){
             var renglon = orgs[n].match(/.{1,32}/g) 
     
             for(var index in renglon){
                 impresion+="<"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+">    "
                 impresion+=renglon[index].match(/.{1,2}/g).join(' ')+"\n"
-                impresionColor += "<tr><td style='color:"+color1+";'> &#60;"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+"&#62; </td>"
-                impresionColor += "<td style='color:"+color2+";'>"+renglon[index].match(/.{1,2}/g).join(' ')+"</td></tr>\n"
+                //impresionColor += "<tr><td style='color:"+color1+";'> &#60;"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+"&#62; </td>"
+                //impresionColor += "<td style='color:"+color2+";'>"+renglon[index].match(/.{1,2}/g).join(' ')+"</td></tr>\n"
             }
         }
-        impresionColor +="\n</table>\n</body>\n</html>"
+        //impresionColor +="\n</table>\n</body>\n</html>"
+        html +="\n</table>\n</body>\n</html>"
         fs.appendFile(direcciones[tipo_compilado][2],impresion, function (err) {
             if (err) throw err;
         });
 
-        fs.appendFile(direcciones[tipo_compilado][4],impresionColor, function (err) {
+        fs.appendFile(direcciones[tipo_compilado][4],html, function (err) {
             if (err) throw err;
         });    
     }else{
