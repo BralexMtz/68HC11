@@ -1,6 +1,9 @@
-var tipo_compilado=1
-const direcciones=[['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx'],
-                    ['../assets/compilados/compilacion.LST','html/lst.html','../assets/compilados/compilacion.s19','../assets/INSTRUCCIONES.xlsx']]
+var tipo_compilado=1 // 1 -- Para compilacion en consola, 0-- Para compilacion con electron
+const direcciones=[
+    ['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx','src/html/s19.html','html/asc.html'],
+    ['../assets/compilados/compilacion.LST','html/lst.html','../assets/compilados/compilacion.s19','../assets/INSTRUCCIONES.xlsx','html/s19.html','html/asc.html']
+                ]
+const { Console } = require('console');
 const xlsxFile = require('read-excel-file/node');
 const cabecera = require('./header.js');
 // global variables
@@ -82,7 +85,7 @@ function tipo_direccionamiento(rows){
         }
         if(line.tipo == 'INSTRUCCION'){
             if (directives.includes(line.instruccion)){
-                //console.log('Es directiva mi chavo :u ' + line.operando)
+              //  console.log('Es directiva mi chavo :u ' + line.operando)
             }else if (line.operando == null){
                 //POSIBLE MODO INHERENTE, REVISAR QUE EL MNEMONICO TENGA MODO INHERENTE
                 line.tipo_direccionamiento = 'INHERENTE'
@@ -218,15 +221,18 @@ function get_lines(data,rows){
         linea_X =  new linea();
         linea_X.linea_str=lineas[index];
         if (renglones[index][0] == 'ORG'){
-            if(memoria_inicio.length==0)
+
+            if(memoria_inicio.length==0){
                 memoria_inicio = parseInt(renglones[index][1].replace("$", ""),16).toString()
+            }
         }
         if(!is_anweisung_tipo(renglones[index][0],rows,0) && longitud>1 && !is_identado(lineas[index])){//si el primero es etiqueta y la longitud es mayor a uno
-            if(is_anweisung_tipo(renglones[index][1],rows,0)){//si el siguiente es mnemonico
+            if(is_anweisung_tipo(renglones[index][1],rows,0) || 
+                ( directives.includes(renglones[index][1].toUpperCase()) && renglones[index][1].toUpperCase() != 'EQU' ) ){//si el siguiente es mnemonico
                 let etiqueta_nombre=renglones[index][0]
                 renglones[index]=renglones[index].slice(1)
                 etiquetas[etiqueta_nombre]="x"
-                lineas[index]="   "+lines[index]
+                lineas[index]="   "+lineas[index]
                 linea_X.etiqueta=etiqueta_nombre
             }
         }
@@ -325,7 +331,8 @@ function get_operando_hex(operandoFormato){//PASAMOS EL VALOR EN LUGAR DE LA LIS
         console.log("operando mal redactado: ",operando,operandoFormato)
     }
     if(resultado.length%2==1){ //SÍ ES IMPAR
-        resultado.length='0'+resultado
+        
+        resultado='0'+resultado
     }
 
     return resultado
@@ -430,7 +437,6 @@ function traduccion(excel){
                             && !line.errores.includes(1) && !line.errores.includes(2) && !line.errores.includes(6) 
                             && !line.errores.includes(5) && !is_excepcion(line.instruccion) && !line.errores.includes(7) 
                             && !Object.keys(etiquetas).includes(line.operando[0])){
-                           
                             var operando_hex = get_operando_hex(line.operando[0]) 
                             
                             //    TRADUCCION DE OPERANDOS
@@ -584,13 +590,15 @@ function generate_column(cadena){
 
 
 
-function impresoraFormato(lines){
-    var memoria_actual = memoria_inicio
+function impresoraFormato(lines,mem_ini){
+   // var memoria_actual = mem_ini    //CAMBIAMOS MEMORIA INICIO
+
     var fs = require('fs');
-    var color1 = '#0000FF';
-    var color2 = '#00FF00';
-    var color3 = '#FF0000';
-    var color4 = '#000000';
+    var color1 = '#c7efcf';//e2fdff 
+    var color2 = '#b2b2b2';//E1939C
+    var color3 = '#93E1D8';
+    var color4 = '#d58936';
+    var color5 = '#f2f3ae';
     var descripcionesErrores = ['01- CONSTANTE INEXISTENTE', 
                                 '02- VARIABLE INEXISTENTE', 
                                 '03- ETIQUETA INEXISTENTE', 
@@ -600,8 +608,7 @@ function impresoraFormato(lines){
                                 '07- MAGNITUD DE OPERANDO ERRONEA', 
                                 '08- SALTO RELATIVO MUY LEJANO', 
                                 '09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN',
-                                '10- INSTRUCCION CARECE DE AL MENOS UN ESPACIO AL MARGEN', 
-                                '11- NO SE ENCUENTRA END']
+                                '10- NO SE ENCUENTRA END']
     fs.writeFile(direcciones[tipo_compilado][0],'',(err)=>{
         if(err){
             return console.log(err)
@@ -617,7 +624,7 @@ function impresoraFormato(lines){
     var status ='A';
     var elementos;
     var impresionGlobal='';
-    var impresionColor ="\n<br><table class='container'>"; // Quitar Borde <html>\n<body>
+    var impresionColor ="\n<br><table class='table  table-hover d-flex justify-content-around'>"; // Quitar Borde <html>\n<body>
 
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
@@ -635,7 +642,7 @@ function impresoraFormato(lines){
             //ERRORES
             impresionColor += "\n<tr><td style='color:"+color1+";'>"
             impresion=renglon.toString().padStart(3)+'  '+status
-            impresionColor += impresion+"</td><td colspan='2'></td><td colspan='3' style='color:"+color3+";'>"
+            impresionColor += impresion+"</td><td colspan='2'></td><td colspan='3' class ='text-start' style='color:"+color3+";'>"
             impresion=generate_column(impresion)+''+lines[i].linea_str
             impresionColor += lines[i].linea_str+"</td></tr>"
 
@@ -643,7 +650,7 @@ function impresoraFormato(lines){
 
             impresionColor += "\n<tr><td style='color:"+color1+";'>"
             impresion = renglon.toString().padStart(3)+'  '+status
-            impresionColor += impresion+"</td><td colspan='2'></td><td colspan='3' style='color:"+color3+";'>"
+            impresionColor += impresion+"</td><td colspan='2'></td><td colspan='3' class ='text-start' style='color:"+color3+";'>"
             impresionColor += lines[i].linea_str+"</td></tr>"
             impresion = generate_column(impresion)+' '+lines[i].linea_str
 
@@ -658,7 +665,7 @@ function impresoraFormato(lines){
             impresion +='  '+lines[i].memoria+'  '+elementos
 
             impresion = generate_column(impresion) + lines[i].linea_str
-            impresionColor+= elementos+"</td><td style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
+            impresionColor+= elementos+"</td><td class ='text-start' style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
             
         }else if(lines[i].tipo == 'INSTRUCCION' || lines[i].tipo == 'EXCEPCION'){
             //Imprime con memoria actual
@@ -670,11 +677,11 @@ function impresoraFormato(lines){
                 lines[i].operando_hex.push('')
             }
             if (lines[i].instruccion == 'ORG'){
-                var memoria_inicio = parseInt(lines[i].operando[0].replace('$', ''),16)   
+                 mem_ini = parseInt(lines[i].operando[0].replace('$', ''),16)
             }
             
 
-            lines[i].memoria += Number(memoria_inicio)  //Primera columna
+            lines[i].memoria += Number(mem_ini)  //Primera columna
             lines[i].memoria = lines[i].memoria.toString(16).toUpperCase()
             impresionColor += "\n<tr><td style='color:"+color1+";'>"
             impresion += renglon.toString().padStart(3)+'  '+status;
@@ -687,7 +694,7 @@ function impresoraFormato(lines){
                 impresionColor+=operando
             }
             impresion = generate_column(impresion) + lines[i].linea_str
-            impresionColor += "</td><td style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
+            impresionColor += "</td><td class ='text-start' style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
             
         }else if(lines[i].tipo == 'ETIQUETA'){
             //Imprime con memoria actual
@@ -705,13 +712,13 @@ function impresoraFormato(lines){
                 lines[i].memoria=''
             }
             
-            lines[i].memoria += Number(memoria_inicio)  //Primera columna
+            lines[i].memoria += Number(mem_ini)  //Primera columna
             lines[i].memoria=lines[i].memoria.toString(16).toUpperCase()
             impresion += renglon.toString().padStart(3)+'  '+status;
             impresionColor += "\n<tr><td style='color:"+color1+";'>"+impresion+"</td>"
             impresionColor += "<td style='color:"+color2+";'>"+lines[i].memoria+"</td><td></td>"
             impresion += '  '+lines[i].memoria
-            impresionColor += "<td style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
+            impresionColor += "<td class ='text-start' style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
             impresion = generate_column(impresion) + lines[i].linea_str
         }
         impresionGlobal+=impresion+"\n"
@@ -719,7 +726,7 @@ function impresoraFormato(lines){
         
         if (lines[i].errores.length != 0){ // Tiene Errores :c
             impresionGlobal+="   ^^^^   "
-            impresionColor +="\n<tr><td colspan='4'>   ^^^^   "
+            impresionColor +="\n<tr><td class='text-center' colspan='4' style='color:"+color5+";'>   ^^^^   "
             for(var error of lines[i].errores)      
                 impresionGlobal+= descripcionesErrores[error-1]+' '
                 impresionColor += descripcionesErrores[error-1]
@@ -732,7 +739,8 @@ function impresoraFormato(lines){
 
     impresionGlobal += "\n Tabla de Variables \n"
     impresionColor += "<tr><td colspan='4'>Tabla de Variables</td></tr>\n"
-    for (var val in values){
+    var keys = Object.keys(values).sort();
+    for (var val of keys){
         impresionGlobal+= val.padStart(10)+"    "+values[val].substring(1)+"\n"
         impresionColor += "<tr><td colspan='2'></td><td>"+val.padStart(10)+"</td><td>"+values[val].substring(1)+"</td></tr>\n"
     }
@@ -778,7 +786,7 @@ function impresionS19(lines){
                 return console.log(err)
             }
         });
-        fs.writeFile('html/s19.html',cabecera.header,(err)=>{
+        fs.writeFile(direcciones[tipo_compilado][4],cabecera.header,(err)=>{
             if(err){
                 return console.log(err)
             }
@@ -791,7 +799,7 @@ function impresionS19(lines){
         color1 = "#00FF00"
         color2 = "#FF0000"
         for(var n in orgs){
-            var renglon = orgs[n].match(/.{1,32}/g)
+            var renglon = orgs[n].match(/.{1,32}/g) 
     
             for(var index in renglon){
                 impresion+="<"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+">    "
@@ -805,13 +813,13 @@ function impresionS19(lines){
             if (err) throw err;
         });
 
-        fs.appendFile('html/s19.html',impresionColor, function (err) {
+        fs.appendFile(direcciones[tipo_compilado][4],impresionColor, function (err) {
             if (err) throw err;
         });    
     }else{
         impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n<body></html>"
         var fs = require('fs');
-        fs.writeFile('html/s19.html',cabecera.header+impresionColor,(err)=>{
+        fs.writeFile(direcciones[tipo_compilado][4],cabecera.header+impresionColor,(err)=>{
             if(err){
                 return console.log(err)
             }
@@ -821,12 +829,12 @@ function impresionS19(lines){
 
 function impresionASC(lines){
     var fs = require('fs');
-    fs.writeFile('html/asc.html',cabecera.header,(err)=>{
+    fs.writeFile(direcciones[tipo_compilado][5],cabecera.header,(err)=>{
         if(err){
             return console.log(err)
         }
     });
-    var impresion = "\n<html>\n<body>\n<table class='container'><br><tr><td>"
+    var impresion = "\n<html>\n<body>\n<table id='asc' class='table table-borderless table-hover d-flex justify-content-around'><br><tr><td>"
     for (var line of lines){
         if(line == '\n')
             impresion+="</td></tr>"+line+"<tr><td>"
@@ -836,11 +844,12 @@ function impresionASC(lines){
             impresion += line
     }
     impresion +="\n</table>\n</body>\n</html>"
-    fs.appendFile('html/asc.html',impresion, function (err) {
+    fs.appendFile(direcciones[tipo_compilado][5],impresion, function (err) {
         if (err) throw err;
     });
 
 }
+
 function main(data){
     //assets/INSTRUCCIONES.xlsx // ====> FINAL LINE, BUT NOW FOR TESTING 
     xlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
@@ -849,9 +858,10 @@ function main(data){
         
         tipo_direccionamiento(rows)
         traduccion(rows)
+
         relative_generation()
-        //escribir archivos LST    
-        impresoraFormato(lines)
+        //escribir archivos LST
+        impresoraFormato(lines,memoria_inicio)
         impresionS19(lines)
         impresionASC(data)
     });

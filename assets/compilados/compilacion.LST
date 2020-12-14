@@ -528,39 +528,47 @@
 528  A                         *RESET
 529  A                         ***********************************
 530  A  FFFE                         ORG    $FFFE
-531  A  FFFE                         FCB    $80,$00
+531  A  FFFE                  RESET  FCB    $80,$00
 532  A                         ***********************************
 533  A  FFFE                         END   $8000
+534  A                         
 
  Tabla de Variables 
-     PACTL    1026
-     PACNT    1027
      ADCTL    1030
       ADR1    1031
       ADR2    1032
       ADR3    1033
       ADR4    1034
+      ALTO    0019
+      BAJO    001A
+    BASE_H    001B
+    BASE_L    001C
+     BAS_H    0015
+     BAS_L    0016
+      BAUD    102B
+     CSCTL    105D
+      DDRA    1001
+      DDRD    1009
+      DDRG    1003
+     HPRIO    103C
+      OPT2    1038
     OPTION    1039
+     ORDEN    000C
+     PACNT    1027
+     PACTL    1026
      PORTA    1000
      PORTD    1008
      PORTE    100A
      PORTG    1002
-      DDRA    1001
-      DDRD    1009
-      DDRG    1003
-     TMSK2    1024
-     TFLG2    1025
-      SCDR    102F
-     SCCR2    102D
-      SCSR    102E
      SCCR1    102C
-      BAUD    102B
-     HPRIO    103C
-      SPCR    1028
-     CSCTL    105D
-      OPT2    1038
-     ORDEN    000C
+     SCCR2    102D
+      SCDR    102F
+      SCSR    102E
        SEG    000D
+      SPCR    1028
+     TEMPO    0018
+     TFLG2    1025
+     TMSK2    1024
         U1    000E
         U2    000F
         U3    0010
@@ -568,13 +576,6 @@
         U5    0012
         V1    0013
         V2    0014
-     BAS_H    0015
-     BAS_L    0016
-        V5    0017
-     TEMPO    0018
-      ALTO    0019
-      BAJO    001A
-    BASE_H    001B
-    BASE_L    001C
         V3    001D
         V4    001E
+        V5    0017
