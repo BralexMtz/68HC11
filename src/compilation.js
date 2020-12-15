@@ -762,11 +762,15 @@ function impresionS19(lines){
     var indice = 0
     var error=false
     var count = 0
-    var renglon=0;
-    var html = "\n<table class='container'>\n<tr><td>";
+    var renglon=0
+    var html = "\n<table class='container'>\n";
+    var columna2 = ''
     color1 = "#00FF00"
-    color2 = "#FF0000"
+    color2 = "#93E1D8"
     color3 = "#000000"
+
+    var arregloTipo = []
+    var arregloOpcode =[]   //ENTRAN OPCODES Y OPERANDOS
     for(var line of lines){
         if(line.errores.length!=0){
             error=true
@@ -775,38 +779,117 @@ function impresionS19(lines){
         if(line.instruccion == 'ORG'){
             impresion += '\n'
             memoria_izquierda.push( parseInt(line.operando[0].replace('$', ''),16))
+            arregloOpcode.push('ORG')
+            arregloTipo.push(true)
             
-        }
-        if (count >= 30){
-            html += "</td>"
-            count=0
-            
-            html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span>"
-            renglon++;
-            //html = '';
-        }
-        if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
-            //html += "<td style='color:"+color2+";'>"+line.opcode.match(/.{1,2}/g).join(' ')+"</td>"
+        }else if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
             if(line.opcode.length>2){
-                line.opcode=line.opcode.match(/.{1,2}/g).join(' ')
-            }
-            html += "<span style='color:"+color2+";'>" +line.opcode+ "</span>\n"
-            count+=line.opcode.length
+                var aux = line.opcode.match(/.{1,2}/g).join(' ').split(' ')
+                for (opco of aux){
+                    arregloOpcode.push(opco)
+                    arregloTipo.push(true)  //SON OPCODES
+                }
+            }else{
+                arregloOpcode.push(line.opcode)
+                arregloTipo.push(true)  //SON OPCODES
+            } 
             impresion += line.opcode
             for(operando of line.operando_hex){
                 impresion+=operando
+                if(operando.length>2){
+                    var aux = operando.match(/.{1,2}/g).join(' ').split(' ')
+                    for (oper of aux){
+                        arregloOpcode.push(oper)
+                        arregloTipo.push(false) //SON OPERANDOS
+                    }
+                }else{
+                    arregloOpcode.push(operando)
+                    arregloTipo.push(false) //SON OPERANDOS
+                }
+            }
+        }
+
+        
+        /* if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
+            //html += "<td style='color:"+color2+";'>"+line.opcode.match(/.{1,2}/g).join(' ')+"</td>"
+            if(line.opcode.length>2){
+                line.opcode=line.opcode.match(/.{1,2}/g).join(' ')
+                
+            } 
+            columna2 += "<span style='color:"+color2+";'>" +line.opcode+ "</span>\n"
+            count+=line.opcode.length
+            if (count >= 32){
+                columna2 += "</td>"
+                count=0
+                html += "<td><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span></td>\n" + columna2
+                //html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span>"
+                html += "</tr><tr>"
+                columna2 = "<td>"
+                renglon++;
+                //html = '';
+            }
+            impresion += line.opcode
+            for(operando of line.operando_hex){
+                impresion+=operando
+                console.log(operando)
                 count+=operando.length
+                if (count >= 32){
+                    columna2 += "</td>"
+                    count=0
+                    html += "<td><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span></td>\n" + columna2
+                    //html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span>"
+                    html += "</tr><tr>"
+                    columna2 = "<td>"
+                    renglon++;
+                    //html = '';
+                }
                 //html += "<td style='color:"+color3+";'>"+operando.match(/.{1,2}/g).join(' ')+"</td>"
                 if(operando.length>2){
                     operando=operando.match(/.{1,2}/g).join(' ')
                 }
-                html += "<span style='color:"+color3+";'>" +operando+ "</span>\n"
+                columna2 += "<span style='color:"+color3+";'>" +operando+ "</span>\n"
             }
-        }
+        }  */
+        
 
     }
-
+    var noBytes = 0
+    var indiceMemoria = 0
+    var renglon = 0
+    for (indice in memoria_izquierda)
+        console.log(memoria_izquierda[indice].toString(16))
     if(!error){
+        for (indice in arregloOpcode){
+
+            if (noBytes == 32){
+                html += "<tr>\n<td style='color:"+color2+";'> &#60;"+(memoria_izquierda[indiceMemoria-1]+(renglon*16)).toString(16).toUpperCase()+"&#62;</td>\n"
+                html += columna2+'</tr>\n'
+                noBytes = 0
+                columna2 = ''
+                renglon++
+            } 
+
+            if (arregloOpcode[indice] == 'ORG'){
+                if (columna2 != '' && columna2.length != 66){
+                    html += "<tr>\n<td style='color:"+color2+";'> &#60;"+(memoria_izquierda[indiceMemoria-1]+(renglon*16)).toString(16).toUpperCase()+"&#62;</td>\n"
+                }
+                //indice++
+                indiceMemoria++
+                html += columna2+'</tr>\n'
+                noBytes = 0
+                columna2 = ''
+                renglon = 0
+            }else{
+                if(arregloTipo[indice]){    // ES UN OPCODE
+                        columna2 += "<td style='color:"+color1+";'>"+arregloOpcode[indice]+"</td>\n"
+                        noBytes += 2 
+                }else{  //ES UN OPERANDO
+                    columna2 += "<td style='color:"+color3+";'>"+arregloOpcode[indice]+"</td>\n"
+                    noBytes += 2
+                }
+            } 
+        }
+        html += "</tr>"
         var fs = require('fs');
 
         fs.writeFile(direcciones[tipo_compilado][2],'',(err)=>{
@@ -886,12 +969,13 @@ function main(data){
         
         tipo_direccionamiento(rows)
         traduccion(rows)
-
+        
         relative_generation()
         //escribir archivos LST
         impresoraFormato(lines,memoria_inicio)
         impresionS19(lines)
         impresionASC(data)
+        
     });
 }
 
