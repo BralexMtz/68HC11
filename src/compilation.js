@@ -775,13 +775,13 @@ function impresionS19(lines){
         if(line.instruccion == 'ORG'){
             impresion += '\n'
             memoria_izquierda.push( parseInt(line.operando[0].replace('$', ''),16))
-            console.log(memoria_izquierda)
+            
         }
-        if (count >= 32){
+        if (count >= 30){
             html += "</td>"
             count=0
             
-            html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+memoria_izquierda[memoria_izquierda.length-1]+(renglon*16).toString(16).toUpperCase()+"&#62; </span>"
+            html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span>"
             renglon++;
             //html = '';
         }
