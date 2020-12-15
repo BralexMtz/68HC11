@@ -594,11 +594,11 @@ function impresoraFormato(lines,mem_ini){
    // var memoria_actual = mem_ini    //CAMBIAMOS MEMORIA INICIO
 
     var fs = require('fs');
-    var color1 = '#c7efcf';//e2fdff 
-    var color2 = '#b2b2b2';//E1939C
-    var color3 = '#93E1D8';
-    var color4 = '#d58936';
-    var color5 = '#f2f3ae';
+    var color1 = '#fff';//e2fdff  c7efcf
+    var color2 = '#f28787';//E1939C #f28787 b2b2b2
+    var color3 = '#38f8e2'; //#38f8e2 93E1D8
+    var color4 = '#ffbe00'; //d58936
+    var color5 = '#ff0000';
     var descripcionesErrores = ['01- CONSTANTE INEXISTENTE', 
                                 '02- VARIABLE INEXISTENTE', 
                                 '03- ETIQUETA INEXISTENTE', 
@@ -726,7 +726,7 @@ function impresoraFormato(lines,mem_ini){
         
         if (lines[i].errores.length != 0){ // Tiene Errores :c
             impresionGlobal+="   ^^^^   "
-            impresionColor +="\n<tr><td class='text-center' colspan='4' style='color:"+color5+";'>   ^^^^   "
+            impresionColor +="\n<tr><td class='text-center' colspan='4' style='color:"+color5+"; text-shadow: 1px 1px 8px red, 0 0 1em red, 0 0 0.2em red;'>   ^^^^   "
             for(var error of lines[i].errores)      
                 impresionGlobal+= descripcionesErrores[error-1]+' '
                 impresionColor += descripcionesErrores[error-1]
