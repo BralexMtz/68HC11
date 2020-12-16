@@ -22,40 +22,39 @@ uploadFile.addEventListener('click', () => {
 		// Resolves to a Promise<Object> 
 		dialog.showOpenDialog({ 
 			title: 'Select the File to be uploaded', 
-			defaultPath: path.join(__dirname, '~/'), 
+//			defaultPath: path.join(__dirname, '~/'), 
 			buttonLabel: 'Upload', 
 			// Restricting the user to only Text Files. 
 			filters: [ 
 				{ 
 					name: 'Text Files', 
-					extensions: ['txt', 'docx','asc'] 
+					extensions: ['asc'] 
 				}, ], 
 			// Specifying the File Selector Property 
 			properties: ['openFile'] 
 		}).then(file => { 
 			// Stating whether dialog operation was 
 			// cancelled or not. 
-			console.log(file.canceled); 
 			if (!file.canceled) { 
-			// Updating the GLOBAL filepath variable 
-			// to user-selected file. 
-			global.filepath = file.filePaths[0].toString(); 
-            console.log(global.filepath); 
-            const fs = require('fs'); 
-
+				// Updating the GLOBAL filepath variable 
+				// to user-selected file. 
+				global.filepath = file.filePaths[0].toString(); 
+	            const fs = require('fs'); 
+				
                 if (global.filepath && !file.canceled) { 
-                    fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI
-                if (!err) { 
-
-					
-					
-					compilator.main(data);
-					
-                } else { 
-                    console.log(err); 
-                } 
-            }); 
-            } 
+					fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI
+						if (!err) { 		
+							compilator.main(data);
+							var links=document.getElementsByClassName('nav-link')
+							for(link of links){
+								link.classList.remove('disabled');
+								link.classList.add('files-ready');
+							}
+						} else { 
+							console.log(err); 
+						} 
+					}); 
+            	} 
             } 
             
 		}).catch(err => { 

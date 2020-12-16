@@ -5,9 +5,11 @@ header = `
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <meta http-equiv="Content-Security-Policy"
+		content="script-src 'self' 'unsafe-inline';" /> 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
 
     <title>Archivo</title>
     <style>
@@ -22,9 +24,15 @@ header = `
               background-color: #05668d;
           }
           .nav-link:hover{
-                background-color: #05668d;
-                text-decoration:  underline;
-                color:white !important;
+            /* background-color: #05668d; */
+            text-decoration:  underline;
+            text-shadow:2px 2px 5px #05668d;
+
+            /* color:white !important; */
+          }
+          .nav-link{
+            font-weight: bold;
+            color: #05668d !important; 
           }
           svg{
               color: #05668d;
@@ -37,6 +45,16 @@ header = `
           #section-01{
             color: white;
           }
+          #save{
+            left:5%;
+            top:50%;
+            color:#0f0;
+            border-color: #0f0;
+          }
+          #save svg{
+            color:#0f0;
+          }
+          
           
 
 
@@ -70,6 +88,12 @@ header = `
           </nav>
     </div>
       <!-- Navbar -->
+<button id="save" type="button" class="btn btn-outline-success btn-lg position-fixed">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+    <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+  </svg>
+</button>
 `
 
 module.exports={header}

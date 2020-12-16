@@ -1,6 +1,6 @@
-var tipo_compilado=1 // 1 -- Para compilacion en consola, 0-- Para compilacion con electron
+var tipo_compilado=0 // 1 -- Para compilacion en consola, 0-- Para compilacion con electron
 const direcciones=[
-    ['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx','src/html/s19.html','html/asc.html'],
+    ['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx','src/html/s19.html','src/html/asc.html'],
     ['../assets/compilados/compilacion.LST','html/lst.html','../assets/compilados/compilacion.s19','../assets/INSTRUCCIONES.xlsx','html/s19.html','html/asc.html']
                 ]
 const { Console } = require('console');
@@ -624,7 +624,7 @@ function impresoraFormato(lines,mem_ini){
     var status ='A';
     var elementos;
     var impresionGlobal='';
-    var impresionColor ="\n<br><table class='table  table-hover d-flex justify-content-around'>"; // Quitar Borde <html>\n<body>
+    var impresionColor ="\n<div class='container'>\n<br><table class='table  table-hover d-flex justify-content-around'>"; // Quitar Borde <html>\n<body>
 
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
@@ -744,7 +744,7 @@ function impresoraFormato(lines,mem_ini){
         impresionGlobal+= val.padStart(10)+"    "+values[val].substring(1)+"\n"
         impresionColor += "<tr><td colspan='2'></td><td>"+val.padStart(10)+"</td><td>"+values[val].substring(1)+"</td></tr>\n"
     }
-    impresionColor+='\n</table>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>'
+    impresionColor+='\n</table>\n</div>\n<script src="../../assets/js/bootstrap.bundle.min.js" ></script><script src="../save.js" ></script>'
     impresionColor+='\n</body>\n</html>'
      fs.appendFile(direcciones[tipo_compilado][0],impresionGlobal, function (err) {
          if (err) throw err;
@@ -763,7 +763,7 @@ function impresionS19(lines){
     var error=false
     var count = 0
     var renglon=0
-    var html = "\n<table class='container'>\n";
+    var html = "\n<div class='mx-auto w-50 mt-5'>\n <table class='container'>\n";
     var columna2 = ''
     color1 = "#00FF00"
     color2 = "#93E1D8"
@@ -919,7 +919,7 @@ function impresionS19(lines){
             }
         }
         //impresionColor +="\n</table>\n</body>\n</html>"
-        html +="\n</table>\n</body>\n</html>"
+        html +="\n</table>\n</div>\n</body>\n<script src='../../assets/js/bootstrap.bundle.min.js'></script>\n</script><script src='../save.js' ></script> \n</html>"
         fs.appendFile(direcciones[tipo_compilado][2],impresion, function (err) {
             if (err) throw err;
         });
@@ -928,7 +928,7 @@ function impresionS19(lines){
             if (err) throw err;
         });    
     }else{
-        impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n<body></html>"
+        impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n</body>\n<script src='../../assets/js/bootstrap.bundle.min.js'></script>\n<style> #save{display:none} </style>  \n</html>"
         var fs = require('fs');
         fs.writeFile(direcciones[tipo_compilado][4],cabecera.header+impresionColor,(err)=>{
             if(err){
@@ -954,7 +954,7 @@ function impresionASC(lines){
         else
             impresion += line
     }
-    impresion +="\n</table>\n</body>\n</html>"
+    impresion +="\n</table>\n</body>\n<script src='../../assets/js/bootstrap.bundle.min.js'></script>\n<style> #save{display:none} </style> \n</html>"
     fs.appendFile(direcciones[tipo_compilado][5],impresion, function (err) {
         if (err) throw err;
     });
