@@ -1,11 +1,12 @@
 {
-  "name": "68hc11",
+  "name": "compilador-68hc11.app",
   "version": "1.0.0",
   "description": "compilador de 68HC11",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -16,13 +17,28 @@
     "electron"
   ],
   "author": "Bralex, Brandon, Osvaldo",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/BralexMtz/68HC11/issues"
   },
   "homepage": "https://github.com/BralexMtz/68HC11#readme",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "electron": "^8.2.5",
+    "electron-builder": "^22.9.1",
     "read-excel-file": "^4.1.0"
+  },
+  "build": {
+    "appId": "com.compilador-68hc11.app",
+    "productName": "Compilador 68HC11",
+    "target":"NSIS",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icono.ico"
+    },
+    "nsis":{
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
   }
 }
