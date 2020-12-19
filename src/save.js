@@ -8,6 +8,13 @@ var save = document.getElementById('save');
   
 save.addEventListener('click', (event) => { 
     // Resolves to a Promise<Object> 
+    tail=[]
+    if(window.location.pathname.includes('lst.html')){
+        tail=['LST']
+    }else if(window.location.pathname.includes('s19.html')){
+        tail=['s19']
+    }
+
     dialog.showSaveDialog({ 
         title: 'Select the File Path to save', 
         defaultPath: path.join(__dirname, 'codigo'), 
@@ -17,8 +24,9 @@ save.addEventListener('click', (event) => {
         filters: [ 
             { 
                 name: 'Text Files', 
-                extensions: ['s19','LST'] 
-            }, ], 
+                extensions: tail
+            }, 
+        ], 
         properties: [] 
     }).then(file => { 
         // Stating whether dialog operation was cancelled or not. 
@@ -27,7 +35,7 @@ save.addEventListener('click', (event) => {
             if(window.location.pathname.includes('lst.html')){
  
                 try {
-                    const data = fs.readFileSync('assets/compilados/compilacion.LST', 'utf8')
+                    const data = fs.readFileSync(__dirname+'/../../assets/compilados/compilacion.LST', 'utf8')
                     let ruta=file.filePath.toString()
                     if(ruta.includes("."))
                      ruta=ruta.substring(0,ruta.indexOf("."))
@@ -45,7 +53,7 @@ save.addEventListener('click', (event) => {
  
             }else if(window.location.pathname.includes('s19.html')){
                 try {
-                    const data = fs.readFileSync('assets/compilados/compilacion.s19', 'utf8')
+                    const data = fs.readFileSync(__dirname+'/../../assets/compilados/compilacion.s19', 'utf8')
                     let ruta=file.filePath.toString()
                     if(ruta.includes("."))
                         ruta=ruta.substring(0,ruta.indexOf("."))

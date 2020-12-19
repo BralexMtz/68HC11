@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -22,23 +23,19 @@
     "url": "https://github.com/BralexMtz/68HC11/issues"
   },
   "homepage": "https://github.com/BralexMtz/68HC11#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "electron": "^8.2.5",
-    "electron-builder": "^22.9.1",
+  "dependencies": {
     "read-excel-file": "^4.1.0"
+  },
+  "devDependencies": {
+    "electron": "^9.4.0",
+    "electron-builder": "^22.9.1"
   },
   "build": {
     "appId": "com.compilador-68hc11.app",
-    "productName": "Compilador 68HC11",
-    "target":"NSIS",
+    "productName": "Compilador68HC11",
     "win": {
       "target": "nsis",
       "icon": "build/icono.ico"
-    },
-    "nsis":{
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false
     }
   }
 }

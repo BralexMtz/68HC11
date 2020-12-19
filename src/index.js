@@ -1,17 +1,19 @@
 const electron = require('electron'); 
-const path = require('path'); 
-//const xlsx = require('xlsx');
-const xlsxFile = require('read-excel-file/node');
+console.log(electron)
+//const { app } = require('electron')	
+const { dialog,app } = require('electron').remote
+const path = require('path')
+
+
 //Imports check for data input
 const compilator = require('./compilation');
 // Importing dialog module using remote 
-const dialog = electron.remote.dialog; 
+
 
 var uploadFile = document.getElementById('upload'); 
-let data;
-let rows;
 
-//compilator.tipo_direccionamiento();// -----Only test
+
+
 // Defining a Global file path Variable to store 
 // user-selected file 
 global.filepath = undefined; 
@@ -22,14 +24,15 @@ uploadFile.addEventListener('click', () => {
 		// Resolves to a Promise<Object> 
 		dialog.showOpenDialog({ 
 			title: 'Select the File to be uploaded', 
-//			defaultPath: path.join(__dirname, '~/'), 
+			defaultPath: path.join(__dirname, '/'), 
 			buttonLabel: 'Upload', 
 			// Restricting the user to only Text Files. 
 			filters: [ 
 				{ 
 					name: 'Text Files', 
 					extensions: ['asc'] 
-				}, ], 
+				}, 
+			], 
 			// Specifying the File Selector Property 
 			properties: ['openFile'] 
 		}).then(file => { 
@@ -41,6 +44,12 @@ uploadFile.addEventListener('click', () => {
 				global.filepath = file.filePaths[0].toString(); 
 	            const fs = require('fs'); 
 				
+				// fs.writeFile(app.getAppPath()+"/HolaMundo.txt","Este es un archivo de prueba", function (err, file) {
+				// 	if (err) throw err;
+				// 	console.log('Saved in',app.getAppPath()+"/HolaMundo.txt",file);
+				//   }); 
+				// NO SE PUEDE ESCRIBIR DIRECTAMENTE DESDE UN RENDER PROCESS
+
                 if (global.filepath && !file.canceled) { 
 					fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI
 						if (!err) { 		

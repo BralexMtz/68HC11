@@ -1,10 +1,7 @@
-var tipo_compilado=0 // 1 -- Para compilacion en consola, 0-- Para compilacion con electron
-const direcciones=[
-    ['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx','src/html/s19.html','src/html/asc.html'],
-    ['../assets/compilados/compilacion.LST','html/lst.html','../assets/compilados/compilacion.s19','../assets/INSTRUCCIONES.xlsx','html/s19.html','html/asc.html']
-                ]
+
 const { Console } = require('console');
-const xlsxFile = require('read-excel-file/node');
+//import readXlsxFile from 'read-excel-file'
+const readXlsxFile = require('read-excel-file/node');
 const cabecera = require('./header.js');
 // global variables
 var lines=[]; 
@@ -12,7 +9,15 @@ var values=[];
 var etiquetas=[];
 const directives=["ORG","END","EQU","FCB"]
 var memoria_inicio='';
-
+//  0 -- Para compilacion con electron,
+//  1 -- Para compilacion en consola,
+//  2 -- para electron-buid
+var tipo_compilado=2 
+const direcciones=[
+    ['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx','src/html/s19.html','src/html/asc.html'],
+    ['../assets/compilados/compilacion.LST','html/lst.html','../assets/compilados/compilacion.s19','../assets/INSTRUCCIONES.xlsx','html/s19.html','html/asc.html'],
+    [__dirname+'/../assets/compilados/compilacion.LST',__dirname+'/html/lst.html',__dirname+'/../assets/compilados/compilacion.s19',__dirname+'/../assets/INSTRUCCIONES.xlsx',__dirname+'/html/s19.html',__dirname+'/html/asc.html']
+                ]
 
 function linea(){
     this.tipo; //  ETIQUETA, INSTRUCCION, VARIABLE, COMENTARIO, EXCEPCION
@@ -893,6 +898,7 @@ function impresionS19(lines){
         var fs = require('fs');
 
         fs.writeFile(direcciones[tipo_compilado][2],'',(err)=>{
+            
             if(err){
                 return console.log(err)
             }
@@ -930,11 +936,39 @@ function impresionS19(lines){
     }else{
         impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n</body>\n<script src='../../assets/js/bootstrap.bundle.min.js'></script>\n<style> #save{display:none} </style>  \n</html>"
         var fs = require('fs');
-        fs.writeFile(direcciones[tipo_compilado][4],cabecera.header+impresionColor,(err)=>{
-            if(err){
-                return console.log(err)
+        // fs.writeFile(direcciones[tipo_compilado][4],cabecera.header+impresionColor,{ flag: 'w' },(err,data)=>{
+        //     if(err){
+        //         return console.log(err)
+        //     }else{
+        //         console.log("no err in",direcciones[tipo_compilado][4]);
+        //     }
+        //     console.log(data);
+        // });
+        const appPath = () => {
+            switch(process.platform) {
+              case 'darwin': {
+                return path.join(process.env.HOME, 'Library', 'Application Support');
+              }
+              case 'win32': {
+                return process.env.APPDATA;
+              }
+              case 'linux': {
+                return process.env.HOME;
+              }
             }
-        });
+          }
+        //  const fs = require('fs'); 
+        console.log('Ruta in',path.join(__dirname,'\\','..\\s19.html'));  
+        fs.writeFile(path.join(__dirname,'\\','..\\s19.html'),cabecera.header+"Este es un archivo de prueba, electronCompilation", function (err, file) {
+              if (err) throw err;
+              
+          }); 
+
+        fs.open(direcciones[tipo_compilado][4], 'w', function (err, file) {
+            if (err) throw err;
+            console.log('Saved!');
+          });
+        fs.writeFileSync(direcciones[tipo_compilado][4],cabecera.header+impresionColor,{ flag:'w' })
     }
 }
 
@@ -962,8 +996,9 @@ function impresionASC(lines){
 }
 
 function main(data){
+
     //assets/INSTRUCCIONES.xlsx // ====> FINAL LINE, BUT NOW FOR TESTING 
-    xlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
+    readXlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
         lines = get_lines(data,rows)
         exist_mnemonicos(rows);        // CHECK IF EXIST THE INSTRUCCION
         
@@ -979,7 +1014,7 @@ function main(data){
     });
 }
 
-if (tipo_compilado==0){
+if (tipo_compilado==0 || tipo_compilado==2){
     module.exports={main}
 
 }else{
