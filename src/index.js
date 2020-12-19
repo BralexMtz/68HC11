@@ -48,7 +48,7 @@ uploadFile.addEventListener('click', () => {
 				// 	if (err) throw err;
 				// 	console.log('Saved in',app.getAppPath()+"/HolaMundo.txt",file);
 				//   }); 
-				// NO SE PUEDE ESCRIBIR DIRECTAMENTE DESDE UN RENDER PROCESS
+				// NO SE PUEDE ESCRIBIR DIRECTAMENTE en un archivo dentro de la aplicacion
 
                 if (global.filepath && !file.canceled) { 
 					fs.readFile(global.filepath, {encoding: 'utf-8'}, function(err,data) { //cambiar a ANSI

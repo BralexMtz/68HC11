@@ -958,10 +958,10 @@ function impresionS19(lines){
             }
           }
         //  const fs = require('fs'); 
-        console.log('Ruta in',path.join(__dirname,'\\','..\\s19.html'));  
-        fs.writeFile(path.join(__dirname,'\\','..\\s19.html'),cabecera.header+"Este es un archivo de prueba, electronCompilation", function (err, file) {
+                        
+          fs.writeFile(path.join(appPath(), "\\", "HolaMundo.txt"),"Este es un archivo de prueba, electronCompilation", function (err, file) {
               if (err) throw err;
-              
+              console.log('Saved in',path.join(appPath(), "\\", "HolaMundo.txt"),file);
           }); 
 
         fs.open(direcciones[tipo_compilado][4], 'w', function (err, file) {
