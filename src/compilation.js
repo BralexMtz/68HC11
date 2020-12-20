@@ -9,14 +9,28 @@ var values=[];
 var etiquetas=[];
 const directives=["ORG","END","EQU","FCB"]
 var memoria_inicio='';
-//  0 -- Para compilacion con electron,
-//  1 -- Para compilacion en consola,
-//  2 -- para electron-buid
+const pathname= window.location.pathname;
+const appPath = () => {
+    switch(process.platform) {
+      case 'darwin': {
+        return path.join(process.env.HOME, 'Library', 'Application Support');
+      }
+      case 'win32': {
+        return process.env.APPDATA;
+      }
+      case 'linux': {
+        return process.env.HOME;
+      }
+    }
+  }
+//  0 -- Para compilacion con electron, (npm start) 
+//  1 -- Para compilacion en consola, (node compilation)
+//  2 -- para electron-buid (npm run dist)
 var tipo_compilado=2 
 const direcciones=[
     ['assets/compilados/compilacion.LST','src/html/lst.html','assets/compilados/compilacion.s19','assets/INSTRUCCIONES.xlsx','src/html/s19.html','src/html/asc.html'],
     ['../assets/compilados/compilacion.LST','html/lst.html','../assets/compilados/compilacion.s19','../assets/INSTRUCCIONES.xlsx','html/s19.html','html/asc.html'],
-    [__dirname+'/../assets/compilados/compilacion.LST',__dirname+'/html/lst.html',__dirname+'/../assets/compilados/compilacion.s19',__dirname+'/../assets/INSTRUCCIONES.xlsx',__dirname+'/html/s19.html',__dirname+'/html/asc.html']
+    [path.join(appPath(), "\\", "compilacion.LST"),path.join(appPath(), "\\", "lst.html"),path.join(appPath(), "\\", "compilacion.s19"),__dirname+'/../assets/INSTRUCCIONES.xlsx',path.join(appPath(), "\\", "s19.html"),path.join(appPath(), "\\", "asc.html")]
                 ]
 
 function linea(){
@@ -614,16 +628,8 @@ function impresoraFormato(lines,mem_ini){
                                 '08- SALTO RELATIVO MUY LEJANO', 
                                 '09- INSTRUCCION CARECE DE AL MENOS UN ESPACIO RELATIVO AL MARGEN',
                                 '10- NO SE ENCUENTRA END']
-    fs.writeFile(direcciones[tipo_compilado][0],'',(err)=>{
-        if(err){
-            return console.log(err)
-        }
-    }) //dejamos limpio el archivo
-    fs.writeFile(direcciones[tipo_compilado][1],cabecera.header,(err)=>{
-        if(err){
-            return console.log(err)
-        }
-    })
+    fs.writeFileSync(direcciones[tipo_compilado][0],'') //dejamos limpio el archivo
+    fs.writeFileSync(direcciones[tipo_compilado][1],cabecera.header)
     
     var impresion
     var status ='A';
@@ -749,14 +755,10 @@ function impresoraFormato(lines,mem_ini){
         impresionGlobal+= val.padStart(10)+"    "+values[val].substring(1)+"\n"
         impresionColor += "<tr><td colspan='2'></td><td>"+val.padStart(10)+"</td><td>"+values[val].substring(1)+"</td></tr>\n"
     }
-    impresionColor+='\n</table>\n</div>\n<script src="../../assets/js/bootstrap.bundle.min.js" ></script><script src="../save.js" ></script>'
+    impresionColor+="\n</table>\n</div>\n<script src='"+pathname.substring(0,pathname.length-10)+"../assets/js/bootstrap.bundle.min.js"+"' ></script><script src='"+pathname.substring(0,pathname.length-10)+"save.js' ></script>"
     impresionColor+='\n</body>\n</html>'
-     fs.appendFile(direcciones[tipo_compilado][0],impresionGlobal, function (err) {
-         if (err) throw err;
-     });
-     fs.appendFile(direcciones[tipo_compilado][1],impresionColor, function (err) {
-        if (err) throw err;
-    });
+     fs.appendFileSync(direcciones[tipo_compilado][0],impresionGlobal);
+     fs.appendFileSync(direcciones[tipo_compilado][1],impresionColor);
     
 }
 
@@ -897,17 +899,8 @@ function impresionS19(lines){
         html += "</tr>"
         var fs = require('fs');
 
-        fs.writeFile(direcciones[tipo_compilado][2],'',(err)=>{
-            
-            if(err){
-                return console.log(err)
-            }
-        });
-        fs.writeFile(direcciones[tipo_compilado][4],cabecera.header,(err)=>{
-            if(err){
-                return console.log(err)
-            }
-        });
+        fs.writeFileSync(direcciones[tipo_compilado][2],'');
+        fs.writeFileSync(direcciones[tipo_compilado][4],cabecera.header);
         var orgs = impresion.split('\n')
         orgs=orgs.slice(1)
     
@@ -925,16 +918,12 @@ function impresionS19(lines){
             }
         }
         //impresionColor +="\n</table>\n</body>\n</html>"
-        html +="\n</table>\n</div>\n</body>\n<script src='../../assets/js/bootstrap.bundle.min.js'></script>\n</script><script src='../save.js' ></script> \n</html>"
-        fs.appendFile(direcciones[tipo_compilado][2],impresion, function (err) {
-            if (err) throw err;
-        });
+        html +="\n</table>\n</div>\n</body>\n<script src='"+pathname.substring(0,pathname.length-10)+"../assets/js/bootstrap.bundle.min.js"+"'></script>\n</script><script src='"+pathname.substring(0,pathname.length-10)+"save.js' ></script> \n</html>"
+        fs.appendFileSync(direcciones[tipo_compilado][2],impresion);
 
-        fs.appendFile(direcciones[tipo_compilado][4],html, function (err) {
-            if (err) throw err;
-        });    
+        fs.appendFileSync(direcciones[tipo_compilado][4],html);    
     }else{
-        impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n</body>\n<script src='../../assets/js/bootstrap.bundle.min.js'></script>\n<style> #save{display:none} </style>  \n</html>"
+        impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n</body>\n<script src='"+pathname.substring(0,pathname.length-10)+"../assets/js/bootstrap.bundle.min.js"+"'></script>\n<style> #save{display:none} </style>  \n</html>"
         var fs = require('fs');
         // fs.writeFile(direcciones[tipo_compilado][4],cabecera.header+impresionColor,{ flag: 'w' },(err,data)=>{
         //     if(err){
@@ -944,41 +933,22 @@ function impresionS19(lines){
         //     }
         //     console.log(data);
         // });
-        const appPath = () => {
-            switch(process.platform) {
-              case 'darwin': {
-                return path.join(process.env.HOME, 'Library', 'Application Support');
-              }
-              case 'win32': {
-                return process.env.APPDATA;
-              }
-              case 'linux': {
-                return process.env.HOME;
-              }
-            }
-          }
-        //  const fs = require('fs'); 
+        // yo ----- prueba de escritura
+        
                         
-          fs.writeFile(path.join(appPath(), "\\", "HolaMundo.txt"),"Este es un archivo de prueba, electronCompilation", function (err, file) {
-              if (err) throw err;
-              console.log('Saved in',path.join(appPath(), "\\", "HolaMundo.txt"),file);
-          }); 
+         
 
-        fs.open(direcciones[tipo_compilado][4], 'w', function (err, file) {
-            if (err) throw err;
-            console.log('Saved!');
-          });
+        // fs.open(direcciones[tipo_compilado][4], 'w', function (err, file) {
+        //     if (err) throw err;
+        //     console.log('Saved!');
+        //   });
         fs.writeFileSync(direcciones[tipo_compilado][4],cabecera.header+impresionColor,{ flag:'w' })
     }
 }
 
 function impresionASC(lines){
     var fs = require('fs');
-    fs.writeFile(direcciones[tipo_compilado][5],cabecera.header,(err)=>{
-        if(err){
-            return console.log(err)
-        }
-    });
+    fs.writeFileSync(direcciones[tipo_compilado][5],cabecera.header);
     var impresion = "\n<html>\n<body>\n<table id='asc' class='table table-borderless table-hover d-flex justify-content-around'><br><tr><td>"
     for (var line of lines){
         if(line == '\n')
@@ -988,15 +958,12 @@ function impresionASC(lines){
         else
             impresion += line
     }
-    impresion +="\n</table>\n</body>\n<script src='../../assets/js/bootstrap.bundle.min.js'></script>\n<style> #save{display:none} </style> \n</html>"
-    fs.appendFile(direcciones[tipo_compilado][5],impresion, function (err) {
-        if (err) throw err;
-    });
+    impresion +="\n</table>\n</body>\n<script src='"+pathname.substring(0,pathname.length-10)+"../assets/js/bootstrap.bundle.min.js"+"'></script>\n<style> #save{display:none} </style> \n</html>"
+    fs.appendFileSync(direcciones[tipo_compilado][5],impresion);
 
 }
 
 function main(data){
-
     //assets/INSTRUCCIONES.xlsx // ====> FINAL LINE, BUT NOW FOR TESTING 
     readXlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
         lines = get_lines(data,rows)

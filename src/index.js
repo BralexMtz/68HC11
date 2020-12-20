@@ -1,5 +1,4 @@
 const electron = require('electron'); 
-console.log(electron)
 //const { app } = require('electron')	
 const { dialog,app } = require('electron').remote
 const path = require('path')
@@ -96,6 +95,29 @@ uploadFile.addEventListener('click', () => {
 	} 
 }); 
 
+const appPath = () => {
+	switch(process.platform) {
+	  case 'darwin': {
+		return path.join(process.env.HOME, 'Library', 'Application Support');
+	  }
+	  case 'win32': {
+		return process.env.APPDATA;
+	  }
+	  case 'linux': {
+		return process.env.HOME;
+	  }
+	}
+  }
 
 
+document.getElementById("link1").onclick=function(){
+	window.location.href=path.join(appPath(), "\\", "asc.html");
+}
 
+document.getElementById("link2").onclick=function(){
+	window.location.href=path.join(appPath(), "\\", "lst.html");
+}
+
+document.getElementById("link3").onclick=function(){
+	window.location.href=path.join(appPath(), "\\", "s19.html");
+}

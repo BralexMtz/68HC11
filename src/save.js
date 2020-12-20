@@ -5,7 +5,19 @@ const fs = require('fs');
 const dialog = electron.remote.dialog; 
   
 var save = document.getElementById('save'); 
-  
+const appPath = () => {
+    switch(process.platform) {
+      case 'darwin': {
+        return path.join(process.env.HOME, 'Library', 'Application Support');
+      }
+      case 'win32': {
+        return process.env.APPDATA;
+      }
+      case 'linux': {
+        return process.env.HOME;
+      }
+    }
+  }
 save.addEventListener('click', (event) => { 
     // Resolves to a Promise<Object> 
     tail=[]
@@ -35,7 +47,7 @@ save.addEventListener('click', (event) => {
             if(window.location.pathname.includes('lst.html')){
  
                 try {
-                    const data = fs.readFileSync(__dirname+'/../../assets/compilados/compilacion.LST', 'utf8')
+                    const data = fs.readFileSync(path.join(appPath(), "\\", "compilacion.LST"), 'utf8')
                     let ruta=file.filePath.toString()
                     if(ruta.includes("."))
                      ruta=ruta.substring(0,ruta.indexOf("."))
@@ -53,7 +65,7 @@ save.addEventListener('click', (event) => {
  
             }else if(window.location.pathname.includes('s19.html')){
                 try {
-                    const data = fs.readFileSync(__dirname+'/../../assets/compilados/compilacion.s19', 'utf8')
+                    const data = fs.readFileSync(path.join(appPath(), "\\", "compilacion.s19"), 'utf8')
                     let ruta=file.filePath.toString()
                     if(ruta.includes("."))
                         ruta=ruta.substring(0,ruta.indexOf("."))

@@ -1,3 +1,4 @@
+const pathname= window.location.pathname
 header = `
 <!doctype html>
 <html lang="es-MX">
@@ -9,7 +10,7 @@ header = `
 		content="script-src 'self' 'unsafe-inline';" /> 
     <!-- Bootstrap CSS -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="`+pathname.substring(0,pathname.length-10)+"../assets/css/bootstrap.min.css"+`">
 
     <title>Archivo</title>
     <style>
@@ -63,7 +64,7 @@ header = `
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-light mt-3 rounded-top " style="background-color: #D39D22">
             <div class="container-fluid">
-                <a href="../index.html">
+                <a href="`+pathname+`">
                     <svg width="4em" height="4em" viewBox="0 0 16 16" class="bi bi-journal-code ms-3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
                         <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
