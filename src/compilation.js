@@ -97,14 +97,12 @@ function tipo_direccionamiento(rows){
     //Funcion de prueba
     for (line of lines){
         //REVISAR SI YA LLEGAMOS A LA LINEA CON EL END
-        //lineLength = line.length;
         if (line.instruccion == 'END'){
             // console.log('SALAVERGA YA TERMINO...')
             break
         }
         if(line.tipo == 'INSTRUCCION'){
             if (directives.includes(line.instruccion)){
-              //  console.log('Es directiva mi chavo :u ' + line.operando)
             }else if (line.operando == null){
                 //POSIBLE MODO INHERENTE, REVISAR QUE EL MNEMONICO TENGA MODO INHERENTE
                 line.tipo_direccionamiento = 'INHERENTE'
@@ -113,7 +111,6 @@ function tipo_direccionamiento(rows){
                 //PUEDE SER CUALQUIERA
                 var line_operando=line.operando[0]
                 var operando_etiqueta = line_operando.replace('#','') //Quitamos # si lo tiene
-                //operando_etiqueta = line_operando.replace("'", '')  //Quitamos el ' si lo tiene
                 if( !operando_etiqueta.startsWith('$') && !is_numeric(operando_etiqueta) && !operando_etiqueta.startsWith("'") ){//si el operando no es hexadecimal ni decimal
                    
                     if (Object.keys(values).includes(operando_etiqueta)){ // valida si el operando es variable
@@ -130,12 +127,10 @@ function tipo_direccionamiento(rows){
                     }else if(is_anweisung_tipo(line.instruccion,rows,9) && Object.keys(etiquetas).includes(operando_etiqueta)){
                         line.tipo_direccionamiento='EXTENDIDO'
                     }else{
-                        //if (!Object.keys(etiquetas).includes(line_operando)){
                             if(line.operando[0].indexOf("#") != -1){ // si contiene # y no es una directiva 
                                 line.errores.push(1);  //ERROR 1 Constante inexistente
                             }else 
                                 line.errores.push(2)    //ERROR 2   Variable inexistente
-                        //} //DESCOMENTADO
                         
                     }
                 } 
@@ -179,9 +174,7 @@ function tipo_direccionamiento(rows){
                 
             }
     }else if (line.tipo == 'EXCEPCION'){
-/*         console.log(line.operando[0])
-        console.log(line.instruccion)
-        console.log('-----------------') */
+
         if(line.operando[0].endsWith(',X')){
             line.tipo_direccionamiento = 'INDEXADO_X'
         }else if(line.operando[0].endsWith(',Y')){
@@ -328,7 +321,6 @@ function exist_mnemonicos(rows){
 }
 function get_operando_hex(operandoFormato){//PASAMOS EL VALOR EN LUGAR DE LA LISTA MEJOR
     var resultado;
-    //console.log(operandoFormato)
     operando=operandoFormato   //MODIFICAMOS?
     operando=operando.replace("#","")  //QUITA EL #
     if(Object.keys(values).includes(operando)){ // es una variable o una constante
@@ -510,7 +502,6 @@ function traduccion(excel){
 
 function reglasSuma(arriba, abajo){
     iguales = (arriba == '1') && (abajo == '1')
-    //diferentes = ((arriba == '1')&&(abajo == '0')) || ((arriba == '0')&&(abajo == '1'))
     ceros = ((arriba == '0') && (abajo == '0'))
     if (iguales || ceros){
         return '0'
@@ -610,13 +601,12 @@ function generate_column(cadena){
 
 
 function impresoraFormato(lines,mem_ini){
-   // var memoria_actual = mem_ini    //CAMBIAMOS MEMORIA INICIO
 
     var fs = require('fs');
-    var color1 = '#fff';//e2fdff  c7efcf
-    var color2 = '#f28787';//E1939C #f28787 b2b2b2
-    var color3 = '#38f8e2'; //#38f8e2 93E1D8
-    var color4 = '#ffbe00'; //d58936
+    var color1 = '#fff';
+    var color2 = '#f28787';
+    var color3 = '#38f8e2';
+    var color4 = '#ffbe00';
     var color5 = '#ff0000';
     var descripcionesErrores = ['01- CONSTANTE INEXISTENTE', 
                                 '02- VARIABLE INEXISTENTE', 
@@ -639,9 +629,6 @@ function impresoraFormato(lines,mem_ini){
 
     for (var i=0;i<lines.length;i++){
         var renglon = i+1;
-        // if (renglon.toString().length == 1){
-        //     renglon = ' '+renglon.toString()
-        // }
         if(lines[i].errores.length!= 0)
             status = 'E'
         else
@@ -708,8 +695,7 @@ function impresoraFormato(lines,mem_ini){
             impresionColor += "</td><td class ='text-start' style='color:"+color3+";'>"+lines[i].linea_str+"</td></tr>"
             
         }else if(lines[i].tipo == 'ETIQUETA'){
-            //Imprime con memoria actual
-            //var n = innot GET /src/inicio.html
+
             var n = i
             var encontrado=false
             while(n<lines.length && !encontrado){ //busca siguiente memoria
@@ -735,7 +721,7 @@ function impresoraFormato(lines,mem_ini){
         impresionGlobal+=impresion+"\n"
 
         
-        if (lines[i].errores.length != 0){ // Tiene Errores :c
+        if (lines[i].errores.length != 0){ // Si Tiene Errores
             impresionGlobal+="   ^^^^   "
             impresionColor +="\n<tr><td class='text-center' colspan='4' style='color:"+color5+"; text-shadow: 1px 1px 8px red, 0 0 1em red, 0 0 0.2em red;'>   ^^^^   "
             for(var error of lines[i].errores)      
@@ -817,46 +803,6 @@ function impresionS19(lines){
         }
 
         
-        /* if(line.tipo == 'INSTRUCCION' || line.tipo== 'EXCEPCION'){
-            //html += "<td style='color:"+color2+";'>"+line.opcode.match(/.{1,2}/g).join(' ')+"</td>"
-            if(line.opcode.length>2){
-                line.opcode=line.opcode.match(/.{1,2}/g).join(' ')
-                
-            } 
-            columna2 += "<span style='color:"+color2+";'>" +line.opcode+ "</span>\n"
-            count+=line.opcode.length
-            if (count >= 32){
-                columna2 += "</td>"
-                count=0
-                html += "<td><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span></td>\n" + columna2
-                //html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span>"
-                html += "</tr><tr>"
-                columna2 = "<td>"
-                renglon++;
-                //html = '';
-            }
-            impresion += line.opcode
-            for(operando of line.operando_hex){
-                impresion+=operando
-                console.log(operando)
-                count+=operando.length
-                if (count >= 32){
-                    columna2 += "</td>"
-                    count=0
-                    html += "<td><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span></td>\n" + columna2
-                    //html += "</tr>\n<br><tr><span style='color:"+color1+";'> &#60;"+(memoria_izquierda[memoria_izquierda.length-1]+(renglon*16)).toString(16).toUpperCase()+"&#62; </span>"
-                    html += "</tr><tr>"
-                    columna2 = "<td>"
-                    renglon++;
-                    //html = '';
-                }
-                //html += "<td style='color:"+color3+";'>"+operando.match(/.{1,2}/g).join(' ')+"</td>"
-                if(operando.length>2){
-                    operando=operando.match(/.{1,2}/g).join(' ')
-                }
-                columna2 += "<span style='color:"+color3+";'>" +operando+ "</span>\n"
-            }
-        }  */
         
 
     }
@@ -905,7 +851,6 @@ function impresionS19(lines){
         orgs=orgs.slice(1)
     
         impresion=''
-        //impresionColor = "\n<p>\n<p>\n<table class='container'>\n"
         
         for(var n in orgs){
             var renglon = orgs[n].match(/.{1,32}/g) 
@@ -913,35 +858,16 @@ function impresionS19(lines){
             for(var index in renglon){
                 impresion+="<"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+">    "
                 impresion+=renglon[index].match(/.{1,2}/g).join(' ')+"\n"
-                //impresionColor += "<tr><td style='color:"+color1+";'> &#60;"+(memoria_izquierda[n]+(index*16)).toString(16).toUpperCase()+"&#62; </td>"
-                //impresionColor += "<td style='color:"+color2+";'>"+renglon[index].match(/.{1,2}/g).join(' ')+"</td></tr>\n"
+               
             }
         }
-        //impresionColor +="\n</table>\n</body>\n</html>"
         html +="\n</table>\n</div>\n</body>\n<script src='"+pathname.substring(0,pathname.length-10)+"../assets/js/bootstrap.bundle.min.js"+"'></script>\n</script><script src='"+pathname.substring(0,pathname.length-10)+"save.js' ></script> \n</html>"
         fs.appendFileSync(direcciones[tipo_compilado][2],impresion);
-
         fs.appendFileSync(direcciones[tipo_compilado][4],html);    
     }else{
         impresionColor+= "\n<br><center><h1>Existen Errores en el archivo ASC</h1></center>\n</body>\n<script src='"+pathname.substring(0,pathname.length-10)+"../assets/js/bootstrap.bundle.min.js"+"'></script>\n<style> #save{display:none} </style>  \n</html>"
         var fs = require('fs');
-        // fs.writeFile(direcciones[tipo_compilado][4],cabecera.header+impresionColor,{ flag: 'w' },(err,data)=>{
-        //     if(err){
-        //         return console.log(err)
-        //     }else{
-        //         console.log("no err in",direcciones[tipo_compilado][4]);
-        //     }
-        //     console.log(data);
-        // });
-        // yo ----- prueba de escritura
-        
-                        
-         
-
-        // fs.open(direcciones[tipo_compilado][4], 'w', function (err, file) {
-        //     if (err) throw err;
-        //     console.log('Saved!');
-        //   });
+   
         fs.writeFileSync(direcciones[tipo_compilado][4],cabecera.header+impresionColor,{ flag:'w' })
     }
 }
@@ -964,8 +890,7 @@ function impresionASC(lines){
 }
 
 function main(data){
-    //assets/INSTRUCCIONES.xlsx // ====> FINAL LINE, BUT NOW FOR TESTING 
-    readXlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
+        readXlsxFile(direcciones[tipo_compilado][3]).then((rows)=>{
         lines = get_lines(data,rows)
         exist_mnemonicos(rows);        // CHECK IF EXIST THE INSTRUCCION
         
@@ -973,7 +898,6 @@ function main(data){
         traduccion(rows)
         
         relative_generation()
-        //escribir archivos LST
         impresoraFormato(lines,memoria_inicio)
         impresionS19(lines)
         impresionASC(data)
@@ -995,6 +919,4 @@ fs.readFile('codigo.asc', 'utf-8', function (err,data) {
   });
 }
 
-////####### JUST FOR TESTING ######
-/// ENGINERS WORKING
 
